@@ -1,0 +1,46 @@
+{
+  "dimension_id": "D5",
+  "name": "emotional_processing_motives",
+
+  "motives": {
+    "emotional_clarity_seeking": {
+      "description": "Attempts to understand, label, and make sense of emotional states.",
+      "activation": "Triggered when emotions feel confusing, mixed, or overwhelming.",
+      "behaviors": [
+        "introspection or journaling",
+        "ruminating to gain clarity",
+        "seeking external perspective"
+      ]
+    },
+
+    "emotional_suppression": {
+      "description": "Minimizes or compresses emotional expression to maintain control or avoid vulnerability.",
+      "activation": "Triggered by judgment, conflict, exposure, or fear of losing composure.",
+      "behaviors": [
+        "silencing emotions",
+        "pushing feelings down or distracting",
+        "appearing flat, cold, or unaffected"
+      ]
+    },
+
+    "emotional_discharge": {
+      "description": "Releases emotional pressure through expression, action, or catharsis.",
+      "activation": "Triggered by buildup of emotional intensity, injustice, or relational overwhelm.",
+      "behaviors": [
+        "venting or emotional outburst",
+        "physical activity to burn through emotion",
+        "rapid shifts in tone or intensity"
+      ]
+    },
+
+    "soothing_and_equilibrium": {
+      "description": "Seeks emotional grounding, comfort, or stabilization when overwhelmed.",
+      "activation": "Triggered by stress, uncertainty, or emotional overload.",
+      "behaviors": [
+        "retreating into calming environments",
+        "self-soothing behaviors",
+        "seeking reassurance, warmth, or safety"
+      ]
+    }
+  }
+}

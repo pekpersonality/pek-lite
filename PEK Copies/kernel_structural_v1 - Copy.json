@@ -1,0 +1,121 @@
+{
+  "kernel_version": "1.0",
+  "dimensions": {
+    "survival_orientation": {
+  "id": "D1",
+  "purpose": "Defines how an individual's nervous system anticipates and responds to perceived threat. Determines baseline safety strategies, reactive patterns, and adaptive survival logic.",
+  "axes": [
+    {
+      "axis_id": "SO-THREAT",
+      "description": "Orients toward perceived danger, instability, or betrayal. Hypervigilance as default state."
+    },
+    {
+      "axis_id": "SO-CONTROL",
+      "description": "Orients toward managing uncertainty, autonomy, and outcomes. Seeks predictability through control."
+    },
+    {
+      "axis_id": "SO-ACCEPTANCE",
+      "description": "Orients toward relational security and belonging. Avoids social rejection, prioritizes connection."
+    },
+    {
+      "axis_id": "SO-ACHIEVEMENT",
+      "description": "Orients toward competence, performance, and success. Avoids inadequacy or perceived failure."
+    }
+  ],
+  "sub_motives": [
+    {
+      "motive_id": "SM-ABANDON",
+      "description": "Fear of emotional or physical abandonment; drives clinging, reassurance-seeking, or compliance."
+    },
+    {
+      "motive_id": "SM-BETRAYAL",
+      "description": "Expectation of deception or hidden agendas; drives distrust, testing behaviors, and vigilance."
+    },
+    {
+      "motive_id": "SM-AUTONOMY_DEF",
+      "description": "Defense of personal control; reacts strongly to constraint, manipulation, or coercion."
+    },
+    {
+      "motive_id": "SM-COMPETENCE",
+      "description": "Fear of inadequacy; survival linked to performance or perceived capability."
+    },
+    {
+      "motive_id": "SM-STABILITY",
+      "description": "Need for predictability, routine, and structure; threat arises from disruption or chaos."
+    },
+    {
+      "motive_id": "SM-CHAOS_ANTIC",
+      "description": "Assumes the world is unstable or dangerous; prepares for sudden negative shifts."
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "indicator_id": "BI-HYPERVIG",
+      "description": "Scanning environment for threat, reading microexpressions, expecting danger."
+    },
+    {
+      "indicator_id": "BI-PEOPLEPLEASE",
+      "description": "Conflict avoidance through appeasement or over-accommodation."
+    },
+    {
+      "indicator_id": "BI-OVERPLAN",
+      "description": "Rigid planning and contingency stacking to avoid uncertainty."
+    },
+    {
+      "indicator_id": "BI-SELFSAB",
+      "description": "Sabotaging opportunities to maintain familiar patterns or avoid failure exposure."
+    },
+    {
+      "indicator_id": "BI-AVOID",
+      "description": "Withdrawal, emotional numbing, or evasion of high-stakes situations."
+    }
+  ],
+  "predictive_signals": [
+    {
+      "signal_id": "PS-CONFLICT_RISK",
+      "description": "Likelihood of escalation or shutdown under stress, shaped by perceived threat type."
+    },
+    {
+      "signal_id": "PS-REL_STAB",
+      "description": "Longposure-term relational stability patterns across stress, rupture, and repair cycles."
+    },
+    {
+      "signal_id": "PS-MANIP_VULN",
+      "description": "Susceptibility to coercion, flattery, or pressure depending on core survival motive."
+    },
+    {
+      "signal_id": "PS-COPING",
+      "description": "Expected coping behaviors in crises; determines meltdown, freeze, or hyperfunction patterns."
+    }
+  ]
+}
+,
+    "reward_strategy": {},
+    "conflict_response_pattern": {},
+    "identity_construction_mode": {},
+    "emotional_processing_style": {}
+  },
+  "components": {
+    "definitions": [],
+    "opposites": [],
+    "triggers": [],
+    "expressions": [],
+    "compensations": []
+  },
+  "interaction_matrix": [],
+  "stress_state_overrides": [],
+  "output_logic": {
+    "units": [],
+    "report_structure": {
+      "core_motives": {},
+      "reward_signature": {},
+      "conflict_pattern": {},
+      "identity_mode": {},
+      "emotional_style": {},
+      "stress_profile": {},
+      "relational_prediction": {},
+      "occupational_prediction": {},
+      "risk_markers": {}
+    }
+  }
+}

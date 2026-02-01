@@ -1,0 +1,114 @@
+{
+  "version": "1.0",
+  "name": "engine_activation_test_suite",
+
+  "tests": {
+    "boot_tests": {
+      "description": "Ensures kernel, modules, and engines load in the correct order.",
+      "checks": [
+        "kernel_linkage_exists",
+        "runtime_harness_exists",
+        "system_binding_exists",
+        "all_modules_present",
+        "no_missing_paths",
+        "no_circular_dependencies"
+      ]
+    },
+
+    "signal_pipeline_test": {
+      "description": "Tests the flow from raw input → signal detection → routing.",
+      "sample_input": [
+        "I feel unsafe when things change suddenly.",
+        "I try to keep control of my environment.",
+        "I avoid conflict whenever possible."
+      ],
+      "expected_outputs": [
+        "THREAT_HIGH",
+        "CONTROL_SEEKING",
+        "CONFLICT_AVOIDANCE"
+      ],
+      "checks": [
+        "signals_detected",
+        "signals_routed",
+        "router_mapping_valid"
+      ]
+    },
+
+    "vector_engine_test": {
+      "description": "Ensures signals correctly update dimensional vectors.",
+      "checks": [
+        "vectors_generated",
+        "weights_applied",
+        "bias_modifiers_applied",
+        "vector_integrity_valid"
+      ]
+    },
+
+    "stress_system_test": {
+      "description": "Validates stress overrides + stress integration behave correctly.",
+      "simulated_stress_inputs": [0.10, 0.50, 0.75, 0.92],
+      "expected_state_transitions": [
+        "baseline",
+        "elevated",
+        "reactive",
+        "overload"
+      ],
+      "checks": [
+        "stress_thresholds_correct",
+        "interpretation_shifts_correct",
+        "vector_bias_correct",
+        "recovery_path_valid"
+      ]
+    },
+
+    "conflict_engine_test": {
+      "description": "Verifies conflict recognition and resolution pathways.",
+      "sample_conflict_input": {
+        "signals": ["APPROACH_CUE", "AVOIDANCE_CUE"],
+        "dimensions": {"D1": 0.8, "D4": 0.7}
+      },
+      "expected_output": "approach_avoidance_conflict_detected",
+      "checks": [
+        "conflicts_detected",
+        "resolution_path_assigned",
+        "confidence_adjusted"
+      ]
+    },
+
+    "interpretation_engine_test": {
+      "description": "Ensures motives, identity, stress, and conflict interpretations assemble properly.",
+      "checks": [
+        "core_motives_interpreted",
+        "identity_structure_valid",
+        "stress_profile_generated",
+        "conflict_narrative_created"
+      ]
+    },
+
+    "output_compiler_test": {
+      "description": "Tests whether the system can assemble the full final report structure.",
+      "checks": [
+        "schema_fields_populated",
+        "narratives_generated",
+        "sections_assembled",
+        "output_valid_json"
+      ]
+    }
+  },
+
+  "test_modes": {
+    "smoke_test": ["boot_tests"],
+    "pipeline_test": ["signal_pipeline_test", "vector_engine_test"],
+    "full_activation": [
+      "boot_tests",
+      "signal_pipeline_test",
+      "vector_engine_test",
+      "stress_system_test",
+      "conflict_engine_test",
+      "interpretation_engine_test",
+      "output_compiler_test"
+    ]
+  },
+
+  "notes": "These tests validate that the entire psychological engine loads, processes, interprets, and outputs without structural failure before being used for live profiling."
+}

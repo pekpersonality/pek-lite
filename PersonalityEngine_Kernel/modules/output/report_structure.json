@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "name": "report_structure",
+
+  "order": [
+    "summary",
+    "core_motives",
+    "conflict_patterns",
+    "stress_profile",
+    "identity_structure",
+    "relational_dynamics",
+    "full_narrative"
+  ],
+
+  "section_headers": {
+    "summary": "Psychological Summary",
+    "core_motives": "Core Motives & Behavioral Drivers",
+    "conflict_patterns": "Internal Conflict Patterns",
+    "stress_profile": "Stress Response Profile",
+    "identity_structure": "Identity Construction Framework",
+    "relational_dynamics": "Relational Patterns & Interpersonal Dynamics",
+    "full_narrative": "Integrated Personality Narrative"
+  },
+
+  "formatting_rules": {
+    "header_style": "uppercase",
+    "separator": "\n--------------------------------------\n",
+    "indent": 2,
+    "line_breaks_after_section": 2
+  },
+
+  "notes": "Defines the presentation order and formatting for the final compiled psychological report. Does not generate content — only structures it."
+}

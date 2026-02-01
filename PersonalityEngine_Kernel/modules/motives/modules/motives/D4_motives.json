@@ -1,0 +1,46 @@
+{
+  "dimension_id": "D4",
+  "name": "identity_construction_motives",
+
+  "motives": {
+    "self_coherence_maintenance": {
+      "description": "Preserves a stable, consistent story about who they are.",
+      "activation": "Triggered by contradiction, criticism, role instability, or identity threat.",
+      "behaviors": [
+        "defensiveness or justification",
+        "reasserting personal values",
+        "rejecting information that destabilizes identity"
+      ]
+    },
+
+    "validation_seeking": {
+      "description": "Builds identity through external approval, recognition, or relational affirmation.",
+      "activation": "Triggered by praise, criticism, audience reaction, or relational cues.",
+      "behaviors": [
+        "shifting self-presentation",
+        "overadaptation to others' expectations",
+        "seeking reassurance or acknowledgment"
+      ]
+    },
+
+    "internal_alignment": {
+      "description": "Constructs identity from personal standards, internal meaning, and self-defined values.",
+      "activation": "Triggered by opportunities for authenticity, integrity, or personal truth expression.",
+      "behaviors": [
+        "rejecting external pressure",
+        "acting according to inner conviction",
+        "prioritizing personal truth over social approval"
+      ]
+    },
+
+    "identity_expansion": {
+      "description": "Seeks the evolution, transformation, or reinvention of self.",
+      "activation": "Triggered by change, growth opportunity, paradigm shifts, or existential tension.",
+      "behaviors": [
+        "reframing life narratives",
+        "embracing new roles or perspectives",
+        "letting go of outdated self-concepts"
+      ]
+    }
+  }
+}

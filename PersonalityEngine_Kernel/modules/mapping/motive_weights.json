@@ -1,0 +1,29 @@
+{
+  "motive_weights_version": "1.0",
+  "purpose": "Defines weight categories used by the Motive Weighting Unit (IU-MOTIVE_WEIGHTING) during interpretation.",
+
+  "weight_categories": {
+    "survival_dominance": {
+      "description": "How strongly survival orientation overrides reward motives.",
+      "default_weight": null
+    },
+    "reward_dominance": {
+      "description": "How strongly reward motives override caution or avoidance.",
+      "default_weight": null
+    },
+    "stress_amplification": {
+      "description": "How much stress signals increase motive intensity.",
+      "default_weight": null
+    },
+    "identity_alignment": {
+      "description": "How motive expression is strengthened when aligned with identity construction mode.",
+      "default_weight": null
+    },
+    "emotional_modulation": {
+      "description": "How emotional processing style dampens or heightens motive expression.",
+      "default_weight": null
+    }
+  },
+
+  "notes": "Weights remain unpopulated until Phase 4 where actual numerical models are created."
+}

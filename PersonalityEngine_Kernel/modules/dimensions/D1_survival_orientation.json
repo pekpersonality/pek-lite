@@ -1,0 +1,22 @@
+{
+  "dimension_id": "D1",
+  "name": "survival_orientation",
+
+  "definition": {
+    "core": "Represents the individual's baseline perception of threat, safety, vulnerability, and environmental control.",
+
+    "axes": {
+      "high_threat_sensitive": "Detects danger quickly; prioritizes stability, predictability, and risk avoidance.",
+      "low_threat_sensitive": "Under-detects danger; prioritizes freedom, movement, and exploration.",
+      "high_control_orientation": "Attempts to shape environment to reduce uncertainty.",
+      "low_control_orientation": "Adapts to environment with minimal intervention."
+    },
+
+    "behavioral_markers": [
+      "heightened vigilance or scanning under uncertainty",
+      "avoidance of unpredictable environments",
+      "controlling or stabilizing behaviors",
+      "withdrawal under threat"
+    ]
+  }
+}

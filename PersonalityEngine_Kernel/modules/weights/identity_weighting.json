@@ -1,0 +1,9 @@
+{
+  "identity_weighting_version": "1.0",
+  "variables": {
+    "identity_stability": null,
+    "role_pressure": null,
+    "consistency_bias": null,
+    "identity-threat_sensitivity": null
+  }
+}

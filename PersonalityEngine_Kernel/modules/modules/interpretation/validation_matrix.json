@@ -1,0 +1,85 @@
+{
+  "version": "1.0",
+  "name": "validation_matrix",
+
+  "validation_checks": {
+    "missing_data_check": {
+      "description": "Detects missing or insufficient signal data.",
+      "rules": {
+        "minimum_signals_required": 5,
+        "action_if_missing": "reduce_confidence",
+        "confidence_penalty": 0.15,
+        "notes": "Prevents overconfident interpretation from sparse inputs."
+      }
+    },
+
+    "signal_vector_alignment_check": {
+      "description": "Ensures routed signals correspond correctly to activated vectors.",
+      "rules": {
+        "mismatch_threshold": 0.25,
+        "action_on_mismatch": "flag_conflict",
+        "notes": "If signals map to dimensions not activated in vectors, internal conflict is flagged."
+      }
+    },
+
+    "motive_vector_consistency_check": {
+      "description": "Ensures dominant motives and dominant vectors do not contradict each other.",
+      "rules": {
+        "contradiction_pairs": [
+          ["SM-ABANDON", "high_reward_drive"],
+          ["EMO-SUPPRESSION", "identity_vulnerability"],
+          ["CM-AMBIVALENCE", "high_decisiveness"]
+        ],
+        "action_on_contradiction": "lower_confidence_and_flag",
+        "confidence_penalty": 0.10,
+        "notes": "Cross-validates motives against vector states for psychological realism."
+      }
+    },
+
+    "stress_conflict_interaction_check": {
+      "description": "Detects when stress levels and conflict patterns do not match psychologically.",
+      "rules": {
+        "stress_too_low_for_conflict": 0.40,
+        "stress_too_high_for_no_conflict": 0.70,
+        "actions": {
+          "low_stress_high_conflict": "adjust_stress_up",
+          "high_stress_no_conflict": "adjust_stress_down"
+        },
+        "notes": "Corrects inconsistencies between emotional intensity and conflict activation."
+      }
+    },
+
+    "identity_integrity_check": {
+      "description": "Ensures identity construction outputs do not contradict survival or emotional vectors.",
+      "rules": {
+        "identity_fragility_threshold": 0.50,
+        "action_on_fragility": "amplify_identity_dimension",
+        "amplification_factor": 1.15,
+        "notes": "Ensures identity-related outputs remain structurally cohesive."
+      }
+    }
+  },
+
+  "aggregated_actions": {
+    "reduce_confidence": {
+      "description": "Applies global confidence penalty if multiple validation failures occur.",
+      "threshold_failures": 2,
+      "total_confidence_penalty": 0.20
+    },
+    "force_conflict_activation": {
+      "description": "Triggers conflict engine if contradictions accumulate.",
+      "rules": {
+        "contradiction_threshold": 3,
+        "action": "activate_conflict_engine"
+      }
+    }
+  },
+
+  "output_flags": {
+    "inconsistency_notes": "Summary of validation failures.",
+    "adjusted_confidence": "Final confidence score after validation.",
+    "structural_integrity_score": "Indicates overall model coherence."
+  },
+
+  "notes": "The Validation Matrix ensures coherence, realism, and structural integrity across the entire psychological engine before final output."
+}

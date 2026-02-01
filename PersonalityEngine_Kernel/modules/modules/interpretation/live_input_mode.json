@@ -1,0 +1,74 @@
+{
+  "version": "1.0",
+  "name": "live_input_mode",
+
+  "input_rules": {
+    "accepted_formats": [
+      "string_array",
+      "single_string_block",
+      "question_answer_pairs"
+    ],
+    "minimum_required_items": 3,
+    "maximum_length_per_item": 400,
+    "missing_data_behavior": {
+      "action": "proceed_with_warnings",
+      "notes": "Engine will compensate by adjusting confidence scores."
+    }
+  },
+
+  "preprocessing_pipeline": {
+    "step_1_clean_text": {
+      "description": "Remove noise, normalize case, strip special characters.",
+      "methods": ["lowercase", "trim", "remove_symbols"],
+      "output": "cleaned_text"
+    },
+    "step_2_segment_input": {
+      "description": "Split blocks into analyzable units (sentences, phrases).",
+      "methods": ["sentence_split", "natural_break_detection"],
+      "output": "segmented_units"
+    },
+    "step_3_detect_context_flags": {
+      "description": "Look for stress, urgency, emotional volatility indicators.",
+      "methods": ["keyword_scan", "pattern_match"],
+      "output": "context_flag_packet"
+    },
+    "step_4_generate_signal_packet": {
+      "description": "Pass cleaned text into signal detection layer.",
+      "calls": "modules/signals/signal_definitions.json",
+      "output": "detected_signals"
+    }
+  },
+
+  "runtime_bridge": {
+    "description": "Passes live signal packets into the runtime harness.",
+    "calls": "runtime_harness.json",
+    "input_mapping": {
+      "signal_packet": "runtime.step_1_collect_inputs",
+      "context_flags": "runtime.step_1_collect_inputs"
+    },
+    "output_expected": "final_personality_report"
+  },
+
+  "output_delivery": {
+    "format": "json",
+    "fields": [
+      "summary",
+      "core_motives",
+      "conflict_patterns",
+      "stress_profile",
+      "identity_structure",
+      "relational_dynamics",
+      "full_narrative"
+    ],
+    "notes": "This defines the structure returned to the user after analysis."
+  },
+
+  "safety_rules": {
+    "max_input_items": 20,
+    "reject_extreme_length": true,
+    "forbid_binary_file_types": true,
+    "notes": "Prevents engine overload and ensures text-only input."
+  },
+
+  "notes": "Live Input Mode enables real human responses to enter the psychological engine through a clean, validated pathway."
+}

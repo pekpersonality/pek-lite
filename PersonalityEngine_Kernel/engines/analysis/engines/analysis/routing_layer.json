@@ -1,0 +1,97 @@
+{
+  "routing_layer_version": "1.0",
+  "purpose": "Integrates validator outputs into the Execution Engine, enabling adaptive routing, confidence propagation, and stress-aware interpretation.",
+
+  "adaptive_routing_rules": {
+    "on_contradiction_detected": {
+      "route": "IU-CONTRADICTION_RESOLUTION",
+      "adjust_pipeline_order": [
+        "resolve_contradictions",
+        "apply_stress_overrides",
+        "weight_motives"
+      ],
+      "notes": "Contradiction resolution must occur before motive weighting to prevent corrupted outputs."
+    },
+
+    "on_stress_elevated": {
+      "route": "stress_state_detector",
+      "modify_weighting": "increase survival dominance, decrease reward dominance",
+      "pipeline_insert_after": "resolve_contradictions",
+      "notes": "Stress amplifies survival motives and reduces exploratory behavior."
+    },
+
+    "on_stress_acute": {
+      "route": "stress_state_detector",
+      "override_dimension_priority": [
+        "survival_orientation",
+        "conflict_response_pattern",
+        "emotional_processing_style",
+        "identity_construction_mode",
+        "reward_strategy"
+      ],
+      "notes": "Acute stress reshapes personality temporarily; reward motives are deprioritized."
+    },
+
+    "on_missing_data": {
+      "route": "missing_data_interpreter",
+      "fallback_strategy": "neutral_imputation",
+      "confidence_penalty": "medium",
+      "notes": "Missing data should not abort the profile; use fallback values."
+    },
+
+    "on_low_confidence": {
+      "route": "confidence_estimator",
+      "apply_weight_modifiers": [
+        "reduce influence of identity filters",
+        "increase influence of emotional style"
+      ],
+      "notes": "When confidence is low, emphasize behaviors, not narratives."
+    }
+  },
+
+  "confidence_propagation": {
+    "rules": [
+      "dimension confidence influences its weight in the interpretation pipeline",
+      "global confidence modifies narrative certainty phrases",
+      "low-confidence signals never override high-confidence signals",
+      "stress-state outputs reduce stability but not truth estimation"
+    ],
+    "outputs": [
+      "dimension_confidence_map",
+      "global_confidence_score",
+      "narrative_certainty_level"
+    ]
+  },
+
+  "integration_points": {
+    "before_pipeline_execution": [
+      "missing_data_interpreter",
+      "contradiction_validator"
+    ],
+    "mid_pipeline": [
+      "stress_state_detector",
+      "confidence_estimator"
+    ],
+    "after_pipeline_execution": [
+      "confidence_propagation"
+    ]
+  },
+
+  "narrative_integration": {
+    "certainty_phrasing_rules": {
+      "high_confidence": [
+        "This strongly suggests that...",
+        "The pattern clearly indicates..."
+      ],
+      "medium_confidence": [
+        "It is likely that...",
+        "The signals suggest..."
+      ],
+      "low_confidence": [
+        "There are indications that...",
+        "Preliminary patterns may imply..."
+      ]
+    },
+    "notes": "Narrative tone adjusts dynamically based on confidence scores."
+  }
+}

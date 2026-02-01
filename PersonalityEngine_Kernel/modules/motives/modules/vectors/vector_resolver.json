@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "name": "vector_resolver",
+
+  "resolution_rules": {
+    "conflict_between_dimensions": {
+      "priority": ["D1", "D3", "D5", "D4", "D2"],
+      "method": "priority_resolution"
+    },
+
+    "ambiguous_signals": {
+      "method": "confidence_reduction",
+      "reduction_factor": 0.25
+    },
+
+    "stress_overrides": {
+      "source": "../overrides/stress_state_overrides.json",
+      "method": "override_dimension_values"
+    },
+
+    "final_vector_normalization": {
+      "normalize": true,
+      "range": [-1.0, 1.0]
+    }
+  },
+
+  "notes": "The resolver decides what happens when signals are mixed, conflicting, or simultaneous, producing a single coherent psychological vector."
+}

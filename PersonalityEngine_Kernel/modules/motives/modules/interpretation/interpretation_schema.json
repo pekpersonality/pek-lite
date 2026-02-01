@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "name": "interpretation_schema",
+
+  "fields": {
+    "core_signal_profile": {
+      "description": "Normalized signal profile aggregated across all five dimensions.",
+      "type": "vector"
+    },
+    "dominant_motives": {
+      "description": "Top-ranked motives influencing current behavioral and emotional configuration.",
+      "type": "array"
+    },
+    "conflict_points": {
+      "description": "Areas where motives or dimensions oppose each other, generating tension.",
+      "type": "array"
+    },
+    "integration_pathways": {
+      "description": "How the system recommends resolving contradictions based on kernel logic.",
+      "type": "array"
+    },
+    "stress_modifiers": {
+      "description": "Overrides applied due to elevated stress-state indicators.",
+      "type": "object"
+    },
+    "confidence_profile": {
+      "description": "Confidence weighting based on data completeness, stress, and contradiction detection.",
+      "type": "object"
+    }
+  },
+
+  "requirements": {
+    "must_include": [
+      "core_signal_profile",
+      "dominant_motives",
+      "confidence_profile"
+    ],
+    "optional": [
+      "conflict_points",
+      "integration_pathways",
+      "stress_modifiers"
+    ]
+  },
+
+  "notes": "This schema establishes the structural blueprint for all interpretive outputs. It does not generate meaning — it defines the shape that meaning must take."
+}

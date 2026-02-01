@@ -1,0 +1,72 @@
+{
+  "version": "1.0",
+  "name": "interpretation_rules",
+
+  "rules": {
+
+    "derive_core_signal_profile": {
+      "inputs": [
+        "../motives/signals/signal_map.json",
+        "../../weights/weights_defaults.json"
+      ],
+      "method": "weighted_vector_aggregation",
+      "description": "Aggregates normalized signals across all dimensions using default weight tables."
+    },
+
+    "identify_dominant_motives": {
+      "inputs": [
+        "../motives/modules/*_motives.json",
+        "../../weights/motive_weights.json"
+      ],
+      "method": "top_ranked_motives",
+      "description": "Ranks motives by influence strength, stress modifiers, and vector contribution."
+    },
+
+    "detect_conflict_points": {
+      "inputs": [
+        "../motives/modules/*_motives.json",
+        "../../weights/conflict_weighting.json"
+      ],
+      "method": "cross_motive_conflict_scan",
+      "description": "Identifies opposing motive pairs or multidimensional contradictions."
+    },
+
+    "generate_integration_pathways": {
+      "inputs": [
+        "derive_core_signal_profile",
+        "detect_conflict_points"
+      ],
+      "method": "resolution_mapping",
+      "description": "Suggests kernel-aligned ways to reconcile conflict and increase coherence."
+    },
+
+    "apply_stress_modifiers": {
+      "inputs": [
+        "../../overrides/stress_overrides.json",
+        "derive_core_signal_profile"
+      ],
+      "method": "override_injection",
+      "description": "Applies stress-state overrides before narrative assembly."
+    },
+
+    "compute_confidence_profile": {
+      "inputs": [
+        "../../engines/analysis/validators.json",
+        "apply_stress_modifiers"
+      ],
+      "method": "confidence_estimation",
+      "description": "Evaluates data reliability based on contradictions, missing data, and stress."
+    }
+  },
+
+  "pipeline_order": [
+    "derive_core_signal_profile",
+    "identify_dominant_motives",
+    "detect_conflict_points",
+    "apply_stress_modifiers",
+    "generate_integration_pathways",
+    "compute_confidence_profile"
+  ],
+
+  "notes": "Interpretation rules define how raw signals evolve into structured meaning across the system's interpretive layer."
+}

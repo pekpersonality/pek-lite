@@ -1,0 +1,99 @@
+{
+  "questioning_engine_version": "1.0",
+  "purpose": "Captures user responses and maps them to dimension indicators for execution in the interpretation pipeline.",
+
+  "dependencies": {
+    "kernel_access_layer": "kernel_access_layer.json",
+    "dimension_mapping": "modules/mapping/dimension_mapping.json"
+  },
+
+  "question_categories": [
+    "survival_orientation",
+    "reward_strategy",
+    "conflict_response_pattern",
+    "identity_construction_mode",
+    "emotional_processing_style",
+    "stress_triggers",
+    "relational_patterns",
+    "decision_rules"
+  ],
+
+  "question_format": {
+    "types": [
+      "forced_choice",
+      "A/B decision",
+      "Likert scale",
+      "scenario-based",
+      "behavioral past-choice",
+      "self-assessment",
+      "contradiction-check pair"
+    ],
+    "notes": "Forced choice + scenario-based yield the highest predictive accuracy."
+  },
+
+  "mapping_logic": {
+    "forced_choice": "Maps directly to high-signal dimension indicators.",
+    "A/B decision": "Determines motive or conflict preference.",
+    "Likert_scale": "Used for weighting strength of dimension responses.",
+    "scenario-based": "Reveals stress-state shifts and override needs.",
+    "behavioral_history": "Evaluates consistency across time.",
+    "contradiction_checks": "Feeds contradiction engine for cross-validation."
+  },
+
+  "engine": {
+    "initialize_question_set": {
+      "description": "Builds question set based on dimension_mapping and required indicators.",
+      "inputs": "dimension_mapping.json",
+      "output": "generated_question_set"
+    },
+
+    "collect_responses": {
+      "description": "Captures all user answers and normalizes input formats.",
+      "inputs": "generated_question_set",
+      "output": "raw_responses"
+    },
+
+    "normalize_responses": {
+      "description": "Converts raw user input into canonical format.",
+      "process": [
+        "convert Likert scales to numeric",
+        "standardize yes/no answers",
+        "check missing items",
+        "parse scenario selections"
+      ],
+      "output": "normalized_responses"
+    },
+
+    "map_to_dimensions": {
+      "description": "Translates normalized answers into dimension indicators.",
+      "inputs": [
+        "normalized_responses",
+        "dimension_mapping",
+        "kernel_access_layer"
+      ],
+      "output": "user_dimension_indicators"
+    },
+
+    "validate_input": {
+      "description": "Checks for contradictions, missing data, and inconsistent choices.",
+      "outputs": [
+        "validated_indicators",
+        "validation_flags"
+      ]
+    },
+
+    "send_to_execution_engine": {
+      "description": "Dispatches dimension indicators to the execution engine.",
+      "inputs": "validated_indicators",
+      "target": "engines/analysis/execution_engine.json",
+      "output": "ready_for_interpretation"
+    }
+  },
+
+  "fallback_rules": {
+    "missing_answers": "Impute neutral values and mark confidence low.",
+    "contradiction_detected": "Send contradiction pair to Interpretation Engine for resolution.",
+    "ambiguous_input": "Default to scenario-derived signal when available.",
+    "invalid_format": "Request user clarification."
+  }
+}

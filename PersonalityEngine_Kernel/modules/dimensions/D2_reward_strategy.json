@@ -1,0 +1,22 @@
+{
+  "dimension_id": "D2",
+  "name": "reward_strategy",
+
+  "definition": {
+    "core": "Represents how the individual generates motivation, reinforcement, and reward. Determines what experiences feel fulfilling, energizing, or validating.",
+
+    "axes": {
+      "achievement_reward": "Seeks mastery, competence, progress, and improvement. Reinforced by personal accomplishment.",
+      "connection_reward": "Seeks closeness, affirmation, shared experiences, and relational harmony.",
+      "novelty_reward": "Seeks stimulation, exploration, curiosity, and new experiences.",
+      "stability_reward": "Seeks predictability, routine, comfort, and low-variance environments."
+    },
+
+    "behavioral_markers": [
+      "gravitates toward situations that produce preferred reward signals",
+      "avoids or disengages from contexts lacking reward potency",
+      "self-reinforces behaviors aligned with dominant reward axis",
+      "higher stress when core reward source is blocked or threatened"
+    ]
+  }
+}

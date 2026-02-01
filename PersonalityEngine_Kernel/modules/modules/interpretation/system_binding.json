@@ -1,0 +1,87 @@
+{
+  "version": "1.0",
+  "name": "system_binding_layer",
+
+  "global_state": {
+    "stress_level": 0.0,
+    "confidence_score": 1.0,
+    "active_conflicts": [],
+    "dominant_dimensions": [],
+    "dominant_motives": [],
+    "notes": "Represents shared psychological state accessible to all modules during runtime."
+  },
+
+  "shared_data_structures": {
+    "signal_packet": {
+      "description": "Unified container for all processed signals.",
+      "fields": ["signal_id", "signal_group", "intensity", "context", "source"]
+    },
+    "vector_profile": {
+      "description": "Resolved vector state after routing, weighting, and overrides.",
+      "fields": ["dimension", "value", "weight", "bias_modifiers"]
+    },
+    "interpretation_profile": {
+      "description": "Core interpretation results from motive/identity/conflict engines.",
+      "fields": ["motives", "conflicts", "identity_state", "stress_state"]
+    },
+    "compiled_output": {
+      "description": "Final structured report to be passed to the output compiler.",
+      "fields": ["sections", "narrative", "confidence", "flags"]
+    }
+  },
+
+  "binding_rules": {
+    "stress_to_conflict_engine": {
+      "description": "Stress state must update conflict engine immediately when thresholds change.",
+      "when": "stress_level_change",
+      "action": "trigger_conflict_recalculation"
+    },
+    "conflict_to_interpretation": {
+      "description": "Detected conflicts must modify interpretation weights before narrative assembly.",
+      "when": "conflict_detected",
+      "action": "re_weight_interpretation"
+    },
+    "validation_to_confidence": {
+      "description": "Validation failures must update global confidence score.",
+      "when": "validation_failure",
+      "action": "apply_confidence_penalty"
+    },
+    "vector_to_identity": {
+      "description": "Vector shifts in D4 must update identity interpretation immediately.",
+      "when": "D4_vector_change",
+      "action": "refresh_identity_state"
+    },
+    "router_to_vector_engine": {
+      "description": "Signal router must pass normalized signals directly into vector engine.",
+      "when": "signal_packet_ready",
+      "action": "vectorize"
+    }
+  },
+
+  "error_handling": {
+    "missing_data": {
+      "action": "warn_and_continue",
+      "notes": "Allows partial interpretation instead of full system halt."
+    },
+    "module_failure": {
+      "action": "fallback_to_previous_state",
+      "notes": "Prevents total failure and ensures continuity."
+    },
+    "invalid_signal": {
+      "action": "discard_and_log",
+      "notes": "Protects engine integrity from malformed inputs."
+    }
+  },
+
+  "sync_order": [
+    "signal_router",
+    "vector_engine",
+    "stress_integration",
+    "conflict_engine",
+    "interpretation_rules",
+    "validation_matrix",
+    "output_compiler"
+  ],
+
+  "notes": "The System Binding Layer defines how all modules communicate and synchronize state. This is the core coordination engine."
+}

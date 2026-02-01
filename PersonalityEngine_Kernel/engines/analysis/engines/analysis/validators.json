@@ -1,0 +1,85 @@
+{
+  "validators_version": "1.0",
+  "purpose": "Defines diagnostic validators for contradiction detection, stress-state identification, missing data inference, and confidence scoring.",
+
+  "validators": {
+    "contradiction_validator": {
+      "description": "Detects incompatible responses across dimensions or within the same dimension.",
+      "checks": [
+        "opposite forced-choice selections",
+        "inconsistent scenario outcomes",
+        "self-reported traits conflicting with behavior",
+        "identity claims conflicting with emotional style"
+      ],
+      "output": [
+        "contradiction_flags",
+        "confidence_adjustment"
+      ]
+    },
+
+    "stress_state_detector": {
+      "description": "Determines if user responses indicate active or latent stress-state.",
+      "signals": [
+        "threat_sensitivity > threshold",
+        "emotional_volatility spikes",
+        "flight/freeze pattern dominance",
+        "identity-threat responses",
+        "attachment insecurity indicators"
+      ],
+      "modes": [
+        "baseline",
+        "elevated",
+        "acute",
+        "shutdown"
+      ],
+      "output": [
+        "stress_state",
+        "stress_modifiers"
+      ]
+    },
+
+    "missing_data_interpreter": {
+      "description": "Determines how to handle skipped, incomplete, or ambiguous answers.",
+      "rules": [
+        "if critical dimension signal missing → impute neutral value",
+        "if contradiction pair incomplete → mark low confidence",
+        "if scenario answer incomplete → request user clarification",
+        "if Likert response missing → assign midpoint"
+      ],
+      "output": [
+        "completed_dimension_indicators",
+        "missing_data_flags"
+      ]
+    },
+
+    "confidence_estimator": {
+      "description": "Generates confidence scores for each dimension and global profile.",
+      "inputs": [
+        "contradiction_flags",
+        "stress_state",
+        "missing_data_flags",
+        "response_consistency"
+      ],
+      "calculation_logic": [
+        "high contradictions → reduce confidence",
+        "high stress → reduce stability, not confidence",
+        "missing data → reduce confidence in affected dimension only",
+        "consistency across question types → increase confidence"
+      ],
+      "output": "confidence_profile"
+    }
+  },
+
+  "integration_rules": {
+    "before_interpretation_pipeline": [
+      "missing_data_interpreter",
+      "contradiction_validator"
+    ],
+    "after_motive_weighting": [
+      "stress_state_detector"
+    ],
+    "before_final_output": [
+      "confidence_estimator"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "emotion_weighting_version": "1.0",
+  "variables": {
+    "volatility": null,
+    "suppression_level": null,
+    "latency": null,
+    "expression_intensity": null
+  }
+}

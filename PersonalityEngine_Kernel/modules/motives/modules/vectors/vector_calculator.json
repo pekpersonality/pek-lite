@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "name": "vector_calculator",
+
+  "calculation_rules": {
+    "signal_to_motive": {
+      "apply_weight": true,
+      "weight_source": "../weights/weights_defaults.json",
+      "formula": "motive_activation = signal_strength * motive_activation_weight"
+    },
+
+    "motive_to_dimension": {
+      "apply_weight": true,
+      "formula": "dimension_shift = motive_activation * dimension_weight"
+    },
+
+    "dimension_resolution": {
+      "combine_method": "weighted_sum",
+      "normalize_range": [-1.0, 1.0]
+    }
+  },
+
+  "notes": "This file defines how raw signals activate motives, how motives shift dimensions, and how dimensions produce a final psychological vector."
+}

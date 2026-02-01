@@ -1,0 +1,22 @@
+{
+  "dimension_id": "D5",
+  "name": "emotional_processing",
+
+  "definition": {
+    "core": "Represents how the individual experiences, interprets, expresses, and regulates emotional states. Determines reactivity, emotional bandwidth, resilience, and default regulation strategies.",
+
+    "axes": {
+      "high_reactivity": "Emotions intensify quickly; responses are rapid and strong.",
+      "low_reactivity": "Emotional responses build slowly; intensity is lower by default.",
+      "internalizer": "Processes emotions inwardly; may suppress, overthink, or privately regulate.",
+      "externalizer": "Expresses emotions outwardly; may discharge feelings through action, speech, or social contact."
+    },
+
+    "behavioral_markers": [
+      "speed and intensity of emotional shifts",
+      "tendencies toward suppression or expression",
+      "emotional recovery rate after stress",
+      "patterns of coping, soothing, or escalation"
+    ]
+  }
+}

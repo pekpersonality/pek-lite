@@ -1,0 +1,99 @@
+{
+  "mapping_version": "1.0",
+  "purpose": "Defines how questionnaire items map to the five kernel dimensions and auxiliary indicators.",
+
+  "dimensions": {
+    "D1_survival_orientation": {
+      "signals": [
+        "threat_sensitivity",
+        "risk_aversion",
+        "control_orientation",
+        "avoidance_threshold"
+      ],
+      "question_types": [
+        "scenario_based",
+        "forced_choice",
+        "stress_trigger"
+      ]
+    },
+
+    "D2_reward_strategy": {
+      "signals": [
+        "reward_seeking",
+        "stimulation_need",
+        "achievement_orientation",
+        "novelty_preference"
+      ],
+      "question_types": [
+        "A/B decision",
+        "Likert_scale",
+        "scenario_based"
+      ]
+    },
+
+    "D3_conflict_response_pattern": {
+      "signals": [
+        "fight_response",
+        "flight_response",
+        "freeze_response",
+        "fawn_response",
+        "assertion_level"
+      ],
+      "question_types": [
+        "behavioral_history",
+        "scenario_based",
+        "forced_choice"
+      ]
+    },
+
+    "D4_identity_construction_mode": {
+      "signals": [
+        "role_identity",
+        "narrative_identity",
+        "relational_identity",
+        "autonomy_identity",
+        "performance_identity"
+      ],
+      "question_types": [
+        "self_assessment",
+        "Likert_scale",
+        "contradiction_check"
+      ]
+    },
+
+    "D5_emotional_processing_style": {
+      "signals": [
+        "internalizer",
+        "externalizer",
+        "suppression_level",
+        "emotional_volatility",
+        "processing_latency"
+      ],
+      "question_types": [
+        "scenario_based",
+        "Likert_scale",
+        "behavioral_history"
+      ]
+    }
+  },
+
+  "auxiliary_indicators": {
+    "stress_triggers": [
+      "rejection_sensitivity",
+      "overwhelm_threshold",
+      "social_threat_reactivity"
+    ],
+    "relational_patterns": [
+      "attachment_style",
+      "intimacy_tolerance",
+      "trust_baseline"
+    ],
+    "decision_rules": [
+      "logic_first",
+      "feeling_first",
+      "impulse_first",
+      "avoidance_first"
+    ]
+  }
+}
+

@@ -1,0 +1,102 @@
+{
+  "version": "1.0",
+  "name": "dry_run_execution",
+
+  "input_used": "engine_simulation_run.json",
+
+  "execution_steps": {
+    "step_1_signal_detection": {
+      "raw_responses": [
+        "I feel unsafe when plans change suddenly.",
+        "I try to stay in control of my environment.",
+        "I avoid arguments and tension whenever possible."
+      ],
+      "detected_signals": [
+        "THREAT_HIGH",
+        "CONTROL_SEEKING",
+        "CONFLICT_AVOIDANCE"
+      ],
+      "notes": "Keyword + pattern rules function correctly."
+    },
+
+    "step_2_signal_routing": {
+      "routes": {
+        "D1_survival_orientation": ["THREAT_HIGH", "CONTROL_SEEKING"],
+        "D3_conflict_response": ["CONFLICT_AVOIDANCE"]
+      },
+      "router_status": "valid",
+      "notes": "Signal packets successfully normalized and routed to the correct dimensions."
+    },
+
+    "step_3_vector_engine": {
+      "input_vectors": {
+        "D1": ["THREAT_HIGH", "CONTROL_SEEKING"],
+        "D3": ["CONFLICT_AVOIDANCE"]
+      },
+      "computed_vectors": {
+        "D1": {
+          "value": "high",
+          "reason": "Threat and control amplification"
+        },
+        "D3": {
+          "value": "moderate",
+          "reason": "Conflict avoidance motive"
+        },
+        "D2": {
+          "value": "low",
+          "reason": "No reward signals"
+        }
+      },
+      "notes": "Vector schema, calculator, and resolver functioning cohesively."
+    },
+
+    "step_4_stress_integration": {
+      "initial_state": "moderate",
+      "computed_state": "elevated",
+      "applied_bias": {
+        "vector_bias_factor": 1.25,
+        "interpretation_shift": "threat_sensitivity"
+      },
+      "notes": "Stress thresholds crossed properly; interpretation shift activated."
+    },
+
+    "step_5_conflict_engine": {
+      "conflicts_detected": false,
+      "reason": "Only avoidance-driven motives present; no internal contradiction.",
+      "notes": "Conflict engine correctly refrained from unnecessary activation."
+    },
+
+    "step_6_interpretation_generation": {
+      "dominant_motives": ["Threat Avoidance", "Control Orientation"],
+      "identity_state": "stable",
+      "stress_profile": "elevated",
+      "relational_style": "Conflict Avoidant",
+      "notes": "Interpretation schema and rules producing coherent psychological state."
+    },
+
+    "step_7_validation_matrix": {
+      "checks_passed": true,
+      "failed_checks": [],
+      "confidence_adjustments": {
+        "initial": 1.00,
+        "final": 0.92
+      },
+      "integrity_score": 0.95,
+      "notes": "No contradictions detected; minor confidence reduction due to moderate stress."
+    },
+
+    "step_8_output_compiler": {
+      "summary_section": {
+        "global_orientation": "High Threat Sensitivity",
+        "dominant_motive": "Stability Seeking",
+        "confidence_score": 0.92
+      },
+      "narrative_snippet": "This individual demonstrates heightened sensitivity to unpredictability, with a clear tendency to avoid conflict and maintain environmental control...",
+      "status": "output_valid",
+      "notes": "All schema fields assembled successfully."
+    }
+  },
+
+  "final_status": "dry_run_successful",
+  "notes": "The psychological engine completed a full pipeline execution using simulated inputs."
+}

@@ -1,0 +1,77 @@
+{
+  "version": "1.0",
+  "name": "runtime_harness",
+
+  "runtime_pipeline": {
+    "step_1_collect_inputs": {
+      "description": "Accept raw responses, question outputs, interaction data, or direct signal flags.",
+      "modules_used": [
+        "engines/questioning_engine.json",
+        "modules/signals/signal_definitions.json",
+        "modules/signals/signal_router.json"
+      ],
+      "output": "raw_signal_packet"
+    },
+
+    "step_2_route_signals": {
+      "description": "Normalize, classify, and route incoming signals to appropriate kernel units.",
+      "modules_used": [
+        "kernel_access_layer.json",
+        "modules/signals/signal_router.json"
+      ],
+      "output": "kernel_ready_inputs"
+    },
+
+    "step_3_vectorize": {
+      "description": "Convert routed signals into weighted vectors across dimensions.",
+      "modules_used": [
+        "modules/vectors/vector_schema.json",
+        "modules/vectors/vector_calculator.json",
+        "modules/vectors/vector_resolver.json"
+      ],
+      "output": "resolved_vectors"
+    },
+
+    "step_4_apply_overrides": {
+      "description": "Apply stress-state overrides, contradiction flags, and adaptive weighting.",
+      "modules_used": [
+        "modules/overrides/stress_overrides.json",
+        "engines/analysis/validators.json"
+      ],
+      "output": "adjusted_vector_profile"
+    },
+
+    "step_5_interpret": {
+      "description": "Generate motive interpretations, conflict maps, identity patterns, and relational dynamics.",
+      "modules_used": [
+        "modules/interpretation/interpretation_schema.json",
+        "modules/interpretation/interpretation_rules.json",
+        "modules/interpretation/narrative_templates.json"
+      ],
+      "output": "interpreted_profile"
+    },
+
+    "step_6_compile_output": {
+      "description": "Assemble structured report + narrative profile using output schema and logic.",
+      "modules_used": [
+        "modules/output/output_schema.json",
+        "modules/output/output_logic.json",
+        "modules/output/report_structure.json"
+      ],
+      "output": "final_personality_report"
+    }
+  },
+
+  "test_mode": {
+    "enabled": true,
+    "description": "Allows sandbox testing of individual pipeline phases.",
+    "options": [
+      "test_signal_only",
+      "test_vector_pipeline",
+      "test_interpretation",
+      "test_output_assembly"
+    ]
+  },
+
+  "notes": "The runtime harness defines how the entire system executes from raw input to final report. This is the activation engine."
+}

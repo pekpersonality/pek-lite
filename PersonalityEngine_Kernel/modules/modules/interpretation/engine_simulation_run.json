@@ -1,0 +1,27 @@
+{
+  "raw_input": {
+    "example_statement": "I crave stability but also feel trapped and want freedom to explore."
+  },
+  "expected_output": {
+    "summary": {
+      "global_orientation": "High Threat Sensitivity",
+      "dominant_motive": "Stability Seeking",
+      "confidence_score": "0.85–0.95"
+    },
+    "core_motives": {
+      "dominant_motives": ["Threat Avoidance", "Control Orientation"],
+      "motive_expressions": "Avoids unpredictability, prefers structure",
+      "stress_expression_patterns": "Moderate reactivity to instability"
+    },
+    "conflict_patterns": {
+      "detected": false
+    },
+    "stress_profile": {
+      "level": "elevated",
+      "behaviors": "Heightened vigilance, risk minimization"
+    },
+    "identity_structure": {
+      "state": "stable"
+    }
+  }
+}

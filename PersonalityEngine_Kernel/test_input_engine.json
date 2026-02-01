@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "name": "test_input_engine",
+
+  "input_format": {
+    "description": "Defines how test inputs must be structured for the runtime harness.",
+    "fields": {
+      "responses": "Array of raw user responses or selected A/B outputs.",
+      "context_flags": "Optional metadata (stress signals, contradiction flags, missing-data flags).",
+      "forced_overrides": "Optional manual overrides for testing specific engine paths."
+    },
+    "example": {
+      "responses": [
+        "I prefer stability over risk.",
+        "I avoid conflict whenever possible.",
+        "I feel uneasy when plans change suddenly."
+      ],
+      "context_flags": {
+        "stress_state": "moderate",
+        "missing_data": false
+      },
+      "forced_overrides": {}
+    }
+  },
+
+  "processing_rules": {
+    "step_1": {
+      "name": "transform_responses_to_signals",
+      "description": "Uses signal definitions to map raw responses to structured signals.",
+      "module_used": "modules/signals/signal_definitions.json",
+      "output": "signal_packet"
+    },
+    "step_2": {
+      "name": "dispatch_signals_to_runtime",
+      "description": "Forwards normalized signals into the runtime_harness.",
+      "module_used": "runtime_harness.json",
+      "output": "raw_pipeline_output"
+    }
+  },
+
+  "test_modes": {
+    "signal_test": {
+      "description": "Tests only the signal-routing transformation.",
+      "steps": [
+        "transform_responses_to_signals"
+      ]
+    },
+    "vector_test": {
+      "description": "Runs signal routing + vector engine only.",
+      "steps": [
+        "transform_responses_to_signals",
+        "dispatch_signals_to_runtime"
+      ],
+      "pipeline_limit": "step_3_vectorize"
+    },
+    "interpretation_test": {
+      "description": "Runs up through motive and conflict interpretation.",
+      "pipeline_limit": "step_5_interpret"
+    },
+    "full_run": {
+      "description": "Executes the entire engine from input → final report.",
+      "pipeline_limit": "step_6_compile_output"
+    }
+  },
+
+  "output_capture": {
+    "store_outputs": true,
+    "output_path": "./test_outputs/",
+    "notes": "This folder can store test reports for validation and versioning."
+  },
+
+  "notes": "This module allows controlled injection of test inputs and determines how the runtime harness is exercised during validation."
+}

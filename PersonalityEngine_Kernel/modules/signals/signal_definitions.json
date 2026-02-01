@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "name": "signal_definitions",
+
+  "signal_categories": {
+    "threat_signals": [
+      "THREAT_HIGH",
+      "THREAT_LOW",
+      "INSTABILITY_AVOIDANCE",
+      "DANGER_SENSITIVITY"
+    ],
+    "control_signals": [
+      "CONTROL_SEEKING",
+      "CONTROL_LOSS_AVERSION",
+      "PREDICTABILITY_NEED",
+      "STRUCTURE_DEPENDENCE"
+    ],
+    "approval_signals": [
+      "APPROVAL_SEEKING",
+      "REJECTION_FEAR",
+      "BELONGING_NEED"
+    ],
+    "competence_signals": [
+      "PERFORMANCE_ANXIETY",
+      "ACHIEVEMENT_DRIVE",
+      "INSECURITY_SELF_EVAL"
+    ],
+    "conflict_signals": [
+      "CONFLICT_AVOIDANCE",
+      "CONFRONTATION_TENSION",
+      "SELF_PROTECTIVE_WITHDRAWAL"
+    ],
+    "stress_signals": [
+      "STRESS_SPIKE",
+      "STRESS_MODERATE",
+      "STRESS_LOW"
+    ],
+    "identity_signals": [
+      "AUTONOMY_DEFENSE",
+      "ROLE_CONFLICT",
+      "SELF_CONCEPT_UNCERTAINTY"
+    ]
+  },
+
+  "detection_rules": {
+    "keyword_rules": {
+      "THREAT_HIGH": ["unsafe", "danger", "threat", "fear", "risk"],
+      "INSTABILITY_AVOIDANCE": ["stable", "predictable", "secure", "routine"],
+      "CONTROL_SEEKING": ["control", "manage", "organize", "plan"],
+      "CONTROL_LOSS_AVERSION": ["overwhelmed", "out of control", "chaotic"],
+      "APPROVAL_SEEKING": ["please", "liked", "accepted", "disappoint"],
+      "REJECTION_FEAR": ["rejected", "left out", "abandon", "not belong"],
+      "CONFLICT_AVOIDANCE": ["avoid conflict", "keep peace", "tension", "arguments"],
+      "STRESS_SPIKE": ["anxious", "panic", "overload", "flooded"],
+      "AUTONOMY_DEFENSE": ["my space", "independence", "don’t tell me", "freedom"]
+    },
+
+    "pattern_rules": {
+      "DANGER_SENSITIVITY": "phrases indicating hyperawareness of risk even when not prompted",
+      "STRUCTURE_DEPENDENCE": "frequent references to planning, order, scheduling",
+      "BELONGING_NEED": "references to fitting in, bonding, closeness",
+      "ACHIEVEMENT_DRIVE": "references to excellence, results, growth, success",
+      "SELF_PROTECTIVE_WITHDRAWAL": "statements implying emotional distance or shutdown"
+    },
+
+    "contextual_rules": {
+      "amplify_under_stress": [
+        "THREAT_HIGH",
+        "CONTROL_SEEKING",
+        "CONFLICT_AVOIDANCE"
+      ],
+      "suppress_under_stress": [
+        "ACHIEVEMENT_DRIVE",
+        "BELONGING_NEED"
+      ]
+    }
+  },
+
+  "mapping_rules": {
+    "THREAT_HIGH": "D1_survival_orientation",
+    "INSTABILITY_AVOIDANCE": "D1_survival_orientation",
+    "CONTROL_SEEKING": "D1_survival_orientation",
+    "APPROVAL_SEEKING": "D5_emotional_processing",
+    "REJECTION_FEAR": "D5_emotional_processing",
+    "ACHIEVEMENT_DRIVE": "D2_reward_strategy",
+    "CONFLICT_AVOIDANCE": "D3_conflict_response",
+    "AUTONOMY_DEFENSE": "D4_identity_construction",
+    "STRESS_SPIKE": "stress_state"
+  },
+
+  "notes": "Defines all identifiable psychological signals, their detection rules, keyword triggers, and mappings to kernel dimensions."
+}

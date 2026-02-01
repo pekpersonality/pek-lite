@@ -1,0 +1,82 @@
+{
+  "units_version": "1.0",
+  "purpose": "Reusable interpretation units that perform motive weighting, conflict analysis, emotional decoding, identity filtering, and prediction synthesis.",
+
+  "units": [
+    {
+      "unit_id": "IU-CONTRADICTION_RESOLUTION",
+      "description": "Resolves dimensional contradictions using the kernel's access priority hierarchy.",
+      "logic": [
+        "Identify conflicting signals across dimensions.",
+        "Apply access_priority: stress overrides > survival > conflict > emotion > reward > identity.",
+        "Suppress lower-priority contradictions.",
+        "Return resolved state object."
+      ]
+    },
+    {
+      "unit_id": "IU-MOTIVE_WEIGHTING",
+      "description": "Assigns weights to survival and reward motives to determine core and secondary motives.",
+      "logic": [
+        "Read D1 and D2 indicators.",
+        "Apply survival override if threat is active.",
+        "If reward axis aligns with identity, increase weight.",
+        "If emotional suppression is present, adjust weights downward for expressed motives.",
+        "Output weighted motive array."
+      ]
+    },
+    {
+      "unit_id": "IU-CONFLICT_SELECTION",
+      "description": "Predicts which conflict pattern activates based on motives and emotional style.",
+      "logic": [
+        "Start with D3 conflict pattern.",
+        "Modify based on D1 threat axis.",
+        "Modify based on emotional externalizer/internalizer pattern.",
+        "Apply stress override if conditions met.",
+        "Output conflict behavior object."
+      ]
+    },
+    {
+      "unit_id": "IU-EMOTIONAL_DECODER",
+      "description": "Interprets emotional timing, expression, suppression, and processing trajectory.",
+      "logic": [
+        "If suppressor: delay emotion, reduce outward expression.",
+        "If expresser: amplify immediate emotion.",
+        "If internalizer: increase narrative rumination.",
+        "If sensitive: increase volatility and hyper-awareness.",
+        "Apply stress overrides for emotional flooding or shutdown.",
+        "Output emotional profile object."
+      ]
+    },
+    {
+      "unit_id": "IU-IDENTITY_FILTER",
+      "description": "Applies identity logic to interpret meaning-making, justification, and reaction narratives.",
+      "logic": [
+        "Read identity axis (performance, relational, autonomy, morality, aesthetic, role).",
+        "Interpret how identity reframes or reinterprets emotional and conflict signals.",
+        "If identity threatened: amplify protective behaviors.",
+        "Modify narrative interpretation accordingly.",
+        "Output identity-modified model object."
+      ]
+    },
+    {
+      "unit_id": "IU-PREDICTION_ENGINE",
+      "description": "Synthesizes all interpreted units into short-term and long-term behavioral predictions.",
+      "logic": [
+        "Integrate weighted motives, conflict pattern, emotional style, and identity filter.",
+        "Generate predictions related to stress behavior, relational dynamics, risk markers, decision making, and consistency of traits.",
+        "Encode predictions into matrix form for downstream narrative generation.",
+        "Output prediction_matrix object."
+      ]
+    },
+    {
+      "unit_id": "IU-NARRATIVE_ENGINE",
+      "description": "Converts predictions into human-readable, structured psychological reports.",
+      "logic": [
+        "Take prediction_matrix and match sections to report_structure template.",
+        "Translate psychological logic into accessible language.",
+        "Maintain internal consistency and avoid contradictions.",
+        "Output structured narrative object."
+      ]
+    }
+  ]
+}

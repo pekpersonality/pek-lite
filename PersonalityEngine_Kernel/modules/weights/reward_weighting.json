@@ -1,0 +1,10 @@
+{
+  "reward_weighting_version": "1.0",
+  "variables": {
+    "reward_magnitude": null,
+    "novelty_drive": null,
+    "achievement_pressure": null,
+    "hedonic_bias": null
+  }
+}
+

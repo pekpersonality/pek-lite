@@ -1,0 +1,60 @@
+{
+  "version": "1.0",
+  "name": "signal_router",
+
+  "routing_rules": [
+    {
+      "signal_group": "threat_signals",
+      "routes_to": {
+        "dimension": "D1",
+        "vector_method": "priority_weight",
+        "stress_override": "SO-THREAT"
+      },
+      "notes": "Threat-related signals increase Survival Orientation weight and activate threat-based stress overrides."
+    },
+    {
+      "signal_group": "attachment_signals",
+      "routes_to": {
+        "dimension": "D1",
+        "vector_method": "affiliation_bias",
+        "stress_override": "SO-ACCEPTANCE"
+      },
+      "notes": "Attachment or relational threat cues adjust acceptance motive weighting."
+    },
+    {
+      "signal_group": "reward_block_signals",
+      "routes_to": {
+        "dimension": "D2",
+        "vector_method": "reward_shift",
+        "stress_override": "REWARD-SUPPRESS"
+      },
+      "notes": "Signals involving blocked goals or stalled progress bias Reward Strategy interpretation."
+    },
+    {
+      "signal_group": "identity_disruption_signals",
+      "routes_to": {
+        "dimension": "D4",
+        "vector_method": "identity_flux",
+        "stress_override": "IDENTITY-FRICTION"
+      },
+      "notes": "Identity conflict, shame, or self-schema instability routes to D4 Identity Construction."
+    },
+    {
+      "signal_group": "emotional_unrest_signals",
+      "routes_to": {
+        "dimension": "D5",
+        "vector_method": "affect_intensity",
+        "stress_override": "AFFECT-OVERLOAD"
+      },
+      "notes": "Affective volatility or emotional overload routes to Emotional Processing."
+    }
+  ],
+
+  "fallback_rule": {
+    "method": "normalize_and_distribute",
+    "dimensions": ["D1", "D2", "D3", "D4", "D5"],
+    "notes": "If a signal does not match any known group, distribute its weight evenly and normalize."
+  },
+
+  "notes": "The router maps incoming signals to their respective dimensions and stress-response pathways."
+}

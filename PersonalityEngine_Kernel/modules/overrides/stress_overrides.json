@@ -1,0 +1,80 @@
+{
+  "version": "1.0",
+  "name": "stress_overrides",
+
+  "override_rules": {
+    "signal_suppression": {
+      "description": "Suppress signals that become unreliable or distorted under elevated stress.",
+      "rules": [
+        {
+          "signal": "low_importance_context",
+          "when_stress_above": 0.50,
+          "action": "suppress",
+          "notes": "Low-context signals are ignored when cognitive bandwidth shrinks."
+        },
+        {
+          "signal": "minor_reward_cues",
+          "when_stress_above": 0.65,
+          "action": "suppress",
+          "notes": "Small positive cues are deprioritized under high stress."
+        }
+      ]
+    },
+
+    "signal_amplification": {
+      "description": "Amplify signals that become disproportionately influential under stress.",
+      "rules": [
+        {
+          "signal": "threat_cue",
+          "when_stress_above": 0.40,
+          "amplify_factor": 1.5,
+          "notes": "Threat-related signals intensify early in stress progression."
+        },
+        {
+          "signal": "identity_violation",
+          "when_stress_above": 0.70,
+          "amplify_factor": 1.8,
+          "notes": "Identity-inconsistent events become extremely salient under high stress."
+        }
+      ]
+    },
+
+    "vector_overrides": {
+      "description": "Direct modifications to vector outputs based on stress conditions.",
+      "rules": [
+        {
+          "dimension": "D1",
+          "when_stress_above": 0.60,
+          "vector_multiplier": 1.3,
+          "notes": "Survival orientation receives priority weighting when stress rises."
+        },
+        {
+          "dimension": "D3",
+          "when_stress_above": 0.75,
+          "vector_multiplier": 1.4,
+          "notes": "Conflict response vectors intensify as internal conflict escalates."
+        }
+      ]
+    },
+
+    "motive_priority_overrides": {
+      "description": "Reorders motives that take priority under stress.",
+      "rules": [
+        {
+          "motive_ids": ["SM-ABANDON", "SM-BETRAYAL"],
+          "when_stress_above": 0.55,
+          "priority_shift": "increase",
+          "notes": "Abandonment and betrayal motives dominate mid-high stress range."
+        },
+        {
+          "motive_ids": ["CM-AMBIVALENCE"],
+          "when_stress_above": 0.70,
+          "priority_shift": "increase",
+          "notes": "Ambivalence motive intensifies during reactive stress states."
+        }
+      ]
+    }
+  },
+
+  "notes": "Stress overrides apply low-level rule modifications to signals, vectors, and motive priority. This module is executed BEFORE stress_integration.json."
+}

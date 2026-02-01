@@ -1,0 +1,65 @@
+{
+  "version": "1.0",
+  "name": "psychological_signal_lexicon",
+
+  "signals": {
+    "emotional_intensity_shift": {
+      "description": "Rapid or notable increase/decrease in emotional energy.",
+      "maps_to": [
+        "D5.high_reactivity",
+        "D3.boundary_protection",
+        "override.stress"
+      ]
+    },
+
+    "withdrawal_or_distance": {
+      "description": "Reduction in presence, engagement, responsiveness, or relational closeness.",
+      "maps_to": [
+        "D1.security_restoration",
+        "D3.escape_urge",
+        "D5.suppression"
+      ]
+    },
+
+    "overexplanation_or_control": {
+      "description": "Attempts to stabilize uncertainty through detailed justification or structured framing.",
+      "maps_to": [
+        "D1.control_seeking",
+        "D3.stability_restoration",
+        "D4.self_coherence_maintenance"
+      ]
+    },
+
+    "validation_seeking_behavior": {
+      "description": "Direct or indirect attempts to gain affirmation, reassurance, or approval.",
+      "maps_to": [
+        "D2.connection_seeking",
+        "D4.validation_seeking"
+      ]
+    },
+
+    "risk_taking_or_novelty_pursuit": {
+      "description": "Behavior indicating desire for stimulation, change, or exploration.",
+      "maps_to": [
+        "D2.novelty_exploration",
+        "D5.discharge"
+      ]
+    },
+
+    "conflict_escalation_marker": {
+      "description": "Verbal or behavioral patterns that indicate rising conflict intensity.",
+      "maps_to": [
+        "D3.boundary_protection",
+        "override.threat_escalation"
+      ]
+    },
+
+    "identity_defense_trigger": {
+      "description": "Statements or behaviors indicating threatened self-concept.",
+      "maps_to": [
+        "D4.self_coherence_maintenance",
+        "override.identity_stress"
+      ]
+    }
+  }
+}

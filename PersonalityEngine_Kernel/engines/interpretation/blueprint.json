@@ -1,0 +1,70 @@
+{
+  "interpretation_engine_version": "1.0",
+  "purpose": "Defines the interpretation logic for synthesizing psychological signals into coherent motives, predictions, and narrative outputs.",
+  
+  "evaluation_order": [
+    "load_dimensions",
+    "apply_stress_overrides",
+    "determine_core_motive",
+    "resolve_dimension_conflicts",
+    "weight_motives",
+    "interpret_conflict_pattern",
+    "interpret_emotional_style",
+    "interpret_identity_filters",
+    "synthesize_predictions",
+    "construct_narrative"
+  ],
+
+  "steps": {
+    "load_dimensions": {
+      "description": "Loads all dimension references using the Kernel Access Layer.",
+      "inputs": "dimension modules",
+      "outputs": "dimension data objects"
+    },
+    "apply_stress_overrides": {
+      "description": "Checks for high-stress signals and applies override logic before any other interpretation.",
+      "inputs": "stress_state_overrides module",
+      "outputs": "modified dimension states"
+    },
+    "determine_core_motive": {
+      "description": "Identifies the primary survival or reward axis driving behavior.",
+      "inputs": "D1 + D2",
+      "outputs": "core motive object"
+    },
+    "resolve_dimension_conflicts": {
+      "description": "Checks for contradictions between dimensions and resolves them using access_priority rules.",
+      "inputs": "all dimensions",
+      "outputs": "resolved state model"
+    },
+    "weight_motives": {
+      "description": "Applies weighting logic to determine dominant and secondary motives.",
+      "inputs": "resolved model + conflict weighting + reward weighting + identity weighting",
+      "outputs": "weighted motive profile"
+    },
+    "interpret_conflict_pattern": {
+      "description": "Predicts conflict behavior based on weighted motives and overrides.",
+      "inputs": "D1 + D3 + EP",
+      "outputs": "conflict behavior object"
+    },
+    "interpret_emotional_style": {
+      "description": "Interprets emotional timing, expression, suppression, and processing patterns.",
+      "inputs": "D5 + stress overrides",
+      "outputs": "emotional profile"
+    },
+    "interpret_identity_filters": {
+      "description": "Applies identity logic to meaning-making, self-justification, and reaction narratives.",
+      "inputs": "D4 + emotional profile",
+      "outputs": "identity-modified model"
+    },
+    "synthesize_predictions": {
+      "description": "Generates predictions for behavior, relationships, stress reactions, and long-term patterns.",
+      "inputs": "all interpreted units",
+      "outputs": "prediction matrix"
+    },
+    "construct_narrative": {
+      "description": "Converts interpreted features into human-readable profile sections.",
+      "inputs": "prediction matrix",
+      "outputs": "structured narrative object (report_structure)"
+    }
+  }
+}

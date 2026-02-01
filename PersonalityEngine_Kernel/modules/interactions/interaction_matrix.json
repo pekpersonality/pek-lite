@@ -1,0 +1,5 @@
+{
+  "ref": "../kernel_structural_v1.json",
+  "section": "interaction_matrix",
+  "notes": "References the full Interaction Matrix from the master kernel."
+}

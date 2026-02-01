@@ -1,0 +1,46 @@
+{
+  "dimension_id": "D1",
+  "name": "survival_orientation_motives",
+
+  "motives": {
+    "abandonment_avoidance": {
+      "description": "Avoids emotional or physical abandonment; seeks stability and reassurance.",
+      "activation": "Triggered by rejection cues, distance, emotional withdrawal.",
+      "behaviors": [
+        "hypervigilance to relational shifts",
+        "clinging or reassurance seeking",
+        "scanning for signs of loss"
+      ]
+    },
+
+    "betrayal_prevention": {
+      "description": "Attempts to anticipate deception or manipulation; seeks certainty.",
+      "activation": "Triggered by secrecy, inconsistency, unpredictability.",
+      "behaviors": [
+        "questioning motives",
+        "withholding trust",
+        "monitoring or testing others"
+      ]
+    },
+
+    "control_seeking": {
+      "description": "Attempts to stabilize environment to offset internal fear.",
+      "activation": "Triggered by chaos, uncertainty, rapid change.",
+      "behaviors": [
+        "overplanning",
+        "routine-building",
+        "asserting control over shared situations"
+      ]
+    },
+
+    "security_restoration": {
+      "description": "Seeks emotional or physical safety when overwhelmed.",
+      "activation": "Triggered by high threat load or overstimulation.",
+      "behaviors": [
+        "withdrawal",
+        "numbing",
+        "shutting down or isolating"
+      ]
+    }
+  }
+}

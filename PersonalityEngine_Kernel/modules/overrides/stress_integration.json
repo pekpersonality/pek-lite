@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "name": "stress_integration",
+
+  "stress_states": {
+    "baseline": {
+      "threshold": 0.20,
+      "vector_bias": 1.0,
+      "interpretation_shift": "none",
+      "notes": "Normal functioning; no amplification."
+    },
+    "elevated": {
+      "threshold": 0.45,
+      "vector_bias": 1.25,
+      "interpretation_shift": "threat_sensitivity",
+      "notes": "Signals are amplified and routed more aggressively toward D1 + conflict motives."
+    },
+    "reactive": {
+      "threshold": 0.70,
+      "vector_bias": 1.5,
+      "interpretation_shift": "motive_conflict_priority",
+      "notes": "Internal conflicts become dominant drivers of interpretation."
+    },
+    "overload": {
+      "threshold": 0.90,
+      "vector_bias": 2.0,
+      "interpretation_shift": "affect_override",
+      "notes": "Interpretation engine gives priority to emotional processing and identity destabilization."
+    }
+  },
+
+  "interpretation_adjustments": {
+    "threat_sensitivity": {
+      "dimension_bias": { "D1": 1.3 },
+      "motive_bias": ["SM-ABANDON", "SM-BETRAYAL"],
+      "notes": "Stress increases reliance on abandonment + betrayal motives."
+    },
+    "motive_conflict_priority": {
+      "dimension_bias": { "D3": 1.35 },
+      "motive_bias": ["CM-THREAT_AVOID", "CM-AMBIVALENCE"],
+      "notes": "Conflict motives dominate when stress reaches reactive state."
+    },
+    "affect_override": {
+      "dimension_bias": { "D5": 1.5, "D4": 1.2 },
+      "motive_bias": ["EMO-VOLATILITY", "EMO-SUPPRESSION"],
+      "notes": "Emotional volatility or shutdown patterns control interpretation."
+    },
+    "none": {
+      "dimension_bias": {},
+      "motive_bias": [],
+      "notes": "No interpretation shift applied."
+    }
+  },
+
+  "vector_bias_method": {
+    "method": "multiply",
+    "description": "Bias is multiplicative. Example: vector = vector * bias_factor."
+  },
+
+  "stress_progression": {
+    "method": "cascading",
+    "description": "If a signal elevates stress beyond one threshold, the engine automatically checks for the next threshold without resetting.",
+    "notes": "Allows realistic stress stacking and de-escalation."
+  },
+
+  "stress_recovery": {
+    "method": "gradient_decay",
+    "decay_rate": 0.05,
+    "description": "Stress gradually decreases between cycles. Interpretation bias fades accordingly."
+  },
+
+  "notes": "Integrates stress levels with interpretation biases, vector amplification, and conflict weighting. This module determines how the engine shifts under pressure."
+}

@@ -1,0 +1,698 @@
+{
+  "kernel_version": "1.0",
+  "dimensions": {
+    "survival_orientation": {
+  "id": "D1",
+  "purpose": "Defines how an individual's nervous system anticipates and responds to perceived threat. Determines baseline safety strategies, reactive patterns, and adaptive survival logic.",
+  "axes": [
+    {
+      "axis_id": "SO-THREAT",
+      "description": "Orients toward perceived danger, instability, or betrayal. Hypervigilance as default state."
+    },
+    {
+      "axis_id": "SO-CONTROL",
+      "description": "Orients toward managing uncertainty, autonomy, and outcomes. Seeks predictability through control."
+    },
+    {
+      "axis_id": "SO-ACCEPTANCE",
+      "description": "Orients toward relational security and belonging. Avoids social rejection, prioritizes connection."
+    },
+    {
+      "axis_id": "SO-ACHIEVEMENT",
+      "description": "Orients toward competence, performance, and success. Avoids inadequacy or perceived failure."
+    }
+  ],
+  "sub_motives": [
+    {
+      "motive_id": "SM-ABANDON",
+      "description": "Fear of emotional or physical abandonment; drives clinging, reassurance-seeking, or compliance."
+    },
+    {
+      "motive_id": "SM-BETRAYAL",
+      "description": "Expectation of deception or hidden agendas; drives distrust, testing behaviors, and vigilance."
+    },
+    {
+      "motive_id": "SM-AUTONOMY_DEF",
+      "description": "Defense of personal control; reacts strongly to constraint, manipulation, or coercion."
+    },
+    {
+      "motive_id": "SM-COMPETENCE",
+      "description": "Fear of inadequacy; survival linked to performance or perceived capability."
+    },
+    {
+      "motive_id": "SM-STABILITY",
+      "description": "Need for predictability, routine, and structure; threat arises from disruption or chaos."
+    },
+    {
+      "motive_id": "SM-CHAOS_ANTIC",
+      "description": "Assumes the world is unstable or dangerous; prepares for sudden negative shifts."
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "indicator_id": "BI-HYPERVIG",
+      "description": "Scanning environment for threat, reading microexpressions, expecting danger."
+    },
+    {
+      "indicator_id": "BI-PEOPLEPLEASE",
+      "description": "Conflict avoidance through appeasement or over-accommodation."
+    },
+    {
+      "indicator_id": "BI-OVERPLAN",
+      "description": "Rigid planning and contingency stacking to avoid uncertainty."
+    },
+    {
+      "indicator_id": "BI-SELFSAB",
+      "description": "Sabotaging opportunities to maintain familiar patterns or avoid failure exposure."
+    },
+    {
+      "indicator_id": "BI-AVOID",
+      "description": "Withdrawal, emotional numbing, or evasion of high-stakes situations."
+    }
+  ],
+  "predictive_signals": [
+    {
+      "signal_id": "PS-CONFLICT_RISK",
+      "description": "Likelihood of escalation or shutdown under stress, shaped by perceived threat type."
+    },
+    {
+      "signal_id": "PS-REL_STAB",
+      "description": "Longposure-term relational stability patterns across stress, rupture, and repair cycles."
+    },
+    {
+      "signal_id": "PS-MANIP_VULN",
+      "description": "Susceptibility to coercion, flattery, or pressure depending on core survival motive."
+    },
+    {
+      "signal_id": "PS-COPING",
+      "description": "Expected coping behaviors in crises; determines meltdown, freeze, or hyperfunction patterns."
+    }
+  ]
+}
+,
+    "reward_strategy": {
+  "id": "D2",
+  "purpose": "Defines what an individual pursues to feel fulfilled, successful, secure, or alive. Governs goal selection, desire patterns, ambition type, and the internal reward landscape.",
+  "axes": [
+    {
+      "axis_id": "RS-POWER",
+      "description": "Seeks influence, control, and the ability to shape outcomes. Feels rewarded when exerting strength or dominance."
+    },
+    {
+      "axis_id": "RS-STATUS",
+      "description": "Seeks admiration, recognition, and respect. Feels rewarded by elevated social standing or reputation."
+    },
+    {
+      "axis_id": "RS-CONNECTION",
+      "description": "Seeks deep emotional bonds, closeness, belonging, and acceptance. Feels rewarded by intimacy and relational harmony."
+    },
+    {
+      "axis_id": "RS-MASTERY",
+      "description": "Seeks competence, improvement, and excellence. Feels rewarded by developing skills and achieving technical proficiency."
+    },
+    {
+      "axis_id": "RS-FREEDOM",
+      "description": "Seeks autonomy, novelty, choice, and open possibilities. Feels rewarded by independence and exploration."
+    },
+    {
+      "axis_id": "RS-STABILITY",
+      "description": "Seeks predictability, order, and long-term security. Feels rewarded by consistency, structure, and routines."
+    }
+  ],
+  "sub_motives": [
+    {
+      "motive_id": "RM-RECOGNITION",
+      "description": "A desire to be seen, valued, acknowledged, or validated publicly or privately."
+    },
+    {
+      "motive_id": "RM-AUTONOMY",
+      "description": "A need for independence and self-directed action; strong resistance to constraint."
+    },
+    {
+      "motive_id": "RM-BONDING",
+      "description": "A drive for emotional closeness and mutual connection; prioritizes relationships as a core source of meaning."
+    },
+    {
+      "motive_id": "RM-SKILL",
+      "description": "A drive for developing ability and competence; internal reward comes from mastery, not external praise."
+    },
+    {
+      "motive_id": "RM-ROUTINE",
+      "description": "A comfort in predictable structure; avoids disruptive novelty and seeks familiar patterns."
+    },
+    {
+      "motive_id": "RM-ADVENTURE",
+      "description": "A hunger for novelty, risk, stimulation, and open horizons."
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "indicator_id": "BI-LEADERSHIP_ATTEMPT",
+      "description": "Frequently steps into leadership, influence, or decision-making roles."
+    },
+    {
+      "indicator_id": "BI-SIGNALING",
+      "description": "Uses appearance, communication, or achievements to signal status or identity."
+    },
+    {
+      "indicator_id": "BI-APPROVAL_SEEK",
+      "description": "Seeks reassurance, praise, or positive social mirroring."
+    },
+    {
+      "indicator_id": "BI-HYPERFOCUS",
+      "description": "Becomes intensely focused on tasks related to self-improvement or mastery."
+    },
+    {
+      "indicator_id": "BI-ESCAPE",
+      "description": "Avoids constraints and seeks novelty, adventure, or unstructured environments."
+    },
+    {
+      "indicator_id": "BI-RITUAL",
+      "description": "Maintains routines or predictable patterns to feel grounded."
+    }
+  ],
+  "predictive_signals": [
+    {
+      "signal_id": "PS-CAREER_PATTERN",
+      "description": "Predicts long-term vocational direction, ambition type, and workplace preferences."
+    },
+    {
+      "signal_id": "PS-LOYALTY",
+      "description": "Determines what type of values or relationships a person remains loyal to over time."
+    },
+    {
+      "signal_id": "PS-NEGOTIATION",
+      "description": "Forecasts negotiation style, persuasion susceptibility, and conflict leverage points."
+    },
+    {
+      "signal_id": "PS-INFLUENCE",
+      "description": "Predicts how an individual gains influence or social traction in groups or organizations."
+    }
+  ]
+}
+,
+    "conflict_response_pattern": {
+  "id": "D3",
+  "purpose": "Defines how an individual reacts to conflict, pressure, or perceived threat. Governs escalation style, avoidance tendencies, emotional expression, and breakdown patterns.",
+  "axes": [
+    {
+      "axis_id": "CR-ESCALATE",
+      "description": "Responds by intensifying pressure—arguing, asserting dominance, or increasing intensity."
+    },
+    {
+      "axis_id": "CR-WITHDRAW",
+      "description": "Responds by retreating physically, emotionally, or communicatively to reduce discomfort."
+    },
+    {
+      "axis_id": "CR-EMOTIONAL",
+      "description": "Responds through amplified emotional expression—crying, pleading, venting, or overwhelming affect."
+    },
+    {
+      "axis_id": "CR-ANALYTIC",
+      "description": "Responds by detaching into logic, shutting down emotion, or intellectualizing the situation."
+    },
+    {
+      "axis_id": "CR-APPEASE",
+      "description": "Responds by smoothing tension, apologizing, people-pleasing, or complying to restore harmony."
+    }
+  ],
+  "sub_motives": [
+    {
+      "motive_id": "CM-CONTROL_RETENTION",
+      "description": "Desire to maintain control or avoid being overpowered; drives escalation or rigid argument patterns."
+    },
+    {
+      "motive_id": "CM-AVOID_FAILURE",
+      "description": "Fear of getting something wrong or being exposed; drives retreat, shutdown, or avoidance."
+    },
+    {
+      "motive_id": "CM-PROTECTION_SEEK",
+      "description": "Need to regain safety through emotional intensity or vulnerability displays."
+    },
+    {
+      "motive_id": "CM-COGNITIVE_REFUGE",
+      "description": "Seeks psychological distance by shifting into logic, analysis, or emotional numbness."
+    },
+    {
+      "motive_id": "CM-SOCIAL_PRESERVE",
+      "description": "Instinct to maintain relational stability through appeasement or de-escalation."
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "indicator_id": "BI-ARGUE",
+      "description": "Raises volume, intensity, or pressure to assert position or regain control."
+    },
+    {
+      "indicator_id": "BI-GHOST",
+      "description": "Disappears, avoids messages, shuts down communication entirely."
+    },
+    {
+      "indicator_id": "BI-FLOOD",
+      "description": "Displays overwhelming emotion—crying, pleading, emotional spiraling."
+    },
+    {
+      "indicator_id": "BI-COLD",
+      "description": "Becomes distant, monotone, silent, or calculated; emotional detachment."
+    },
+    {
+      "indicator_id": "BI-APOLOGIZE",
+      "description": "Over-apologizes or takes responsibility to neutralize the conflict."
+    }
+  ],
+  "predictive_signals": [
+    {
+      "signal_id": "PS-BREAKUP_STYLE",
+      "description": "Predicts relationship rupture patterns: explosive, avoidant, cold, cyclical, or appeasing."
+    },
+    {
+      "signal_id": "PS-CONFLICT_ROLE",
+      "description": "Forecasts how the individual behaves during arguments—pursuer, withdrawer, rescuer, or aggressor."
+    },
+    {
+      "signal_id": "PS-CRISIS_RESPONSE",
+      "description": "Identifies tendencies under extreme stress—shutdown, fight, meltdown, or hypercontrol."
+    },
+    {
+      "signal_id": "PS-WORKPLACE_CONFLICT",
+      "description": "Predicts how someone behaves with authority, teammates, or during professional tension."
+    }
+  ]
+}
+,
+    "identity_construction_mode": {
+  "id": "D4",
+  "purpose": "Defines how an individual builds, maintains, and protects their sense of self. Governs self-worth, personal narratives, ego integrity, and the internal logic of identity.",
+  "axes": [
+    {
+      "axis_id": "ID-PERFORMANCE",
+      "description": "Identity built around achievement, competence, productivity, or success. Self-worth tied to output."
+    },
+    {
+      "axis_id": "ID-RELATIONAL",
+      "description": "Identity built around relationships, connection, belonging, or being needed by others."
+    },
+    {
+      "axis_id": "ID-MORALITY",
+      "description": "Identity built around values, principles, belief systems, or moral frameworks."
+    },
+    {
+      "axis_id": "ID-AESTHETIC",
+      "description": "Identity built through appearance, expression, style, creativity, or personal presentation."
+    },
+    {
+      "axis_id": "ID-ROLE",
+      "description": "Identity built around formal roles, duties, archetypes, responsibilities, or social functions."
+    },
+    {
+      "axis_id": "ID-AUTONOMY",
+      "description": "Identity built on independence, self-definition, uniqueness, and personal sovereignty."
+    }
+  ],
+  "sub_motives": [
+    {
+      "motive_id": "IM-ACHIEVE",
+      "description": "Desire to earn identity through accomplishment; fears failure, inadequacy, or stagnation."
+    },
+    {
+      "motive_id": "IM-CARE",
+      "description": "Desire to be valued through relational connection, caregiving, support, or emotional presence."
+    },
+    {
+      "motive_id": "IM-BELIEF",
+      "description": "Desire to embody and express moral, ideological, or philosophical principles."
+    },
+    {
+      "motive_id": "IM-EXPRESSION",
+      "description": "Desire to express personality through creativity, style, appearance, or aesthetics."
+    },
+    {
+      "motive_id": "IM-DUTY",
+      "description": "Desire to fulfill obligations or roles; gains identity through service, consistency, or reliability."
+    },
+    {
+      "motive_id": "IM-SOVEREIGN",
+      "description": "Desire to self-define completely; resists external labels, control, or imposed identity."
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "indicator_id": "BI-NARRATIVE",
+      "description": "Creates strong personal narratives or life stories to explain identity and purpose."
+    },
+    {
+      "indicator_id": "BI-COMPARISON",
+      "description": "Frequently compares self to others to gauge identity strength or weakness."
+    },
+    {
+      "indicator_id": "BI-VALUE_SIGNAL",
+      "description": "Communicates values, beliefs, or moral stances to reinforce identity."
+    },
+    {
+      "indicator_id": "BI-STYLIZE",
+      "description": "Uses style, presentation, or aesthetics to signal selfhood."
+    },
+    {
+      "indicator_id": "BI-ROLE_LOCK",
+      "description": "Holds tightly to roles or duties; resists identity shifts."
+    }
+  ],
+  "predictive_signals": [
+    {
+      "signal_id": "PS-LIFE_PATH",
+      "description": "Predicts long-term life decisions related to career, relationships, and purpose alignment."
+    },
+    {
+      "signal_id": "PS-VULNERABILITIES",
+      "description": "Identifies weak points in self-worth, shame sensitivity, and triggers of identity collapse."
+    },
+    {
+      "signal_id": "PS-RADICALIZATION",
+      "description": "Forecasts how identity shifts under ideological pressure, trauma, or belonging needs."
+    },
+    {
+      "signal_id": "PS-RELATIONAL_SELF",
+      "description": "Determines how identity affects intimacy, attachment, commitments, and role dynamics."
+    }
+  ]
+}
+,
+    "emotional_processing_style": {
+  "id": "D5",
+  "purpose": "Defines how an individual experiences, processes, regulates, expresses, suppresses, and integrates emotional states. Governs emotional timing, expression style, vulnerability patterns, and recovery trajectories.",
+  "axes": [
+    {
+      "axis_id": "EP-INTERNALIZER",
+      "description": "Processes emotions inwardly; contains or absorbs feelings without outward expression."
+    },
+    {
+      "axis_id": "EP-EXTERNALIZER",
+      "description": "Processes emotions outwardly; expresses or discharges feelings through communication or action."
+    },
+    {
+      "axis_id": "EP-SUPPRESSOR",
+      "description": "Avoids, minimizes, or hides emotional states; disconnects from felt experience."
+    },
+    {
+      "axis_id": "EP-EXPRESSER",
+      "description": "Shares emotions openly and readily; uses communication for emotional relief or clarity."
+    },
+    {
+      "axis_id": "EP-IMMEDIATE",
+      "description": "Feels emotions quickly and intensely in real time; low delay between trigger and reaction."
+    },
+    {
+      "axis_id": "EP-DELAYED",
+      "description": "Processes emotions slowly, often recognizing or feeling them long after the event."
+    },
+    {
+      "axis_id": "EP-MEANING",
+      "description": "Creates narrative, symbolism, or personal significance around emotional events."
+    },
+    {
+      "axis_id": "EP-REACTION",
+      "description": "Responds based on emotional impulse rather than reflective interpretation."
+    },
+    {
+      "axis_id": "EP-NUMB",
+      "description": "Emotionally muted; reduced emotional access due to overwhelm, trauma, or dissociation."
+    },
+    {
+      "axis_id": "EP-SENSITIVE",
+      "description": "Emotionally perceptive; reacts strongly to subtle emotional or relational shifts."
+    }
+  ],
+  "sub_motives": [
+    {
+      "motive_id": "EM-AVOID_OVERWHELM",
+      "description": "Desire to prevent emotional flooding; drives suppression, internalizing, or withdrawal."
+    },
+    {
+      "motive_id": "EM-SEEK_CLARITY",
+      "description": "Desire for emotional understanding; drives introspection, analysis, or expressive processing."
+    },
+    {
+      "motive_id": "EM-CONNECTION",
+      "description": "Desire to share emotional experience; drives communication, bonding, and vulnerability."
+    },
+    {
+      "motive_id": "EM-PROTECTION",
+      "description": "Desire to stay safe emotionally; avoids vulnerability or exposure to prevent hurt."
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "indicator_id": "BI-SUPPRESS",
+      "description": "Disguises or hides emotional reactions; shifts focus away from feelings."
+    },
+    {
+      "indicator_id": "BI-SHARE",
+      "description": "Communicates emotions in real time; uses expression for connection or relief."
+    },
+    {
+      "indicator_id": "BI-SLOW_REACT",
+      "description": "Responds emotionally hours or days later; delayed awareness or processing."
+    },
+    {
+      "indicator_id": "BI-OVERANALYZE",
+      "description": "Attempts to interpret emotions through thought, logic, or conceptualization."
+    },
+    {
+      "indicator_id": "BI-NUMB_EP",
+      "description": "Experiences reduced emotional presence; appears detached, muted, or disconnected."
+    }
+  ],
+  "predictive_signals": [
+    {
+      "signal_id": "PS-INTIMACY",
+      "description": "Predicts capacity for emotional openness, vulnerability, trust, and relational depth."
+    },
+    {
+      "signal_id": "PS-BREAKDOWN",
+      "description": "Forecasts emotional collapse patterns—shutdown, meltdown, dissociation, or overexpression."
+    },
+    {
+      "signal_id": "PS-HEALING",
+      "description": "Predicts how an individual recovers from emotional wounds—through meaning, expression, avoidance, or connection."
+    },
+    {
+      "signal_id": "PS-TRAUMA_PATH",
+      "description": "Identifies long-term emotional trajectories shaped by unresolved stress, attachment wounds, or chronic suppression."
+    }
+  ]
+}
+
+  },
+  "components": {
+    "definitions": [],
+    "opposites": [],
+    "triggers": [],
+    "expressions": [],
+    "compensations": []
+  },
+  "interaction_matrix": [
+  {
+    "dimension_A": "survival_orientation",
+    "dimension_B": "reward_strategy",
+    "influence_type": "dominant",
+    "rules": [
+      "If survival threat level is high, reward expression becomes distorted or inhibited.",
+      "If reward pursuit contradicts survival motive, default to survival behavior unless identity priority is extreme.",
+      "Survival fear amplifies reward intensity but narrows reward focus."
+    ]
+  },
+  {
+    "dimension_A": "survival_orientation",
+    "dimension_B": "conflict_response_pattern",
+    "influence_type": "trigger",
+    "rules": [
+      "Threat anticipation automatically activates corresponding conflict pattern.",
+      "Control-based survival orientation increases escalation or shutdown patterns.",
+      "Acceptance-based survival orientation increases appeasement under stress."
+    ]
+  },
+  {
+    "dimension_A": "survival_orientation",
+    "dimension_B": "identity_construction_mode",
+    "influence_type": "interpretation_shift",
+    "rules": [
+      "Identity meaning is filtered through perceived safety or danger.",
+      "Identity collapse risk increases under survival threat.",
+      "Narrative formation shifts depending on primary survival axis (threat, control, acceptance, achievement)."
+    ]
+  },
+  {
+    "dimension_A": "survival_orientation",
+    "dimension_B": "emotional_processing_style",
+    "influence_type": "amplifier",
+    "rules": [
+      "Threat increases emotional intensity for sensitive processors.",
+      "Threat increases suppression for internalizers.",
+      "Survival fear modifies emotional timing (faster for immediate processors, delayed for analytical styles)."
+    ]
+  },
+  {
+    "dimension_A": "reward_strategy",
+    "dimension_B": "conflict_response_pattern",
+    "influence_type": "modifier",
+    "rules": [
+      "Power-reward individuals escalate more readily.",
+      "Connection-reward individuals appease or emotionally express during conflict.",
+      "Freedom-reward individuals withdraw.",
+      "Stability-reward individuals seek fast resolution or suppression."
+    ]
+  },
+  {
+    "dimension_A": "reward_strategy",
+    "dimension_B": "identity_construction_mode",
+    "influence_type": "alignment",
+    "rules": [
+      "Identity forms around the dominant reward axis.",
+      "Conflicts between identity and reward create chronic internal tension.",
+      "Strong alignment produces stable self-concept and predictable pursuit behavior."
+    ]
+  },
+  {
+    "dimension_A": "reward_strategy",
+    "dimension_B": "emotional_processing_style",
+    "influence_type": "expression_path",
+    "rules": [
+      "Connection-reward strengthens emotional expression.",
+      "Mastery-reward strengthens internal emotional processing.",
+      "Freedom-reward increases emotional impulsivity.",
+      "Stability-reward increases emotional suppression."
+    ]
+  },
+  {
+    "dimension_A": "conflict_response_pattern",
+    "dimension_B": "identity_construction_mode",
+    "influence_type": "ego_protection",
+    "rules": [
+      "Identity-based shame determines conflict pattern intensity.",
+      "Performance and Morality identities escalate when threatened.",
+      "Relational and Role identities appease when threatened.",
+      "Autonomy identities withdraw or go cold."
+    ]
+  },
+  {
+    "dimension_A": "conflict_response_pattern",
+    "dimension_B": "emotional_processing_style",
+    "influence_type": "activation",
+    "rules": [
+      "Emotional processors amplify conflict through expression.",
+      "Analytical processors suppress or detach.",
+      "Suppressors enter shutdown or coldness.",
+      "Externalizers escalate or plead."
+    ]
+  },
+  {
+    "dimension_A": "identity_construction_mode",
+    "dimension_B": "emotional_processing_style",
+    "influence_type": "meaning_maker",
+    "rules": [
+      "Identity determines emotional interpretation.",
+      "Autonomy identities suppress vulnerability.",
+      "Relational identities amplify emotional expression.",
+      "Performance identities intellectualize emotion to maintain competence image."
+    ]
+  }
+]
+,
+  "stress_state_overrides": [
+  {
+    "dimension_id": "D1",
+    "trigger_type": "threat",
+    "override_rules": [
+      "If threat perception becomes extreme, shift Survival Orientation to SO-THREAT regardless of prior axis.",
+      "Activate corresponding Conflict Pattern: escalation for dominance profiles, shutdown for avoidance profiles.",
+      "Increase emotional intensity for sensitive processors; increase suppression for internalizers.",
+      "Identity meaning collapses toward safety-seeking narratives."
+    ]
+  },
+  {
+    "dimension_id": "D1",
+    "trigger_type": "loss_of_control",
+    "override_rules": [
+      "Shift to SO-CONTROL orientation; individual attempts to regain structure or predictability.",
+      "Conflict Pattern biases toward escalation or cold detachment.",
+      "Reward Strategy becomes constricted—freedom and novelty axes collapse; stability and mastery axes intensify.",
+      "Identity narratives frame self as responsible, pressured, or burdened."
+    ]
+  },
+  {
+    "dimension_id": "D1",
+    "trigger_type": "abandonment_rejection",
+    "override_rules": [
+      "Shift toward SO-ACCEPTANCE orientation regardless of baseline motive.",
+      "Increase appeasement or emotional overexpression depending on Conflict Pattern.",
+      "Identity constructs destabilize around worthiness and belonging.",
+      "Emotional Style intensifies externalization or shutdown depending on sub-motive structure."
+    ]
+  },
+  {
+    "dimension_id": "D1",
+    "trigger_type": "performance_failure",
+    "override_rules": [
+      "Shift toward SO-ACHIEVEMENT orientation; competence anxiety becomes dominant.",
+      "Conflict Pattern biases toward over-effort, self-criticism, or perfectionism.",
+      "Identity narratives frame self as inadequate or pressured toward performance redemption.",
+      "Emotional Style becomes internalized and delayed."
+    ]
+  },
+  {
+    "dimension_id": "D2",
+    "trigger_type": "reward_block",
+    "override_rules": [
+      "If primary reward motive is obstructed, intensify pursuit behavior or shift to compensatory motives.",
+      "Power and Status motives escalate conflict intensity.",
+      "Connection motives trigger emotional pleas or appeasement.",
+      "Freedom motives trigger withdrawal or impulsive escape."
+    ]
+  },
+  {
+    "dimension_id": "D3",
+    "trigger_type": "acute_conflict",
+    "override_rules": [
+      "Default to dominant Conflict Pattern unless identity or emotional axes override.",
+      "Escalators intensify; withdrawers disappear; emotional processors flood; analytic processors detach.",
+      "Survival Orientation amplifies whichever Conflict Pattern matches the core fear.",
+      "Reward Strategy loses nuance and collapses toward core sub-motive."
+    ]
+  },
+  {
+    "dimension_id": "D4",
+    "trigger_type": "ego_threat",
+    "override_rules": [
+      "Identity becomes rigid; narratives intensify around self-protection, justification, or moral framing.",
+      "Performance and Morality identities escalate; Relational identities appease; Autonomy identities withdraw.",
+      "Emotional processing becomes symbolic or defensive.",
+      "Conflict Pattern is selected based on shame-avoidance strategy."
+    ]
+  },
+  {
+    "dimension_id": "D5",
+    "trigger_type": "emotional_overload",
+    "override_rules": [
+      "Internalizers shift toward shutdown, numbness, or delay.",
+      "Externalizers increase expression, intensity, or relational pursuit.",
+      "Suppressors collapse into dissociation or rigid control.",
+      "Sensitive processors escalate emotional signaling or hyper-awareness."
+    ]
+  }
+]
+,
+  "output_logic": {
+    "units": [],
+    "report_structure": {
+      "core_motives": {},
+      "reward_signature": {},
+      "conflict_pattern": {},
+      "identity_mode": {},
+      "emotional_style": {},
+      "stress_profile": {},
+      "relational_prediction": {},
+      "occupational_prediction": {},
+      "risk_markers": {}
+    }
+  }
+}

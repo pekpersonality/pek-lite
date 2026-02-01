@@ -1,0 +1,86 @@
+{
+  "execution_engine_version": "1.0",
+  "purpose": "Central engine that orchestrates interpretation by routing modules through the Kernel Access Layer and Interpretation Pipeline.",
+
+  "dependencies": {
+    "kernel": "kernel_structural_v1.json",
+    "kernel_access_layer": "kernel_access_layer.json",
+    "interpretation_units": "engines/interpretation/units.json",
+    "interpretation_pipeline": "engines/interpretation/pipeline.json"
+  },
+
+  "runtime_steps": [
+    "initialize_engine",
+    "load_user_inputs",
+    "load_dimension_modules",
+    "route_through_kernel_access_layer",
+    "execute_interpretation_pipeline",
+    "collect_intermediate_outputs",
+    "generate_final_profile",
+    "return_output"
+  ],
+
+  "engine": {
+    "initialize_engine": {
+      "description": "Loads dependencies and prepares routing tables.",
+      "loads": [
+        "kernel",
+        "kernel_access_layer",
+        "interpretation_units",
+        "interpretation_pipeline"
+      ],
+      "output": "engine_state initialized"
+    },
+
+    "load_user_inputs": {
+      "description": "Captures user responses from questioning engine.",
+      "inputs": "questionnaire_output.json",
+      "output": "user_dimension_indicators"
+    },
+
+    "load_dimension_modules": {
+      "description": "Loads individual dimension reference bindings.",
+      "reads": "modules/dimensions/*",
+      "output": "dimension_reference_bundle"
+    },
+
+    "route_through_kernel_access_layer": {
+      "description": "Uses KAL to resolve dot-paths and load canonical kernel sections.",
+      "inputs": [
+        "dimension_reference_bundle",
+        "kernel_access_layer"
+      ],
+      "output": "resolved_kernel_data"
+    },
+
+    "execute_interpretation_pipeline": {
+      "description": "Runs all interpretation units in pipeline order.",
+      "pipeline_sequence": "interpretation_pipeline.execution_sequence",
+      "output": "interpretation_results"
+    },
+
+    "collect_intermediate_outputs": {
+      "description": "Bundles weighted motives, emotional profiles, conflict patterns, identity filters, and prediction matrices.",
+      "inputs": "interpretation_results",
+      "output": "psychological_state_bundle"
+    },
+
+    "generate_final_profile": {
+      "description": "Uses narrative engine to convert prediction matrix into structured human-readable profile.",
+      "inputs": "psychological_state_bundle",
+      "output": "final_psychological_profile"
+    },
+
+    "return_output": {
+      "description": "Returns complete profile to frontend or downstream API.",
+      "returns": "final_psychological_profile"
+    }
+  },
+
+  "fallbacks": {
+    "missing_user_input": "Return incomplete profile with confidence estimate.",
+    "kernel_path_error": "Abort sequence and issue integrity warning.",
+    "unit_failure": "Skip unit and proceed with reduced-confidence predictions.",
+    "pipeline_break": "Re-run pipeline with minimal viable subset."
+  }
+}

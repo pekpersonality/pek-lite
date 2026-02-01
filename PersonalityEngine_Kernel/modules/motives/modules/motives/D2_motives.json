@@ -1,0 +1,46 @@
+{
+  "dimension_id": "D2",
+  "name": "reward_strategy_motives",
+
+  "motives": {
+    "achievement_pursuit": {
+      "description": "Seeks mastery, progress, challenge, and personal excellence.",
+      "activation": "Triggered by opportunities to improve, compete, or excel.",
+      "behaviors": [
+        "setting ambitious goals",
+        "self-competition",
+        "intense focus on growth or skill acquisition"
+      ]
+    },
+
+    "connection_seeking": {
+      "description": "Finds reward in closeness, belonging, emotional warmth, and shared experiences.",
+      "activation": "Triggered by intimacy cues, validation, and relational stability.",
+      "behaviors": [
+        "prioritizing togetherness",
+        "seeking reassurance or emotional resonance",
+        "building rituals of closeness"
+      ]
+    },
+
+    "novelty_exploration": {
+      "description": "Pursues stimulation, new experiences, adventure, or discovery.",
+      "activation": "Triggered by freedom, change, curiosity, or reduced constraint.",
+      "behaviors": [
+        "taking risks to feel alive",
+        "trying new environments or ideas",
+        "impulsive exploration or experimentation"
+      ]
+    },
+
+    "comfort_preservation": {
+      "description": "Seeks ease, predictability, familiarity, and low-stress environments.",
+      "activation": "Triggered by overstimulation, burnout, or uncertainty.",
+      "behaviors": [
+        "retreating into known routines",
+        "prioritizing low-effort, high-comfort activities",
+        "resisting change unless safety is guaranteed"
+      ]
+    }
+  }
+}

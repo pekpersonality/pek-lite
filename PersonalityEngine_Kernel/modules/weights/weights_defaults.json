@@ -1,0 +1,68 @@
+{
+  "version": "1.0",
+  "name": "default_weight_matrix",
+
+  "dimension_weights": {
+    "D1": {
+      "baseline": 0.28,
+      "influences": {
+        "D2": 0.15,
+        "D3": 0.20,
+        "D4": 0.10,
+        "D5": 0.18
+      }
+    },
+    "D2": {
+      "baseline": 0.22,
+      "influences": {
+        "D1": 0.12,
+        "D3": 0.08,
+        "D4": 0.14,
+        "D5": 0.10
+      }
+    },
+    "D3": {
+      "baseline": 0.25,
+      "influences": {
+        "D1": 0.22,
+        "D2": 0.06,
+        "D4": 0.12,
+        "D5": 0.18
+      }
+    },
+    "D4": {
+      "baseline": 0.15,
+      "influences": {
+        "D1": 0.06,
+        "D2": 0.10,
+        "D3": 0.10,
+        "D5": 0.08
+      }
+    },
+    "D5": {
+      "baseline": 0.10,
+      "influences": {
+        "D1": 0.14,
+        "D2": 0.12,
+        "D3": 0.20,
+        "D4": 0.10
+      }
+    }
+  },
+
+  "motive_activation_weights": {
+    "low": 0.25,
+    "medium": 0.50,
+    "high": 0.75,
+    "extreme": 1.0
+  },
+
+  "signal_strength_defaults": {
+    "weak": 0.20,
+    "moderate": 0.50,
+    "strong": 0.75,
+    "critical": 1.0
+  },
+
+  "notes": "These weights represent the default physics of human behavior. The Questioning Engine and Interpretation System will override or refine these dynamically per user."
+}

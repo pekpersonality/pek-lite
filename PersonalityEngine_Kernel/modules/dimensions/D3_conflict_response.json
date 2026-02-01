@@ -1,0 +1,22 @@
+{
+  "dimension_id": "D3",
+  "name": "conflict_response",
+
+  "definition": {
+    "core": "Represents the individual's default and fallback strategies when encountering conflict, tension, disagreement, or threat to needs or identity. Reveals escalation tendencies, avoidance patterns, and stress-driven behaviors.",
+
+    "axes": {
+      "fight_orientation": "Confronts conflict directly; escalates to regain control or assert boundaries.",
+      "flight_orientation": "Withdraws or disengages to reduce tension; avoids confrontation.",
+      "freeze_orientation": "Pauses, becomes indecisive, mentally overloaded, or emotionally shut down under conflict.",
+      "fawn_orientation": "Attempts to restore harmony through appeasement, compliance, or over-accommodation."
+    },
+
+    "behavioral_markers": [
+      "predictable escalation or retreat patterns under relational stress",
+      "consistency in how boundaries are defended or avoided",
+      "conflict strategies tied to perceived threat intensity",
+      "distortion or rigidity in communication when stakes feel high"
+    ]
+  }
+}

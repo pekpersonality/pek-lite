@@ -1,0 +1,53 @@
+{
+  "kal_version": "1.0",
+  "description": "Kernel Access Layer — standard routing, reference resolution, and kernel section access for all modules and engines.",
+  
+  "access_methods": {
+    "load_section": {
+      "params": ["ref", "section"],
+      "description": "Loads the specified section from the master kernel using the module's reference binding."
+    },
+    "resolve_path": {
+      "params": ["section_path"],
+      "description": "Resolves dot-notation paths (e.g., dimensions.survival_orientation) within the master kernel."
+    },
+    "validate_reference": {
+      "params": ["module_ref"],
+      "description": "Ensures the module reference points to the canonical kernel and has not been altered."
+    }
+  },
+
+  "routing_rules": [
+    {
+      "module": "modules/dimensions",
+      "routes_to": "kernel.dimensions",
+      "notes": "All dimension modules must read from the canonical dimensions map in the master kernel."
+    },
+    {
+      "module": "modules/interactions",
+      "routes_to": "kernel.interaction_matrix",
+      "notes": "Interaction modules load the global interaction matrix."
+    },
+    {
+      "module": "modules/overrides",
+      "routes_to": "kernel.stress_state_overrides",
+      "notes": "Override modules must reference the stress overrides from the kernel."
+    },
+    {
+      "module": "modules/output",
+      "routes_to": "kernel.output_logic",
+      "notes": "Output modules map directly to kernel output logic and report structures."
+    }
+  ],
+
+  "access_priority": [
+    "stress_state_overrides",
+    "survival_orientation",
+    "conflict_response_pattern",
+    "emotional_processing_style",
+    "reward_strategy",
+    "identity_construction_mode"
+  ],
+
+  "notes": "The access_priority array defines the order engines must follow when resolving contradictions or determining dominant psychological signals."
+}

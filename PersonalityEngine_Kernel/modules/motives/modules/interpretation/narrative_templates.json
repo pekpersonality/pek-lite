@@ -1,0 +1,87 @@
+{
+  "version": "1.0",
+  "name": "narrative_templates",
+
+  "templates": {
+
+    "core_motive_narrative": {
+      "inputs": [
+        "interpretation_rules.identify_dominant_motives",
+        "../motives/modules"
+      ],
+      "structure": [
+        "The individual's primary psychological drivers center around {{dominant_motive}}.",
+        "This motive expresses itself through patterns such as {{behavioral_markers}}.",
+        "Under stress, this motive shifts toward {{stress_expression}}."
+      ],
+      "description": "Explains the individual's underlying core motives and how they shape perception and behavior."
+    },
+
+    "conflict_profile_narrative": {
+      "inputs": [
+        "interpretation_rules.detect_conflict_points"
+      ],
+      "structure": [
+        "Internal conflict is present between {{conflict_pair}}.",
+        "This tension emerges when {{trigger_conditions}}.",
+        "Resolution pathways involve {{resolution_mapping}}."
+      ],
+      "description": "Describes contradictions or competing internal motives."
+    },
+
+    "stress_state_narrative": {
+      "inputs": [
+        "interpretation_rules.apply_stress_modifiers"
+      ],
+      "structure": [
+        "When experiencing elevated stress, the individual's processing shifts toward {{stress_profile}}.",
+        "This intensifies patterns such as {{stress_behaviors}}.",
+        "Mitigation occurs when the environment restores {{safety_signals}}."
+      ],
+      "description": "Summarizes how stress alters emotional and cognitive patterns."
+    },
+
+    "identity_formation_narrative": {
+      "inputs": [
+        "interpretation_rules.derive_core_signal_profile",
+        "../../weights/identity_weighting.json"
+      ],
+      "structure": [
+        "Identity formation is heavily influenced by {{identity_dominant_axis}}.",
+        "This creates a worldview shaped by {{identity_interpretation}}.",
+        "Adaptive identity behaviors include {{identity_adaptations}}."
+      ],
+      "description": "Explores how the individual constructs identity from internal and external signals."
+    },
+
+    "relational_dynamics_narrative": {
+      "inputs": [
+        "interpretation_rules.derive_core_signal_profile",
+        "interpretation_rules.identify_dominant_motives"
+      ],
+      "structure": [
+        "Relational patterns follow a {{relational_style}} orientation.",
+        "Motives such as {{dominant_motive}} guide responses to closeness and distance.",
+        "In conflict, the individual tends toward {{relational_conflict_response}}."
+      ],
+      "description": "Describes relational tendencies, interpersonal styles, and conflict behaviors."
+    },
+
+    "overall_personality_summary": {
+      "inputs": [
+        "interpretation_rules.compute_confidence_profile",
+        "interpretation_rules.generate_integration_pathways",
+        "interpretation_rules.identify_dominant_motives"
+      ],
+      "structure": [
+        "Overall, the individual's psychological profile reflects a {{global_orientation}}.",
+        "Core motives emphasize {{dominant_motive}} while conflicts arise around {{conflict_pair}}.",
+        "Stress amplifies {{stress_profile}}, but coherent pathways for growth include {{integration_pathways}}.",
+        "Confidence level for this interpretation: {{confidence_score}}."
+      ],
+      "description": "The high-level synthesis narrative that ties all layers together."
+    }
+  },
+
+  "notes": "Narrative templates transform kernel outputs into natural language patterns. Each {{token}} references dynamic data populated at runtime."
+}

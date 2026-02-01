@@ -1,0 +1,11 @@
+{
+  "dimension_priority_version": "1.0",
+  "priority_order": [
+    "survival_orientation",
+    "conflict_response_pattern",
+    "emotional_processing_style",
+    "reward_strategy",
+    "identity_construction_mode"
+  ],
+  "notes": "Defines which dimensions override others when contradictions appear."
+}

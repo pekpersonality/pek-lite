@@ -1,0 +1,22 @@
+{
+  "dimension_id": "D4",
+  "name": "identity_construction",
+
+  "definition": {
+    "core": "Represents how the individual forms, stabilizes, updates, and defends their internal identity. Determines narrative style, worldview formation, self-coherence, and susceptibility to identity distortion or fragmentation.",
+
+    "axes": {
+      "internal_identity_reference": "Constructs identity from internal values, personal standards, and intrinsic meaning.",
+      "external_identity_reference": "Constructs identity from feedback, roles, expectations, and relational validation.",
+      "rigid_identity_framework": "Maintains a fixed, inflexible sense of self; low adaptability to new information.",
+      "fluid_identity_framework": "Highly adaptive or shifting sense of self; open to redefinition and reinterpretation."
+    },
+
+    "behavioral_markers": [
+      "consistency or volatility in self-description across situations",
+      "sensitivity to validation or criticism in identity-relevant areas",
+      "tendencies toward narrative coherence or fragmentation",
+      "identity anchoring through roles, achievements, or relationships"
+    ]
+  }
+}

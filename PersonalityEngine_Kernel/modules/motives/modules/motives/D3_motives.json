@@ -1,0 +1,46 @@
+{
+  "dimension_id": "D3",
+  "name": "conflict_response_motives",
+
+  "motives": {
+    "boundary_protection": {
+      "description": "Defends personal boundaries, autonomy, or dignity when threatened.",
+      "activation": "Triggered by criticism, disrespect, injustice, or perceived dominance.",
+      "behaviors": [
+        "assertiveness or verbal pushback",
+        "heightened emotional intensity",
+        "escalation to regain perceived balance of power"
+      ]
+    },
+
+    "peace_preservation": {
+      "description": "Reduces tension through appeasement, harmony-seeking, or emotional diffusion.",
+      "activation": "Triggered by rising conflict intensity, relational instability, or risk of losing connection.",
+      "behaviors": [
+        "softening tone or posture",
+        "over-accommodating the other person",
+        "self-silencing or withdrawing objections"
+      ]
+    },
+
+    "escape_urge": {
+      "description": "Seeks psychological or physical distance to reduce overwhelm.",
+      "activation": "Triggered by overstimulation, emotional pressure, or fear of escalation.",
+      "behaviors": [
+        "emotional shutdown",
+        "leaving the environment",
+        "non-responsiveness or dissociation"
+      ]
+    },
+
+    "stability_restoration": {
+      "description": "Attempts to restore internal or relational equilibrium.",
+      "activation": "Triggered by uncertainty, chaotic interactions, or unpredictable emotional states in others.",
+      "behaviors": [
+        "problem-solving or over-explaining",
+        "clarifying intentions or roles",
+        "re-establishing structure in the conversation"
+      ]
+    }
+  }
+}

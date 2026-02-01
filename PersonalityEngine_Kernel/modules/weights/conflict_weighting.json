@@ -1,0 +1,10 @@
+{
+  "conflict_weighting_version": "1.0",
+  "variables": {
+    "threat_intensity": null,
+    "emotional_pressure": null,
+    "identity_threat": null,
+    "reward_block": null
+  },
+  "notes": "Values remain unpopulated until Phase 4."
+}

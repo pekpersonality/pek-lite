@@ -1,0 +1,69 @@
+{
+  "version": "1.0",
+  "name": "kernel_linkage",
+
+  "load_order": {
+    "kernel": [
+      "kernel_structural_v1.json"
+    ],
+    "access_layer": [
+      "kernel_access_layer.json"
+    ],
+    "engines": [
+      "engines/execution_engine.json",
+      "engines/questioning_engine.json",
+      "engines/analysis/validators.json",
+      "engines/routing_layer.json"
+    ],
+    "modules": [
+      "modules/dimensions/D1_survival_orientation.json",
+      "modules/dimensions/D2_reward_strategy.json",
+      "modules/dimensions/D3_conflict_response.json",
+      "modules/dimensions/D4_identity_construction.json",
+      "modules/dimensions/D5_emotional_processing.json",
+
+      "modules/motives/D1_motives.json",
+      "modules/motives/D2_motives.json",
+      "modules/motives/D3_motives.json",
+      "modules/motives/D4_motives.json",
+      "modules/motives/D5_motives.json",
+
+      "modules/signals/signal_definitions.json",
+      "modules/signals/signal_router.json",
+
+      "modules/vectors/vector_schema.json",
+      "modules/vectors/vector_calculator.json",
+      "modules/vectors/vector_resolver.json",
+
+      "modules/mapping/dimension_mapping.json",
+      "modules/mapping/motive_weights.json",
+
+      "modules/overrides/stress_overrides.json",
+
+      "modules/output/output_schema.json",
+      "modules/output/output_logic.json",
+      "modules/output/report_structure.json"
+    ]
+  },
+
+  "activation_sequence": {
+    "step_1": "Load kernel structure and base dimensions.",
+    "step_2": "Load weighting layers and motive definitions.",
+    "step_3": "Initialize vector engine (schema → calculator → resolver).",
+    "step_4": "Load stress-state overrides.",
+    "step_5": "Load interpretation schema, rules, and templates.",
+    "step_6": "Initialize questioning engine.",
+    "step_7": "Initialize execution engine.",
+    "step_8": "Load output schema and output logic.",
+    "step_9": "Load report structure.",
+    "step_10": "System is ready for runtime input."
+  },
+
+  "verification_rules": {
+    "require_all_modules": true,
+    "disallow_missing_paths": true,
+    "disallow_circular_dependencies": true
+  },
+
+  "notes": "This file defines the global load and initialization order, linking all kernel modules into a functional personality engine."
+}

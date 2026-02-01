@@ -1,0 +1,109 @@
+{
+  "pipeline_version": "1.0",
+  "purpose": "Defines the ordered execution pipeline for all interpretation units, integrating dimensions, overrides, motives, conflicts, emotions, identity filters, and prediction synthesis.",
+
+  "execution_sequence": [
+    "load_dimension_data",
+    "resolve_contradictions",
+    "apply_stress_overrides",
+    "weight_motives",
+    "derive_conflict_pattern",
+    "decode_emotional_style",
+    "apply_identity_filter",
+    "generate_prediction_matrix",
+    "construct_psychological_narrative"
+  ],
+
+  "pipeline": {
+    "load_dimension_data": {
+      "unit": "load_dimensions (blueprint step)",
+      "inputs": [
+        "modules/dimensions/*",
+        "kernel_access_layer"
+      ],
+      "outputs": "dimension_data_bundle",
+      "notes": "Initial step; loads all dimension data objects with KAL routing."
+    },
+
+    "resolve_contradictions": {
+      "unit": "IU-CONTRADICTION_RESOLUTION",
+      "inputs": "dimension_data_bundle",
+      "outputs": "resolved_state",
+      "notes": "Removes contradictory signals using access_priority from the KAL."
+    },
+
+    "apply_stress_overrides": {
+      "unit": "stress_state_overrides (kernel module)",
+      "inputs": [
+        "resolved_state",
+        "stress indicators"
+      ],
+      "outputs": "stress_modified_state",
+      "notes": "Overrides must be applied BEFORE motive weighting for accuracy."
+    },
+
+    "weight_motives": {
+      "unit": "IU-MOTIVE_WEIGHTING",
+      "inputs": "stress_modified_state",
+      "outputs": "motive_weight_profile",
+      "notes": "Determines dominant and secondary survival/reward motives."
+    },
+
+    "derive_conflict_pattern": {
+      "unit": "IU-CONFLICT_SELECTION",
+      "inputs": [
+        "motive_weight_profile",
+        "stress_modified_state"
+      ],
+      "outputs": "conflict_behavior",
+      "notes": "Predicts conflict reactions based on motive/emotion interplay."
+    },
+
+    "decode_emotional_style": {
+      "unit": "IU-EMOTIONAL_DECODER",
+      "inputs": [
+        "stress_modified_state",
+        "conflict_behavior"
+      ],
+      "outputs": "emotional_profile",
+      "notes": "Generates emotional timing, volatility, suppression/expression analysis."
+    },
+
+    "apply_identity_filter": {
+      "unit": "IU-IDENTITY_FILTER",
+      "inputs": [
+        "emotional_profile",
+        "motive_weight_profile"
+      ],
+      "outputs": "identity_shaped_model",
+      "notes": "Identity determines meaning-making and narrative orientation."
+    },
+
+    "generate_prediction_matrix": {
+      "unit": "IU-PREDICTION_ENGINE",
+      "inputs": [
+        "identity_shaped_model",
+        "conflict_behavior",
+        "emotional_profile",
+        "motive_weight_profile"
+      ],
+      "outputs": "prediction_matrix",
+      "notes": "Core behavioral predictions emerge here."
+    },
+
+    "construct_psychological_narrative": {
+      "unit": "IU-NARRATIVE_ENGINE",
+      "inputs": "prediction_matrix",
+      "outputs": "psychological_report",
+      "notes": "Generates human-readable, structured report from kernel templates."
+    }
+  },
+
+  "fallback_rules": {
+    "missing_dimension": "Skip unit and continue pipeline with default-neutral weighting.",
+    "stress_missing": "Assume low-stress baseline unless conflict patterns spike.",
+    "identity_ambiguous": "Apply 'autonomy-first' fallback model.",
+    "emotion_unreadable": "Default to internalizer profile with low external volatility.",
+    "contradiction_unresolvable": "Honor access_priority and suppress lowest-priority dimension."
+  }
+}

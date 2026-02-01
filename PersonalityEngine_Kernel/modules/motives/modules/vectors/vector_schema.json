@@ -1,0 +1,34 @@
+{
+  "version": "1.0",
+  "name": "behavioral_vector_schema",
+
+  "dimensions": {
+    "D1": {
+      "label": "survival_orientation",
+      "range": [-1.0, 1.0],
+      "baseline": 0.0
+    },
+    "D2": {
+      "label": "reward_strategy",
+      "range": [-1.0, 1.0],
+      "baseline": 0.0
+    },
+    "D3": {
+      "label": "conflict_response",
+      "range": [-1.0, 1.0],
+      "baseline": 0.0
+    },
+    "D4": {
+      "label": "identity_construction",
+      "range": [-1.0, 1.0],
+      "baseline": 0.0
+    },
+    "D5": {
+      "label": "emotional_processing",
+      "range": [-1.0, 1.0],
+      "baseline": 0.0
+    }
+  },
+
+  "notes": "Each dimension uses a continuous range from -1 (one pole) to +1 (the opposite pole). A user's vector is calculated by interpreting signals, motive activation, and weight interactions."
+}

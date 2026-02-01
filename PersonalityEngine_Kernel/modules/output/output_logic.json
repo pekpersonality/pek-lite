@@ -1,0 +1,68 @@
+{
+  "version": "1.0",
+  "name": "output_logic",
+
+  "pipeline": {
+    "load_inputs": {
+      "description": "Gather all processed signals from kernel-level engines.",
+      "inputs": [
+        "vector_engine.final_vectors",
+        "interpretation_rules.core_motives",
+        "interpretation_rules.conflict_patterns",
+        "interpretation_rules.stress_profile",
+        "interpretation_rules.identity_structure",
+        "interpretation_rules.relational_dynamics",
+        "interpretation_rules.confidence_profile"
+      ]
+    },
+
+    "assemble_fields": {
+      "description": "Populate output_schema fields using processed inputs.",
+      "mapping_rules": {
+        "summary.global_orientation": "vector_engine.determine_global_orientation",
+        "summary.dominant_motive": "interpretation_rules.identify_dominant_motive",
+        "summary.confidence_score": "interpretation_rules.compute_confidence_profile",
+
+        "core_motives.dominant_motives": "interpretation_rules.core_motives",
+        "core_motives.motive_expressions": "interpretation_rules.motive_expressions",
+        "core_motives.stress_expression_patterns": "interpretation_rules.stress_expression_patterns",
+
+        "conflict_patterns.conflict_points": "interpretation_rules.conflict_points",
+        "conflict_patterns.conflict_origins": "interpretation_rules.conflict_origins",
+        "conflict_patterns.resolution_pathways": "interpretation_rules.resolution_pathways",
+
+        "stress_profile.stress_state": "interpretation_rules.stress_state",
+        "stress_profile.stress_modifiers": "interpretation_rules.stress_modifiers",
+        "stress_profile.stress_behaviors": "interpretation_rules.stress_behaviors",
+        "stress_profile.recovery_conditions": "interpretation_rules.recovery_conditions",
+
+        "identity_structure.identity_dominant_axis": "interpretation_rules.identity_dominant_axis",
+        "identity_structure.identity_interpretation": "interpretation_rules.identity_interpretation",
+        "identity_structure.identity_adaptations": "interpretation_rules.identity_adaptations",
+
+        "relational_dynamics.relational_style": "interpretation_rules.relational_style",
+        "relational_dynamics.relational_motive_influence": "interpretation_rules.relational_motive_influence",
+        "relational_dynamics.relational_conflict_response": "interpretation_rules.relational_conflict_response"
+      }
+    },
+
+    "generate_narratives": {
+      "description": "Uses narrative template system to produce human-readable psychological narratives.",
+      "templates": {
+        "core_motive_narrative": "narrative_templates.core_motive_narrative",
+        "conflict_profile_narrative": "narrative_templates.conflict_profile_narrative",
+        "stress_state_narrative": "narrative_templates.stress_state_narrative",
+        "identity_formation_narrative": "narrative_templates.identity_formation_narrative",
+        "relational_dynamics_narrative": "narrative_templates.relational_dynamics_narrative",
+        "overall_personality_summary": "narrative_templates.overall_personality_summary"
+      }
+    },
+
+    "final_assembly": {
+      "description": "Outputs full psychological profile following the schema.",
+      "output_target": "compiled_profile"
+    }
+  },
+
+  "notes": "The output compiler transforms raw kernel outputs into structured, human-readable reports using mapping rules, interpretation logic, and narrative templates."
+}
