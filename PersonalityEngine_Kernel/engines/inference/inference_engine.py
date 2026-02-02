@@ -4,6 +4,8 @@
 
 from typing import List, Dict
 
+ENGINE_VERSION = "PEK_LAYER8_PROOF_001"
+
 
 def run_inference(responses: List[str], context_flags=None, forced_overrides=None):
     text = " ".join(responses).lower()
@@ -116,6 +118,7 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
     }
 
     return {
+        "engine_version": ENGINE_VERSION,
         "kernel_output": {
             "confidence_score": round(confidence_score, 2),
             "signal_summary": signal_summary,
