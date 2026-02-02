@@ -1,147 +1,143 @@
 # inference_engine.py
-# PEK Lite — Inference Engine v0.5
-# Layers:
-# 1) Motivational Structure
-# 2) Internal Tension Patterns
+# PEK Lite — Layered inference engine (Layers 1–3)
 
 from typing import List, Dict
 
 
 def run_inference(
     responses: List[str],
-    context_flags: Dict = None,
-    forced_overrides: Dict = None
+    context_flags: Dict | None = None,
+    forced_overrides: Dict | None = None
 ) -> Dict:
 
     text = " ".join(responses).lower()
 
     # -----------------------------
-    # BASE KERNEL OUTPUT
+    # SIGNAL INITIALIZATION
     # -----------------------------
-
-    kernel_output = {
-        "confidence_score": 0.3,
-        "signal_summary": {
-            "responsibility": 0,
-            "autonomy": 0,
-            "cognitive_load": 0,
-            "internal_tension": 0
-        }
-    }
-
-    lite = {
-        "orientation_snapshot": "",
-        "real_world_signals": [],
-        "strengths": [],
-        "common_misinterpretations": [],
-        "reflection_prompts": []
+    signals = {
+        "motivation": 0,
+        "cognitive_load": 0,
+        "internal_tension": 0
     }
 
     # -----------------------------
     # LAYER 1 — MOTIVATIONAL STRUCTURE
     # -----------------------------
-
-    responsibility_markers = [
-        "responsible", "holding everything together", "on me",
-        "pressure", "expectations", "standards", "hard on myself"
+    motivation_keywords = [
+        "drive", "goal", "purpose", "standard", "expectation",
+        "independent", "autonomy", "control", "clarity"
     ]
 
-    autonomy_markers = [
-        "independent", "micromanaged", "freedom",
-        "control", "own way", "autonomy"
-    ]
-
-    cognitive_markers = [
-        "overthink", "overanalyze", "second guess",
-        "doubt", "replay", "loop"
-    ]
-
-    for m in responsibility_markers:
-        if m in text:
-            kernel_output["signal_summary"]["responsibility"] += 1
-
-    for m in autonomy_markers:
-        if m in text:
-            kernel_output["signal_summary"]["autonomy"] += 1
-
-    for m in cognitive_markers:
-        if m in text:
-            kernel_output["signal_summary"]["cognitive_load"] += 1
+    for word in motivation_keywords:
+        if word in text:
+            signals["motivation"] += 1
 
     # -----------------------------
-    # LAYER 2 — INTERNAL TENSION
+    # LAYER 2 — COGNITIVE LOAD / OVERANALYSIS
     # -----------------------------
-
-    tension_markers = [
-        "oscillate", "conflicted", "torn",
-        "push myself", "never enough",
-        "self doubt", "pressure", "mental strain"
+    cognitive_keywords = [
+        "overthink", "analyze", "replay", "second guess",
+        "mental", "loop", "exhausted", "can't stop thinking"
     ]
 
-    for m in tension_markers:
-        if m in text:
-            kernel_output["signal_summary"]["internal_tension"] += 1
+    for word in cognitive_keywords:
+        if word in text:
+            signals["cognitive_load"] += 1
+
+    # -----------------------------
+    # LAYER 3 — INTERNAL TENSION / RESPONSIBILITY LOAD
+    # -----------------------------
+    tension_keywords = [
+        "holding everything together",
+        "responsible for",
+        "carry the weight",
+        "pressure",
+        "expectations",
+        "hard on myself",
+        "self doubt",
+        "let people down",
+        "burden",
+        "on me"
+    ]
+
+    for phrase in tension_keywords:
+        if phrase in text:
+            signals["internal_tension"] += 1
+
+    # -----------------------------
+    # CONFIDENCE SCORE (Lite-scale)
+    # -----------------------------
+    total_signal = sum(signals.values())
+
+    if total_signal == 0:
+        confidence = 0.3
+    elif total_signal <= 2:
+        confidence = 0.45
+    elif total_signal <= 4:
+        confidence = 0.6
+    else:
+        confidence = 0.75
 
     # -----------------------------
     # LITE TRANSLATION (OBSERVATIONAL)
     # -----------------------------
+    orientation_snapshot = (
+        "Your motivational structure appears internally consistent, "
+        "with moderate internal pressure shaping how you engage with decisions."
+        if signals["internal_tension"] > 0 else
+        "Your motivational structure appears internally consistent, "
+        "with relatively low internal friction at this time."
+    )
 
-    if kernel_output["signal_summary"]["internal_tension"] > 0:
-        lite["orientation_snapshot"] = (
-            "You appear to carry a meaningful amount of internal pressure. "
-            "Your system tends to hold competing demands simultaneously, "
-            "which can create mental strain even when external conditions are stable."
+    real_world_signals = []
+
+    if signals["cognitive_load"] > 0:
+        real_world_signals.append(
+            "You may find yourself revisiting decisions internally, even after they’re made."
         )
 
-        lite["real_world_signals"].extend([
-            "You may feel internally busy even during periods of outward calm.",
-            "Decision-making can feel heavier than it looks from the outside."
-        ])
-
-        lite["strengths"].extend([
-            "High internal standards that drive depth and seriousness.",
-            "Strong capacity to self-monitor and reflect."
-        ])
-
-        lite["common_misinterpretations"].extend([
-            "This pattern is often mistaken for indecision or emotional volatility.",
-            "In reality, it reflects internal load rather than lack of clarity."
-        ])
-
-        lite["reflection_prompts"].extend([
-            "Notice when internal pressure is helping focus versus creating drag.",
-            "Pay attention to moments when easing self-expectations improves momentum."
-        ])
-
-        kernel_output["confidence_score"] = 0.6
-
-    else:
-        lite["orientation_snapshot"] = (
-            "Your motivational structure appears internally consistent, "
-            "with relatively low internal friction at this time."
+    if signals["internal_tension"] > 0:
+        real_world_signals.append(
+            "You may take on more responsibility internally than others realize."
         )
 
-        lite["real_world_signals"].append(
-            "You may experience periods of clarity where decisions feel straightforward."
+    strengths = []
+
+    if signals["motivation"] > 0:
+        strengths.append(
+            "Strong internal standards and self-direction."
         )
 
-        lite["strengths"].append(
-            "Capacity to maintain internal alignment without excessive strain."
+    if signals["internal_tension"] > 0:
+        strengths.append(
+            "High reliability and capacity to carry responsibility under pressure."
         )
 
-        lite["common_misinterpretations"].append(
-            "This can be mistaken for passivity, when it often reflects steadiness."
+    common_misinterpretations = []
+
+    if signals["internal_tension"] > 0:
+        common_misinterpretations.append(
+            "This pattern can be mistaken for emotional distance, when it often reflects containment."
         )
 
-        lite["reflection_prompts"].append(
-            "Notice what conditions help you preserve this sense of internal ease."
-        )
+    reflection_prompts = [
+        "Notice what situations tend to increase internal pressure versus internal clarity."
+    ]
 
     # -----------------------------
-    # FINAL RESPONSE
+    # OUTPUT
     # -----------------------------
-
     return {
-        "kernel_output": kernel_output,
-        "lite_translation": lite
+        "kernel_output": {
+            "confidence_score": confidence,
+            "signal_summary": signals
+        },
+        "lite_translation": {
+            "orientation_snapshot": orientation_snapshot,
+            "real_world_signals": real_world_signals,
+            "strengths": strengths,
+            "common_misinterpretations": common_misinterpretations,
+            "reflection_prompts": reflection_prompts
+        }
     }
