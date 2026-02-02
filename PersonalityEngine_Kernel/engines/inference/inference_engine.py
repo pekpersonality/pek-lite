@@ -1,5 +1,5 @@
 # inference_engine.py
-# PEK Lite — Incremental Inference Engine (Layers 1–4)
+# PEK Lite — Incremental Inference Engine (Layers 1–5)
 
 from typing import List, Dict
 
@@ -16,6 +16,8 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
         "internal_tension": 0,
         "identity_rigidity": 0,
         "identity_flexibility": 0,
+        "control_orientation": 0,
+        "trust_orientation": 0,
     }
 
     confidence_score = 0.3
@@ -37,7 +39,7 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
             signal_summary["cognitive_load"] += 1
 
     # -----------------------------
-    # Layer 3 — Internal Tension / Pressure
+    # Layer 3 — Internal Tension
     # -----------------------------
     tension_terms = ["pressure", "holding everything", "responsible for", "weight on me", "stress"]
     for term in tension_terms:
@@ -72,7 +74,34 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
             signal_summary["identity_flexibility"] += 1
 
     # -----------------------------
-    # Lite Translation Logic
+    # Layer 5 — Control vs Trust Orientation
+    # -----------------------------
+    control_terms = [
+        "i have to make sure",
+        "i can't rely on others",
+        "i need to manage",
+        "if i don't handle it",
+        "i keep things from falling apart"
+    ]
+
+    trust_terms = [
+        "i let things unfold",
+        "i trust the process",
+        "things work out",
+        "i allow",
+        "i step back"
+    ]
+
+    for term in control_terms:
+        if term in text:
+            signal_summary["control_orientation"] += 1
+
+    for term in trust_terms:
+        if term in text:
+            signal_summary["trust_orientation"] += 1
+
+    # -----------------------------
+    # Lite Translation
     # -----------------------------
     lite = {
         "orientation_snapshot": "",
@@ -82,33 +111,30 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
         "reflection_prompts": [],
     }
 
-    if signal_summary["identity_rigidity"] > signal_summary["identity_flexibility"]:
+    if signal_summary["control_orientation"] > signal_summary["trust_orientation"]:
         lite["orientation_snapshot"] = (
-            "Your responses suggest a relatively stable and consistent sense of self, "
-            "with a tendency to define identity in fixed terms."
+            "Your responses suggest a tendency to maintain control over outcomes, "
+            "especially when responsibility feels high."
         )
         lite["real_world_signals"].append(
-            "You may rely on a clear internal identity when navigating decisions or roles."
+            "You may feel most at ease when you are actively managing variables."
         )
         lite["common_misinterpretations"].append(
-            "This can be mistaken for inflexibility, when it often reflects self-consistency."
+            "This can be mistaken for rigidity, when it often reflects conscientiousness."
         )
         lite["reflection_prompts"].append(
-            "Notice when stability feels grounding versus when flexibility feels useful."
+            "Notice when control feels stabilizing versus draining."
         )
 
-    elif signal_summary["identity_flexibility"] > signal_summary["identity_rigidity"]:
+    elif signal_summary["trust_orientation"] > signal_summary["control_orientation"]:
         lite["orientation_snapshot"] = (
-            "Your responses suggest an adaptive sense of identity that shifts across situations."
-        )
-        lite["real_world_signals"].append(
-            "You may adjust how you show up depending on context or environment."
+            "Your responses suggest comfort with allowing situations to develop without heavy intervention."
         )
         lite["strengths"].append(
-            "Capacity to navigate different roles without feeling confined to a single self-definition."
+            "Capacity to conserve energy by trusting processes and timing."
         )
         lite["reflection_prompts"].append(
-            "Notice which environments invite flexibility versus consistency."
+            "Notice which situations invite trust versus active involvement."
         )
 
     else:
