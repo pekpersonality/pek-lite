@@ -1,5 +1,5 @@
 # inference_engine.py
-# PEK Lite — Incremental Inference Engine (Layers 1–5)
+# PEK Lite — Incremental Inference Engine (Layers 1–6)
 
 from typing import List, Dict
 
@@ -18,6 +18,8 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
         "identity_flexibility": 0,
         "control_orientation": 0,
         "trust_orientation": 0,
+        "external_validation": 0,
+        "internal_reference": 0,
     }
 
     confidence_score = 0.3
@@ -31,7 +33,7 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
             signal_summary["motivation"] += 1
 
     # -----------------------------
-    # Layer 2 — Cognitive Load / Overanalysis
+    # Layer 2 — Cognitive Load
     # -----------------------------
     cognitive_terms = ["overthink", "analyze", "ruminate", "second guess", "mentally exhausted"]
     for term in cognitive_terms:
@@ -74,7 +76,7 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
             signal_summary["identity_flexibility"] += 1
 
     # -----------------------------
-    # Layer 5 — Control vs Trust Orientation
+    # Layer 5 — Control vs Trust
     # -----------------------------
     control_terms = [
         "i have to make sure",
@@ -101,6 +103,34 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
             signal_summary["trust_orientation"] += 1
 
     # -----------------------------
+    # Layer 6 — External Validation vs Internal Reference
+    # -----------------------------
+    validation_terms = [
+        "what do people think",
+        "i need approval",
+        "how i'm perceived",
+        "validation",
+        "recognized",
+        "seen as"
+    ]
+
+    internal_reference_terms = [
+        "i know for myself",
+        "internally",
+        "my own standards",
+        "i trust my judgment",
+        "inner sense"
+    ]
+
+    for term in validation_terms:
+        if term in text:
+            signal_summary["external_validation"] += 1
+
+    for term in internal_reference_terms:
+        if term in text:
+            signal_summary["internal_reference"] += 1
+
+    # -----------------------------
     # Lite Translation
     # -----------------------------
     lite = {
@@ -111,30 +141,29 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
         "reflection_prompts": [],
     }
 
-    if signal_summary["control_orientation"] > signal_summary["trust_orientation"]:
+    if signal_summary["external_validation"] > signal_summary["internal_reference"]:
         lite["orientation_snapshot"] = (
-            "Your responses suggest a tendency to maintain control over outcomes, "
-            "especially when responsibility feels high."
+            "Your responses suggest attentiveness to how your actions are perceived by others."
         )
         lite["real_world_signals"].append(
-            "You may feel most at ease when you are actively managing variables."
+            "You may calibrate decisions based on external feedback or recognition."
         )
         lite["common_misinterpretations"].append(
-            "This can be mistaken for rigidity, when it often reflects conscientiousness."
+            "This can be mistaken for insecurity, when it often reflects social awareness."
         )
         lite["reflection_prompts"].append(
-            "Notice when control feels stabilizing versus draining."
+            "Notice when external input feels informative versus distracting."
         )
 
-    elif signal_summary["trust_orientation"] > signal_summary["control_orientation"]:
+    elif signal_summary["internal_reference"] > signal_summary["external_validation"]:
         lite["orientation_snapshot"] = (
-            "Your responses suggest comfort with allowing situations to develop without heavy intervention."
+            "Your responses suggest reliance on internal standards when evaluating decisions."
         )
         lite["strengths"].append(
-            "Capacity to conserve energy by trusting processes and timing."
+            "Capacity to self-evaluate without heavy dependence on external feedback."
         )
         lite["reflection_prompts"].append(
-            "Notice which situations invite trust versus active involvement."
+            "Notice which situations reinforce trust in your internal judgment."
         )
 
     else:
