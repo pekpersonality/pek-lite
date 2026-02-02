@@ -1,66 +1,35 @@
-"""
-PEK Lite — Inference Engine v0.4
-More expressive, observational-only inference.
-No advice language. Pattern description only.
-"""
+# inference_engine.py
+# PEK Lite — Inference Engine v0.5
+# Layers:
+# 1) Motivational Structure
+# 2) Internal Tension Patterns
 
 from typing import List, Dict
 
 
 def run_inference(
     responses: List[str],
-    context_flags: Dict | None = None,
-    forced_overrides: Dict | None = None
+    context_flags: Dict = None,
+    forced_overrides: Dict = None
 ) -> Dict:
+
     text = " ".join(responses).lower()
 
     # -----------------------------
-    # SIGNAL BUCKETS (expressive)
+    # BASE KERNEL OUTPUT
     # -----------------------------
 
-    responsibility_signals = [
-        "responsible", "holding everything together", "hard on myself",
-        "pressure", "expectations", "burden", "carry", "weight",
-        "overanalyze", "overthinking", "self-doubt", "standards"
-    ]
-
-    autonomy_signals = [
-        "independent", "micromanaged", "freedom", "control",
-        "clarity", "own decisions"
-    ]
-
-    cognitive_load_signals = [
-        "patterns", "analyze", "thinking", "clarity",
-        "notice", "understand", "explain"
-    ]
-
-    # -----------------------------
-    # SCORE ACCUMULATION
-    # -----------------------------
-
-    scores = {
-        "responsibility": 0,
-        "autonomy": 0,
-        "cognitive_load": 0
+    kernel_output = {
+        "confidence_score": 0.3,
+        "signal_summary": {
+            "responsibility": 0,
+            "autonomy": 0,
+            "cognitive_load": 0,
+            "internal_tension": 0
+        }
     }
 
-    for word in responsibility_signals:
-        if word in text:
-            scores["responsibility"] += 1
-
-    for word in autonomy_signals:
-        if word in text:
-            scores["autonomy"] += 1
-
-    for word in cognitive_load_signals:
-        if word in text:
-            scores["cognitive_load"] += 1
-
-    # -----------------------------
-    # LITE TRANSLATION (OUTPUT)
-    # -----------------------------
-
-    lite_translation = {
+    lite = {
         "orientation_snapshot": "",
         "real_world_signals": [],
         "strengths": [],
@@ -68,92 +37,111 @@ def run_inference(
         "reflection_prompts": []
     }
 
-    # RESPONSIBILITY / SELF-PRESSURE CLUSTER
-    if scores["responsibility"] >= 2:
-        lite_translation["orientation_snapshot"] = (
-            "Your responses suggest a strong internal sense of responsibility. "
-            "You tend to carry ownership for outcomes, often holding yourself "
-            "to high internal standards."
-        )
+    # -----------------------------
+    # LAYER 1 — MOTIVATIONAL STRUCTURE
+    # -----------------------------
 
-        lite_translation["real_world_signals"].extend([
-            "You may feel like the stabilizing force in uncertain situations.",
-            "You often internalize pressure rather than expressing it outwardly.",
-            "You tend to evaluate yourself more critically than others do."
-        ])
+    responsibility_markers = [
+        "responsible", "holding everything together", "on me",
+        "pressure", "expectations", "standards", "hard on myself"
+    ]
 
-        lite_translation["strengths"].extend([
-            "Reliability under pressure.",
-            "Strong internal accountability.",
-            "Ability to sustain effort without external validation."
-        ])
+    autonomy_markers = [
+        "independent", "micromanaged", "freedom",
+        "control", "own way", "autonomy"
+    ]
 
-        lite_translation["common_misinterpretations"].extend([
-            "This pattern can be mistaken for rigidity or self-doubt.",
-            "In reality, it reflects internal discipline and responsibility."
-        ])
+    cognitive_markers = [
+        "overthink", "overanalyze", "second guess",
+        "doubt", "replay", "loop"
+    ]
 
-        lite_translation["reflection_prompts"].extend([
-            "Notice when responsibility energizes you versus when it becomes heavy.",
-            "Pay attention to how often you assume ownership by default."
-        ])
+    for m in responsibility_markers:
+        if m in text:
+            kernel_output["signal_summary"]["responsibility"] += 1
 
-    # AUTONOMY OVERLAY
-    if scores["autonomy"] >= 1:
-        lite_translation["real_world_signals"].append(
-            "You appear sensitive to unnecessary constraint or micromanagement."
-        )
+    for m in autonomy_markers:
+        if m in text:
+            kernel_output["signal_summary"]["autonomy"] += 1
 
-        lite_translation["strengths"].append(
-            "Clear internal boundaries around autonomy and self-direction."
-        )
-
-    # COGNITIVE LOAD OVERLAY
-    if scores["cognitive_load"] >= 2:
-        lite_translation["orientation_snapshot"] += (
-            " You process experiences through analysis and pattern recognition, "
-            "often thinking several steps ahead."
-        )
-
-        lite_translation["common_misinterpretations"].append(
-            "This analytical style is sometimes mistaken for indecision."
-        )
-
-    # FALLBACK (still valid, not an error)
-    if lite_translation["orientation_snapshot"] == "":
-        lite_translation["orientation_snapshot"] = (
-            "Motivational structure appears internally consistent. "
-            "Confidence is currently low, which usually means the system "
-            "needs more detail to sharpen the read."
-        )
-
-        lite_translation["real_world_signals"] = [
-            "You may hesitate to act until things feel internally clearer.",
-            "You may avoid conflict unless it feels especially meaningful."
-        ]
-
-        lite_translation["strengths"] = [
-            "Internal consistency rather than impulsive action."
-        ]
-
-        lite_translation["common_misinterpretations"] = [
-            "This can be mistaken for indecision."
-        ]
-
-        lite_translation["reflection_prompts"] = [
-            "Notice what increases internal clarity for you."
-        ]
+    for m in cognitive_markers:
+        if m in text:
+            kernel_output["signal_summary"]["cognitive_load"] += 1
 
     # -----------------------------
-    # FINAL STRUCTURE
+    # LAYER 2 — INTERNAL TENSION
+    # -----------------------------
+
+    tension_markers = [
+        "oscillate", "conflicted", "torn",
+        "push myself", "never enough",
+        "self doubt", "pressure", "mental strain"
+    ]
+
+    for m in tension_markers:
+        if m in text:
+            kernel_output["signal_summary"]["internal_tension"] += 1
+
+    # -----------------------------
+    # LITE TRANSLATION (OBSERVATIONAL)
+    # -----------------------------
+
+    if kernel_output["signal_summary"]["internal_tension"] > 0:
+        lite["orientation_snapshot"] = (
+            "You appear to carry a meaningful amount of internal pressure. "
+            "Your system tends to hold competing demands simultaneously, "
+            "which can create mental strain even when external conditions are stable."
+        )
+
+        lite["real_world_signals"].extend([
+            "You may feel internally busy even during periods of outward calm.",
+            "Decision-making can feel heavier than it looks from the outside."
+        ])
+
+        lite["strengths"].extend([
+            "High internal standards that drive depth and seriousness.",
+            "Strong capacity to self-monitor and reflect."
+        ])
+
+        lite["common_misinterpretations"].extend([
+            "This pattern is often mistaken for indecision or emotional volatility.",
+            "In reality, it reflects internal load rather than lack of clarity."
+        ])
+
+        lite["reflection_prompts"].extend([
+            "Notice when internal pressure is helping focus versus creating drag.",
+            "Pay attention to moments when easing self-expectations improves momentum."
+        ])
+
+        kernel_output["confidence_score"] = 0.6
+
+    else:
+        lite["orientation_snapshot"] = (
+            "Your motivational structure appears internally consistent, "
+            "with relatively low internal friction at this time."
+        )
+
+        lite["real_world_signals"].append(
+            "You may experience periods of clarity where decisions feel straightforward."
+        )
+
+        lite["strengths"].append(
+            "Capacity to maintain internal alignment without excessive strain."
+        )
+
+        lite["common_misinterpretations"].append(
+            "This can be mistaken for passivity, when it often reflects steadiness."
+        )
+
+        lite["reflection_prompts"].append(
+            "Notice what conditions help you preserve this sense of internal ease."
+        )
+
+    # -----------------------------
+    # FINAL RESPONSE
     # -----------------------------
 
     return {
-        "kernel_output": {
-            "confidence_score": round(
-                min(0.9, 0.3 + (sum(scores.values()) * 0.1)), 2
-            ),
-            "signal_summary": scores
-        },
-        "lite_translation": lite_translation
+        "kernel_output": kernel_output,
+        "lite_translation": lite
     }
