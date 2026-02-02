@@ -1,143 +1,129 @@
 # inference_engine.py
-# PEK Lite — Layered inference engine (Layers 1–3)
+# PEK Lite — Incremental Inference Engine (Layers 1–4)
 
 from typing import List, Dict
 
 
-def run_inference(
-    responses: List[str],
-    context_flags: Dict | None = None,
-    forced_overrides: Dict | None = None
-) -> Dict:
-
+def run_inference(responses: List[str], context_flags=None, forced_overrides=None) -> dict:
     text = " ".join(responses).lower()
 
     # -----------------------------
-    # SIGNAL INITIALIZATION
+    # Base containers
     # -----------------------------
-    signals = {
+    signal_summary = {
         "motivation": 0,
         "cognitive_load": 0,
-        "internal_tension": 0
+        "internal_tension": 0,
+        "identity_rigidity": 0,
+        "identity_flexibility": 0,
     }
 
+    confidence_score = 0.3
+
     # -----------------------------
-    # LAYER 1 — MOTIVATIONAL STRUCTURE
+    # Layer 1 — Motivation
     # -----------------------------
-    motivation_keywords = [
-        "drive", "goal", "purpose", "standard", "expectation",
-        "independent", "autonomy", "control", "clarity"
+    motivation_terms = ["drive", "push", "ambition", "goal", "prove", "achieve"]
+    for term in motivation_terms:
+        if term in text:
+            signal_summary["motivation"] += 1
+
+    # -----------------------------
+    # Layer 2 — Cognitive Load / Overanalysis
+    # -----------------------------
+    cognitive_terms = ["overthink", "analyze", "ruminate", "second guess", "mentally exhausted"]
+    for term in cognitive_terms:
+        if term in text:
+            signal_summary["cognitive_load"] += 1
+
+    # -----------------------------
+    # Layer 3 — Internal Tension / Pressure
+    # -----------------------------
+    tension_terms = ["pressure", "holding everything", "responsible for", "weight on me", "stress"]
+    for term in tension_terms:
+        if term in text:
+            signal_summary["internal_tension"] += 1
+
+    # -----------------------------
+    # Layer 4 — Identity Rigidity vs Flexibility
+    # -----------------------------
+    rigidity_terms = [
+        "this is just who i am",
+        "i've always been this way",
+        "people never change",
+        "that's just me",
+        "fixed"
     ]
 
-    for word in motivation_keywords:
-        if word in text:
-            signals["motivation"] += 1
-
-    # -----------------------------
-    # LAYER 2 — COGNITIVE LOAD / OVERANALYSIS
-    # -----------------------------
-    cognitive_keywords = [
-        "overthink", "analyze", "replay", "second guess",
-        "mental", "loop", "exhausted", "can't stop thinking"
+    flexibility_terms = [
+        "depends on the situation",
+        "i adapt",
+        "changes over time",
+        "different sides of me",
+        "context matters"
     ]
 
-    for word in cognitive_keywords:
-        if word in text:
-            signals["cognitive_load"] += 1
+    for term in rigidity_terms:
+        if term in text:
+            signal_summary["identity_rigidity"] += 1
+
+    for term in flexibility_terms:
+        if term in text:
+            signal_summary["identity_flexibility"] += 1
 
     # -----------------------------
-    # LAYER 3 — INTERNAL TENSION / RESPONSIBILITY LOAD
+    # Lite Translation Logic
     # -----------------------------
-    tension_keywords = [
-        "holding everything together",
-        "responsible for",
-        "carry the weight",
-        "pressure",
-        "expectations",
-        "hard on myself",
-        "self doubt",
-        "let people down",
-        "burden",
-        "on me"
-    ]
+    lite = {
+        "orientation_snapshot": "",
+        "real_world_signals": [],
+        "strengths": [],
+        "common_misinterpretations": [],
+        "reflection_prompts": [],
+    }
 
-    for phrase in tension_keywords:
-        if phrase in text:
-            signals["internal_tension"] += 1
+    if signal_summary["identity_rigidity"] > signal_summary["identity_flexibility"]:
+        lite["orientation_snapshot"] = (
+            "Your responses suggest a relatively stable and consistent sense of self, "
+            "with a tendency to define identity in fixed terms."
+        )
+        lite["real_world_signals"].append(
+            "You may rely on a clear internal identity when navigating decisions or roles."
+        )
+        lite["common_misinterpretations"].append(
+            "This can be mistaken for inflexibility, when it often reflects self-consistency."
+        )
+        lite["reflection_prompts"].append(
+            "Notice when stability feels grounding versus when flexibility feels useful."
+        )
 
-    # -----------------------------
-    # CONFIDENCE SCORE (Lite-scale)
-    # -----------------------------
-    total_signal = sum(signals.values())
+    elif signal_summary["identity_flexibility"] > signal_summary["identity_rigidity"]:
+        lite["orientation_snapshot"] = (
+            "Your responses suggest an adaptive sense of identity that shifts across situations."
+        )
+        lite["real_world_signals"].append(
+            "You may adjust how you show up depending on context or environment."
+        )
+        lite["strengths"].append(
+            "Capacity to navigate different roles without feeling confined to a single self-definition."
+        )
+        lite["reflection_prompts"].append(
+            "Notice which environments invite flexibility versus consistency."
+        )
 
-    if total_signal == 0:
-        confidence = 0.3
-    elif total_signal <= 2:
-        confidence = 0.45
-    elif total_signal <= 4:
-        confidence = 0.6
     else:
-        confidence = 0.75
-
-    # -----------------------------
-    # LITE TRANSLATION (OBSERVATIONAL)
-    # -----------------------------
-    orientation_snapshot = (
-        "Your motivational structure appears internally consistent, "
-        "with moderate internal pressure shaping how you engage with decisions."
-        if signals["internal_tension"] > 0 else
-        "Your motivational structure appears internally consistent, "
-        "with relatively low internal friction at this time."
-    )
-
-    real_world_signals = []
-
-    if signals["cognitive_load"] > 0:
-        real_world_signals.append(
-            "You may find yourself revisiting decisions internally, even after they’re made."
+        lite["orientation_snapshot"] = (
+            "Your motivational structure appears internally consistent, "
+            "with relatively low internal friction at this time."
+        )
+        lite["reflection_prompts"].append(
+            "Notice what situations tend to increase internal pressure versus internal clarity."
         )
 
-    if signals["internal_tension"] > 0:
-        real_world_signals.append(
-            "You may take on more responsibility internally than others realize."
-        )
-
-    strengths = []
-
-    if signals["motivation"] > 0:
-        strengths.append(
-            "Strong internal standards and self-direction."
-        )
-
-    if signals["internal_tension"] > 0:
-        strengths.append(
-            "High reliability and capacity to carry responsibility under pressure."
-        )
-
-    common_misinterpretations = []
-
-    if signals["internal_tension"] > 0:
-        common_misinterpretations.append(
-            "This pattern can be mistaken for emotional distance, when it often reflects containment."
-        )
-
-    reflection_prompts = [
-        "Notice what situations tend to increase internal pressure versus internal clarity."
-    ]
-
-    # -----------------------------
-    # OUTPUT
-    # -----------------------------
     return {
         "kernel_output": {
-            "confidence_score": confidence,
-            "signal_summary": signals
+            "confidence_score": confidence_score,
+            "signal_summary": signal_summary
         },
-        "lite_translation": {
-            "orientation_snapshot": orientation_snapshot,
-            "real_world_signals": real_world_signals,
-            "strengths": strengths,
-            "common_misinterpretations": common_misinterpretations,
-            "reflection_prompts": reflection_prompts
-        }
+        "lite_translation": lite
     }
