@@ -1,184 +1,115 @@
 # inference_engine.py
-# PEK Lite — Incremental Inference Engine (Layers 1–6)
+# PEK Lite — Inference Engine (Layers 1–7)
 
 from typing import List, Dict
 
 
-def run_inference(responses: List[str], context_flags=None, forced_overrides=None) -> dict:
-    text = " ".join(responses).lower()
+class InferenceEngine:
+    def __init__(self):
+        self.version = "0.7.0"
 
-    # -----------------------------
-    # Base containers
-    # -----------------------------
-    signal_summary = {
-        "motivation": 0,
-        "cognitive_load": 0,
-        "internal_tension": 0,
-        "identity_rigidity": 0,
-        "identity_flexibility": 0,
-        "control_orientation": 0,
-        "trust_orientation": 0,
-        "external_validation": 0,
-        "internal_reference": 0,
-    }
+    def interpret(self, responses: List[str]) -> Dict:
+        text = " ".join(responses).lower()
 
-    confidence_score = 0.3
+        # -----------------------------
+        # Base containers
+        # -----------------------------
+        signal_summary = {
+            "motivation": 0,
+            "cognitive_load": 0,
+            "internal_tension": 0,
+            "identity_rigidity": 0,
+            "identity_flexibility": 0,
+            "control_orientation": 0,
+            "trust_orientation": 0,
+            "external_validation": 0,
+            "internal_reference": 0,
+            # Layer 7
+            "deliberative_decision_style": 0,
+            "decisive_action_style": 0,
+        }
 
-    # -----------------------------
-    # Layer 1 — Motivation
-    # -----------------------------
-    motivation_terms = ["drive", "push", "ambition", "goal", "prove", "achieve"]
-    for term in motivation_terms:
-        if term in text:
-            signal_summary["motivation"] += 1
+        lite = {
+            "orientation_snapshot": "",
+            "real_world_signals": [],
+            "strengths": [],
+            "common_misinterpretations": [],
+            "reflection_prompts": []
+        }
 
-    # -----------------------------
-    # Layer 2 — Cognitive Load
-    # -----------------------------
-    cognitive_terms = ["overthink", "analyze", "ruminate", "second guess", "mentally exhausted"]
-    for term in cognitive_terms:
-        if term in text:
-            signal_summary["cognitive_load"] += 1
+        confidence_score = 0.3
 
-    # -----------------------------
-    # Layer 3 — Internal Tension
-    # -----------------------------
-    tension_terms = ["pressure", "holding everything", "responsible for", "weight on me", "stress"]
-    for term in tension_terms:
-        if term in text:
-            signal_summary["internal_tension"] += 1
+        # -----------------------------
+        # LAYER 7 — DECISIONAL STYLE
+        # -----------------------------
+        deliberative_markers = [
+            "overanalyze", "think it through", "need clarity",
+            "weigh options", "sit with", "process before acting",
+            "hesitate", "double check"
+        ]
 
-    # -----------------------------
-    # Layer 4 — Identity Rigidity vs Flexibility
-    # -----------------------------
-    rigidity_terms = [
-        "this is just who i am",
-        "i've always been this way",
-        "people never change",
-        "that's just me",
-        "fixed"
-    ]
+        decisive_markers = [
+            "act quickly", "decide fast", "jump in",
+            "figure it out later", "move forward",
+            "take action immediately"
+        ]
 
-    flexibility_terms = [
-        "depends on the situation",
-        "i adapt",
-        "changes over time",
-        "different sides of me",
-        "context matters"
-    ]
+        for phrase in deliberative_markers:
+            if phrase in text:
+                signal_summary["deliberative_decision_style"] += 1
 
-    for term in rigidity_terms:
-        if term in text:
-            signal_summary["identity_rigidity"] += 1
+        for phrase in decisive_markers:
+            if phrase in text:
+                signal_summary["decisive_action_style"] += 1
 
-    for term in flexibility_terms:
-        if term in text:
-            signal_summary["identity_flexibility"] += 1
+        # -----------------------------
+        # Lite Translation — Layer 7
+        # -----------------------------
+        if signal_summary["deliberative_decision_style"] > signal_summary["decisive_action_style"]:
+            lite["real_world_signals"].append(
+                "You tend to move toward decisions after internal processing rather than immediate action."
+            )
+            lite["strengths"].append(
+                "Decisions are often well-considered rather than impulsive."
+            )
+            lite["common_misinterpretations"].append(
+                "This can be mistaken for hesitation, when it often reflects care and depth."
+            )
+            lite["reflection_prompts"].append(
+                "Notice when deliberation improves outcomes — and when it slows momentum."
+            )
 
-    # -----------------------------
-    # Layer 5 — Control vs Trust
-    # -----------------------------
-    control_terms = [
-        "i have to make sure",
-        "i can't rely on others",
-        "i need to manage",
-        "if i don't handle it",
-        "i keep things from falling apart"
-    ]
+        elif signal_summary["decisive_action_style"] > signal_summary["deliberative_decision_style"]:
+            lite["real_world_signals"].append(
+                "You often act quickly and refine direction as you go."
+            )
+            lite["strengths"].append(
+                "Ability to create momentum and adapt in real time."
+            )
+            lite["common_misinterpretations"].append(
+                "This can be mistaken for recklessness, when it often reflects confidence."
+            )
+            lite["reflection_prompts"].append(
+                "Notice when quick action serves you — and when pause might add clarity."
+            )
 
-    trust_terms = [
-        "i let things unfold",
-        "i trust the process",
-        "things work out",
-        "i allow",
-        "i step back"
-    ]
-
-    for term in control_terms:
-        if term in text:
-            signal_summary["control_orientation"] += 1
-
-    for term in trust_terms:
-        if term in text:
-            signal_summary["trust_orientation"] += 1
-
-    # -----------------------------
-    # Layer 6 — External Validation vs Internal Reference
-    # -----------------------------
-    validation_terms = [
-        "what do people think",
-        "i need approval",
-        "how i'm perceived",
-        "validation",
-        "recognized",
-        "seen as"
-    ]
-
-    internal_reference_terms = [
-        "i know for myself",
-        "internally",
-        "my own standards",
-        "i trust my judgment",
-        "inner sense"
-    ]
-
-    for term in validation_terms:
-        if term in text:
-            signal_summary["external_validation"] += 1
-
-    for term in internal_reference_terms:
-        if term in text:
-            signal_summary["internal_reference"] += 1
-
-    # -----------------------------
-    # Lite Translation
-    # -----------------------------
-    lite = {
-        "orientation_snapshot": "",
-        "real_world_signals": [],
-        "strengths": [],
-        "common_misinterpretations": [],
-        "reflection_prompts": [],
-    }
-
-    if signal_summary["external_validation"] > signal_summary["internal_reference"]:
-        lite["orientation_snapshot"] = (
-            "Your responses suggest attentiveness to how your actions are perceived by others."
-        )
-        lite["real_world_signals"].append(
-            "You may calibrate decisions based on external feedback or recognition."
-        )
-        lite["common_misinterpretations"].append(
-            "This can be mistaken for insecurity, when it often reflects social awareness."
-        )
-        lite["reflection_prompts"].append(
-            "Notice when external input feels informative versus distracting."
-        )
-
-    elif signal_summary["internal_reference"] > signal_summary["external_validation"]:
-        lite["orientation_snapshot"] = (
-            "Your responses suggest reliance on internal standards when evaluating decisions."
-        )
-        lite["strengths"].append(
-            "Capacity to self-evaluate without heavy dependence on external feedback."
-        )
-        lite["reflection_prompts"].append(
-            "Notice which situations reinforce trust in your internal judgment."
-        )
-
-    else:
+        # -----------------------------
+        # Orientation Snapshot (fallback-safe)
+        # -----------------------------
         lite["orientation_snapshot"] = (
             "Your motivational structure appears internally consistent, "
             "with relatively low internal friction at this time."
         )
-        lite["reflection_prompts"].append(
-            "Notice what situations tend to increase internal pressure versus internal clarity."
-        )
 
-    return {
-        "kernel_output": {
-            "confidence_score": confidence_score,
-            "signal_summary": signal_summary
-        },
-        "lite_translation": lite
-    }
+        return {
+            "kernel_output": {
+                "confidence_score": confidence_score,
+                "signal_summary": signal_summary
+            },
+            "lite_translation": lite
+        }
+
+
+def run_inference(responses: List[str], **kwargs) -> Dict:
+    engine = InferenceEngine()
+    return engine.interpret(responses)
