@@ -1,10 +1,11 @@
 # inference_engine.py
-# PEK Lite — Inference Engine v0.8
-# Layers 1–8 active, additive, non-destructive
+# PEK Lite — Inference Engine v0.9
+# Layers 1–8 cumulative, additive, non-destructive
 
 from typing import List, Dict
 
-ENGINE_VERSION = "PEK_LAYER8_PROOF_001"
+
+ENGINE_VERSION = "PEK_LITE_LAYERS_1_TO_8"
 
 
 def run_inference(responses: List[str], context_flags=None, forced_overrides=None):
@@ -29,92 +30,153 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
     confidence_score = 0.3
 
     # -------------------------
-    # LAYER 8 — PRESSURE REGULATION (EXPANDED)
+    # LAYER 1 — MOTIVATION / RESPONSIBILITY
     # -------------------------
+    motivation_markers = [
+        "responsible", "holding everything together", "carry the load",
+        "depend on me", "my responsibility"
+    ]
 
+    # -------------------------
+    # LAYER 2 — COGNITIVE LOAD / OVERTHINKING
+    # -------------------------
+    cognitive_markers = [
+        "overthink", "replay decisions", "analyze too much",
+        "can't stop thinking", "mentally exhausting"
+    ]
+
+    # -------------------------
+    # LAYER 3 — INTERNAL TENSION
+    # -------------------------
+    tension_markers = [
+        "pressure", "tense", "on edge", "stress building",
+        "tight", "anxious"
+    ]
+
+    # -------------------------
+    # LAYER 4 — IDENTITY STRUCTURE
+    # -------------------------
+    rigidity_markers = [
+        "i am this way", "always been like this",
+        "that's just who i am"
+    ]
+
+    flexibility_markers = [
+        "depends", "changes", "sometimes",
+        "can adapt", "varies"
+    ]
+
+    # -------------------------
+    # LAYER 5 — CONTROL VS TRUST
+    # -------------------------
+    control_markers = [
+        "control", "manage everything", "handle it myself",
+        "keep things in order"
+    ]
+
+    trust_markers = [
+        "trust others", "let go", "delegate",
+        "rely on others"
+    ]
+
+    # -------------------------
+    # LAYER 6 — VALIDATION SOURCE
+    # -------------------------
+    external_validation_markers = [
+        "need reassurance", "approval", "validation",
+        "what others think"
+    ]
+
+    internal_reference_markers = [
+        "i know internally", "my own judgment",
+        "i trust myself"
+    ]
+
+    # -------------------------
+    # LAYER 7 — DECISION STYLE
+    # -------------------------
+    deliberative_markers = [
+        "think it through", "take my time deciding",
+        "deliberate", "weigh options"
+    ]
+
+    decisive_markers = [
+        "act quickly", "decide fast",
+        "go with my gut immediately"
+    ]
+
+    # -------------------------
+    # LAYER 8 — PRESSURE REGULATION
+    # -------------------------
     internal_pressure_markers = [
-        "keep it inside",
-        "keep stress inside",
-        "hold it in",
-        "deal with it internally",
-        "rarely vent",
-        "don't vent",
-        "dont vent",
-        "not show",
-        "hide stress",
-        "internalize",
-        "bottle up",
-        "bottled up",
-        "handle it myself",
-        "handle it alone",
-        "process internally",
-        "keep pressure inside",
+        "keep stress inside", "deal with it internally",
+        "rarely vent", "hold it in",
+        "bottle it up", "process internally"
     ]
 
     external_release_markers = [
-        "talk it out",
-        "vent",
-        "let it out",
-        "express my feelings",
-        "release pressure",
-        "share how i feel",
-        "need to get it out",
+        "vent", "talk it out", "let it out",
+        "express my feelings"
     ]
 
-    for phrase in internal_pressure_markers:
-        if phrase in text:
-            signal_summary["internal_pressure_regulation"] += 1
-            confidence_score += 0.05
+    # -------------------------
+    # SCORING
+    # -------------------------
+    def score(markers, key):
+        nonlocal confidence_score
+        for phrase in markers:
+            if phrase in text:
+                signal_summary[key] += 1
+                confidence_score += 0.05
 
-    for phrase in external_release_markers:
-        if phrase in text:
-            signal_summary["external_pressure_release"] += 1
-            confidence_score += 0.05
+    score(motivation_markers, "motivation")
+    score(cognitive_markers, "cognitive_load")
+    score(tension_markers, "internal_tension")
+    score(rigidity_markers, "identity_rigidity")
+    score(flexibility_markers, "identity_flexibility")
+    score(control_markers, "control_orientation")
+    score(trust_markers, "trust_orientation")
+    score(external_validation_markers, "external_validation")
+    score(internal_reference_markers, "internal_reference")
+    score(deliberative_markers, "deliberative_decision_style")
+    score(decisive_markers, "decisive_action_style")
+    score(internal_pressure_markers, "internal_pressure_regulation")
+    score(external_release_markers, "external_pressure_release")
 
     # -------------------------
-    # LITE TRANSLATION
+    # LITE TRANSLATION (MINIMAL, OBSERVATIONAL)
     # -------------------------
+    if signal_summary["internal_pressure_regulation"] > 0:
+        orientation_snapshot = (
+            "You tend to manage pressure internally rather than releasing it outwardly. "
+            "This reflects a contained, self-directed coping style."
+        )
+    else:
+        orientation_snapshot = (
+            "Your motivational structure appears internally consistent, "
+            "with relatively low internal friction at this time."
+        )
 
     lite = {
-        "orientation_snapshot": (
-            "You tend to regulate pressure internally rather than releasing it outwardly. "
-            "This suggests a self-contained coping style that prioritizes control and privacy."
-            if signal_summary["internal_pressure_regulation"] > 0
-            else
-            "Your motivational structure appears internally consistent, with relatively low internal friction at this time."
-        ),
-        "real_world_signals": (
-            [
-                "You may carry stress quietly rather than expressing it outwardly.",
-                "Others may not immediately notice when pressure is building for you."
-            ]
-            if signal_summary["internal_pressure_regulation"] > 0
-            else []
-        ),
-        "strengths": (
-            [
-                "Ability to remain composed under pressure.",
-                "Strong internal containment and self-regulation."
-            ]
-            if signal_summary["internal_pressure_regulation"] > 0
-            else []
-        ),
-        "common_misinterpretations": (
-            [
-                "This pattern can be mistaken for emotional distance.",
-                "In reality, it often reflects deliberate self-control."
-            ]
-            if signal_summary["internal_pressure_regulation"] > 0
-            else []
-        ),
-        "reflection_prompts": (
-            [
-                "Notice how long you tend to hold pressure before releasing it.",
-                "Consider what signals tell you when internal pressure is reaching its limit."
-            ]
-            if signal_summary["internal_pressure_regulation"] > 0
-            else []
-        ),
+        "orientation_snapshot": orientation_snapshot,
+        "real_world_signals": [
+            "You may carry stress quietly without signaling it to others."
+            if signal_summary["internal_pressure_regulation"] > 0 else
+            "You may appear steady and composed to people around you."
+        ],
+        "strengths": [
+            "Strong internal regulation and self-control."
+            if signal_summary["internal_pressure_regulation"] > 0 else
+            "Ability to maintain internal alignment."
+        ],
+        "common_misinterpretations": [
+            "This pattern can be mistaken for emotional distance."
+            if signal_summary["internal_pressure_regulation"] > 0 else
+            "This can be mistaken for passivity."
+        ],
+        "reflection_prompts": [
+            "Notice when holding pressure internally helps you — and when it becomes costly."
+        ]
     }
 
     return {
