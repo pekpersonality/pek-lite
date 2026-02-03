@@ -1,10 +1,12 @@
 """
 PEK Lite – FastAPI Application Entry Point
-Stable Lite report renderer (Option 1)
+Thin HTTP wrapper around the Personality Engine Kernel.
 """
 
+import html
+
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
 
 from PersonalityEngine_Kernel.engines.inference.inference_engine import run_inference
@@ -12,7 +14,7 @@ from PersonalityEngine_Kernel.engines.inference.inference_engine import run_infe
 
 app = FastAPI(
     title="PEK Lite",
-    version="0.5"
+    version="0.4"
 )
 
 
@@ -24,62 +26,88 @@ class InferenceRequest(BaseModel):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "engine": "PEK Lite"}
+    return {
+        "status": "ok",
+        "engine": "PEK Lite"
+    }
 
 
-def render_lite_html(lite: dict) -> str:
-    def bullets(items):
-        return "".join(f"<li>{i}</li>" for i in items)
+def build_engine_input(payload: InferenceRequest) -> dict:
+    combined_statement = " ".join(payload.responses)
 
-    snapshot = lite.get(
-        "orientation_snapshot",
-        "Your responses suggest an internally consistent motivational structure."
-    )
+    return {
+        "example_statement": combined_statement,
+        "context_flags": payload.context_flags or {},
+        "forced_overrides": payload.forced_overrides or {}
+    }
+
+
+def _li(items: list[str]) -> str:
+    if not items:
+        return "<li style='color:#777;'>No strong signals detected from the current input.</li>"
+    return "".join(f"<li>{html.escape(str(i))}</li>" for i in items)
+
+
+def render_lite_html(result: dict) -> str:
+    t = result.get("lite_translation") or {}
+
+    orientation_snapshot = html.escape(str(t.get("orientation_snapshot", ""))).strip()
+    real_world_signals = t.get("real_world_signals") or []
+    strengths = t.get("strengths") or []
+    common_misinterpretations = t.get("common_misinterpretations") or []
+    reflection_prompts = t.get("reflection_prompts") or []
 
     return f"""
     <!DOCTYPE html>
-    <html>
+    <html lang="en">
     <head>
+        <meta charset="UTF-8">
         <title>PEK Lite — Personality Snapshot</title>
         <style>
             body {{
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                 background: #0e0e11;
                 color: #eaeaf0;
-                padding: 50px 20px;
+                padding: 60px 20px;
             }}
             .container {{
-                max-width: 820px;
+                max-width: 900px;
                 margin: auto;
                 background: #16161c;
-                padding: 45px;
+                padding: 50px;
                 border-radius: 14px;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+                box-shadow: 0 20px 60px rgba(0,0,0,0.6);
             }}
             h1 {{
-                margin-bottom: 6px;
                 font-size: 2.2em;
+                margin: 0 0 6px 0;
             }}
             .sub {{
-                color: #9a9ab0;
-                margin-bottom: 36px;
+                color: #9fa4ff;
+                margin-bottom: 34px;
             }}
             h2 {{
                 margin-top: 38px;
                 font-size: 1.35em;
                 border-bottom: 1px solid #2a2a35;
-                padding-bottom: 8px;
+                padding-bottom: 10px;
+            }}
+            p {{
+                line-height: 1.7;
+                font-size: 1.05em;
+                margin-top: 14px;
             }}
             ul {{
                 line-height: 1.7;
-                padding-left: 20px;
+                padding-left: 22px;
+                margin-top: 14px;
             }}
             li {{
-                margin-bottom: 8px;
+                margin-bottom: 10px;
             }}
             .footer {{
                 margin-top: 46px;
-                font-size: 0.85em;
+                font-size: 0.9em;
                 color: #777;
                 text-align: center;
             }}
@@ -91,19 +119,19 @@ def render_lite_html(lite: dict) -> str:
             <div class="sub">Behavioral & cognitive pattern snapshot</div>
 
             <h2>Orientation Snapshot</h2>
-            <p>{snapshot}</p>
+            <p>{orientation_snapshot if orientation_snapshot else "No orientation snapshot available for the current input."}</p>
 
             <h2>Real-World Signals</h2>
-            <ul>{bullets(lite.get("real_world_signals", []))}</ul>
+            <ul>{_li(real_world_signals)}</ul>
 
             <h2>Strengths</h2>
-            <ul>{bullets(lite.get("strengths", []))}</ul>
+            <ul>{_li(strengths)}</ul>
 
             <h2>Common Misinterpretations</h2>
-            <ul>{bullets(lite.get("common_misinterpretations", []))}</ul>
+            <ul>{_li(common_misinterpretations)}</ul>
 
             <h2>Reflection Prompts</h2>
-            <ul>{bullets(lite.get("reflection_prompts", []))}</ul>
+            <ul>{_li(reflection_prompts)}</ul>
 
             <div class="footer">
                 Generated by PEK Lite · Full PEK available soon
@@ -119,11 +147,10 @@ def infer(payload: InferenceRequest):
     if not payload.responses:
         raise HTTPException(status_code=400, detail="No responses provided")
 
-    return run_inference(
-        responses=payload.responses,
-        context_flags=payload.context_flags or {},
-        forced_overrides=payload.forced_overrides or {}
-    )
+    engine_input = build_engine_input(payload)
+    result = run_inference(engine_input)
+
+    return JSONResponse(result)
 
 
 @app.post("/report", response_class=HTMLResponse)
@@ -131,11 +158,7 @@ def report(payload: InferenceRequest):
     if not payload.responses:
         raise HTTPException(status_code=400, detail="No responses provided")
 
-    result = run_inference(
-        responses=payload.responses,
-        context_flags=payload.context_flags or {},
-        forced_overrides=payload.forced_overrides or {}
-    )
+    engine_input = build_engine_input(payload)
+    result = run_inference(engine_input)
 
-    lite = result.get("lite_translation", {})
-    return render_lite_html(lite)
+    return HTMLResponse(content=render_lite_html(result))
