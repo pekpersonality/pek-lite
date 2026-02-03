@@ -1,15 +1,13 @@
 # inference_engine.py
-# PEK Lite — Inference Engine v0.9
-# Layers 1–8 active, cumulative, Lite-enriched (non-prescriptive)
+# Personality Engine Kernel — Lite
+# Version: PEK_LITE_INSIGHTFUL_A_V1
+# Layers 1–8 cumulative, non-destructive
 
 from typing import List, Dict
 
 
-ENGINE_VERSION = "PEK_LITE_V0_9_ENRICHED"
-
-
-def run_inference(responses: List[str], context_flags=None, forced_overrides=None):
-    text = " ".join(responses).lower()
+def run_inference(engine_input: dict):
+    text = engine_input.get("example_statement", "").lower()
 
     signal_summary = {
         "motivation": 0,
@@ -29,102 +27,96 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
 
     confidence_score = 0.3
 
-    # -------------------------------------------------
-    # LAYER 8 — INTERNAL PRESSURE REGULATION (STABLE)
-    # -------------------------------------------------
+    # -------------------------
+    # SIGNAL MATCHING (RELAXED)
+    # -------------------------
 
-    internal_pressure_markers = [
-        "keep it inside",
+    def match_any(phrases):
+        return any(p in text for p in phrases)
+
+    if match_any(["responsible", "holding everything", "managing outcomes"]):
+        signal_summary["motivation"] += 1
+        confidence_score += 0.05
+
+    if match_any(["overthink", "replay", "mentally"]):
+        signal_summary["cognitive_load"] += 1
+        confidence_score += 0.05
+
+    if match_any(["stress", "pressure"]):
+        signal_summary["internal_tension"] += 1
+        confidence_score += 0.05
+
+    if match_any(["control", "micromanaged", "boxed in"]):
+        signal_summary["control_orientation"] += 1
+        confidence_score += 0.05
+
+    if match_any(["trust myself", "own judgment"]):
+        signal_summary["internal_reference"] += 1
+        confidence_score += 0.05
+
+    if match_any(["external validation", "reassurance"]):
+        signal_summary["external_validation"] += 1
+        confidence_score += 0.05
+
+    if match_any(["deliberate", "take time", "think before acting"]):
+        signal_summary["deliberative_decision_style"] += 1
+        confidence_score += 0.05
+
+    if match_any(["decisive", "act quickly"]):
+        signal_summary["decisive_action_style"] += 1
+        confidence_score += 0.05
+
+    if match_any([
+        "keep stress inside",
         "deal with it internally",
         "rarely vent",
         "hold it in",
-        "bottle it up",
-        "internalize",
-        "handle it myself",
-        "process internally",
+        "process internally"
+    ]):
+        signal_summary["internal_pressure_regulation"] += 1
+        confidence_score += 0.1
+
+    if match_any(["talk it out", "vent", "let it out"]):
+        signal_summary["external_pressure_release"] += 1
+        confidence_score += 0.05
+
+    # -------------------------
+    # INSIGHTFUL LITE TRANSLATION (OPTION A)
+    # -------------------------
+
+    orientation_snapshot = (
+        "Your responses suggest a person who carries responsibility internally and processes pressure quietly rather than outwardly. "
+        "You tend to rely on your own judgment and internal calibration more than reassurance from others, which often allows you to stay "
+        "composed even when demands increase. This self-contained style can create stability and clarity, but it may also mean that the effort "
+        "you are exerting goes largely unseen. Overall, your pattern reflects internal strength, deliberate control, and a preference for "
+        "handling complexity privately rather than reactively."
+    )
+
+    real_world_signals = [
+        "You may appear calm or steady even when you are carrying significant internal responsibility.",
+        "You often process stress internally before deciding whether it needs to be shared.",
+        "Others may underestimate how much cognitive and emotional load you are managing."
     ]
 
-    external_release_markers = [
-        "talk it out",
-        "vent",
-        "express my feelings",
-        "let it out",
-        "share how i feel",
+    strengths = [
+        "Strong internal self-regulation under pressure.",
+        "Ability to remain aligned with your intentions without becoming reactive.",
+        "High tolerance for responsibility and sustained focus."
     ]
 
-    for phrase in internal_pressure_markers:
-        if phrase in text:
-            signal_summary["internal_pressure_regulation"] += 1
-            confidence_score += 0.05
+    common_misinterpretations = [
+        "This pattern can be mistaken for emotional distance or passivity.",
+        "Your independence may be misread as not needing support."
+    ]
 
-    for phrase in external_release_markers:
-        if phrase in text:
-            signal_summary["external_pressure_release"] += 1
-            confidence_score += 0.05
-
-    # -------------------------------------------------
-    # LITE TRANSLATION — ENRICHED (VALUE LAYER)
-    # -------------------------------------------------
-
-    if signal_summary["internal_pressure_regulation"] > 0:
-        orientation_snapshot = (
-            "Your responses suggest a pattern of carrying responsibility and pressure internally. "
-            "Rather than discharging stress outwardly, you tend to process demands privately and maintain "
-            "a composed external presence. This often reflects a strong internal control system — one that "
-            "prioritizes stability, self-regulation, and personal accountability over immediate emotional release."
-        )
-
-        real_world_signals = [
-            "You may appear steady and unaffected even during periods of elevated internal stress.",
-            "Others may underestimate how much pressure you are managing at any given time.",
-            "You are more likely to reflect privately than to seek immediate external validation."
-        ]
-
-        strengths = [
-            "High capacity for internal self-regulation under pressure.",
-            "Ability to remain composed and functional during demanding situations.",
-            "Strong sense of personal responsibility and internal control."
-        ]
-
-        common_misinterpretations = [
-            "This pattern can be mistaken for emotional distance or disengagement.",
-            "Others may assume you are unaffected when you are actually processing deeply."
-        ]
-
-        reflection_prompts = [
-            "Notice how long you tend to carry pressure before releasing it.",
-            "Pay attention to early internal signals that indicate rising strain.",
-            "Consider which situations benefit from private processing versus shared reflection."
-        ]
-    else:
-        orientation_snapshot = (
-            "Your responses indicate a generally consistent internal motivational structure with relatively "
-            "low visible internal friction at this time. You appear to move through demands without significant "
-            "strain, maintaining alignment between intention and action."
-        )
-
-        real_world_signals = [
-            "You may experience periods where decisions feel clear and manageable.",
-            "You are less likely to feel internally overloaded during routine demands."
-        ]
-
-        strengths = [
-            "Ability to maintain internal alignment without excessive strain.",
-            "Stable engagement with responsibilities and expectations."
-        ]
-
-        common_misinterpretations = [
-            "This steadiness can be mistaken for passivity.",
-            "Others may not recognize the deliberate nature of your pacing."
-        ]
-
-        reflection_prompts = [
-            "Notice what conditions help preserve this sense of internal ease.",
-            "Pay attention to changes when demands begin to stack."
-        ]
+    reflection_prompts = [
+        "Notice when internal processing helps you stay grounded — and when it quietly increases strain.",
+        "Consider which situations might benefit from selective sharing rather than full self-containment.",
+        "Pay attention to early signals that pressure is accumulating beneath the surface."
+    ]
 
     return {
-        "engine_version": ENGINE_VERSION,
+        "engine_version": "PEK_LITE_INSIGHTFUL_A_V1",
         "kernel_output": {
             "confidence_score": round(confidence_score, 2),
             "signal_summary": signal_summary,
@@ -135,5 +127,5 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
             "strengths": strengths,
             "common_misinterpretations": common_misinterpretations,
             "reflection_prompts": reflection_prompts,
-        },
+        }
     }
