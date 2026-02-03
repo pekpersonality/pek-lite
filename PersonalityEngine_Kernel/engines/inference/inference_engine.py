@@ -1,11 +1,15 @@
 # inference_engine.py
 # PEK Lite — Inference Engine v0.9
-# Layers 1–8 cumulative, additive, non-destructive
+# Layers 1–8 cumulative, relaxed keyword-family matching
 
 from typing import List, Dict
 
 
-ENGINE_VERSION = "PEK_LITE_LAYERS_1_TO_8"
+ENGINE_VERSION = "PEK_LITE_LAYERS_1_TO_8_RELAXED"
+
+
+def keyword_hit(text: str, keywords: List[str]) -> bool:
+    return any(k in text for k in keywords)
 
 
 def run_inference(responses: List[str], context_flags=None, forced_overrides=None):
@@ -30,153 +34,132 @@ def run_inference(responses: List[str], context_flags=None, forced_overrides=Non
     confidence_score = 0.3
 
     # -------------------------
-    # LAYER 1 — MOTIVATION / RESPONSIBILITY
+    # LAYER 1 — RESPONSIBILITY / MOTIVATION
     # -------------------------
-    motivation_markers = [
-        "responsible", "holding everything together", "carry the load",
-        "depend on me", "my responsibility"
-    ]
+    if keyword_hit(text, [
+        "responsible", "holding", "carry", "depend", "outcomes", "manage"
+    ]):
+        signal_summary["motivation"] += 1
+        confidence_score += 0.05
 
     # -------------------------
-    # LAYER 2 — COGNITIVE LOAD / OVERTHINKING
+    # LAYER 2 — COGNITIVE LOAD / OVERANALYSIS
     # -------------------------
-    cognitive_markers = [
-        "overthink", "replay decisions", "analyze too much",
-        "can't stop thinking", "mentally exhausting"
-    ]
+    if keyword_hit(text, [
+        "overthink", "over analyze", "replay", "ruminate", "analyze", "mentally"
+    ]):
+        signal_summary["cognitive_load"] += 1
+        confidence_score += 0.05
 
     # -------------------------
     # LAYER 3 — INTERNAL TENSION
     # -------------------------
-    tension_markers = [
-        "pressure", "tense", "on edge", "stress building",
-        "tight", "anxious"
-    ]
+    if keyword_hit(text, [
+        "pressure", "stress", "tension", "strain", "frustrated"
+    ]):
+        signal_summary["internal_tension"] += 1
+        confidence_score += 0.05
 
     # -------------------------
-    # LAYER 4 — IDENTITY STRUCTURE
+    # LAYER 4 — IDENTITY RIGIDITY / FLEXIBILITY
     # -------------------------
-    rigidity_markers = [
-        "i am this way", "always been like this",
-        "that's just who i am"
-    ]
+    if keyword_hit(text, [
+        "standards", "hard on myself", "expect", "should be", "my role"
+    ]):
+        signal_summary["identity_rigidity"] += 1
+        confidence_score += 0.05
 
-    flexibility_markers = [
-        "depends", "changes", "sometimes",
-        "can adapt", "varies"
-    ]
+    if keyword_hit(text, [
+        "adapt", "flexible", "open", "adjust"
+    ]):
+        signal_summary["identity_flexibility"] += 1
+        confidence_score += 0.05
 
     # -------------------------
-    # LAYER 5 — CONTROL VS TRUST
+    # LAYER 5 — CONTROL vs TRUST
     # -------------------------
-    control_markers = [
-        "control", "manage everything", "handle it myself",
-        "keep things in order"
-    ]
+    if keyword_hit(text, [
+        "control", "handle", "manage", "my responsibility"
+    ]):
+        signal_summary["control_orientation"] += 1
+        confidence_score += 0.05
 
-    trust_markers = [
-        "trust others", "let go", "delegate",
-        "rely on others"
-    ]
+    if keyword_hit(text, [
+        "trust", "rely", "let go"
+    ]):
+        signal_summary["trust_orientation"] += 1
+        confidence_score += 0.05
 
     # -------------------------
     # LAYER 6 — VALIDATION SOURCE
     # -------------------------
-    external_validation_markers = [
-        "need reassurance", "approval", "validation",
-        "what others think"
-    ]
+    if keyword_hit(text, [
+        "approval", "validation", "recognition", "noticed"
+    ]):
+        signal_summary["external_validation"] += 1
+        confidence_score += 0.05
 
-    internal_reference_markers = [
-        "i know internally", "my own judgment",
-        "i trust myself"
-    ]
+    if keyword_hit(text, [
+        "my own standards", "internal", "for myself"
+    ]):
+        signal_summary["internal_reference"] += 1
+        confidence_score += 0.05
 
     # -------------------------
     # LAYER 7 — DECISION STYLE
     # -------------------------
-    deliberative_markers = [
-        "think it through", "take my time deciding",
-        "deliberate", "weigh options"
-    ]
+    if keyword_hit(text, [
+        "deliberate", "think through", "consider"
+    ]):
+        signal_summary["deliberative_decision_style"] += 1
+        confidence_score += 0.05
 
-    decisive_markers = [
-        "act quickly", "decide fast",
-        "go with my gut immediately"
-    ]
+    if keyword_hit(text, [
+        "decide quickly", "act fast", "jump in"
+    ]):
+        signal_summary["decisive_action_style"] += 1
+        confidence_score += 0.05
 
     # -------------------------
     # LAYER 8 — PRESSURE REGULATION
     # -------------------------
-    internal_pressure_markers = [
-        "keep stress inside", "deal with it internally",
-        "rarely vent", "hold it in",
-        "bottle it up", "process internally"
-    ]
+    if keyword_hit(text, [
+        "keep it inside", "internally", "rarely vent", "hold it in",
+        "don't show", "not show"
+    ]):
+        signal_summary["internal_pressure_regulation"] += 1
+        confidence_score += 0.05
 
-    external_release_markers = [
-        "vent", "talk it out", "let it out",
-        "express my feelings"
-    ]
-
-    # -------------------------
-    # SCORING
-    # -------------------------
-    def score(markers, key):
-        nonlocal confidence_score
-        for phrase in markers:
-            if phrase in text:
-                signal_summary[key] += 1
-                confidence_score += 0.05
-
-    score(motivation_markers, "motivation")
-    score(cognitive_markers, "cognitive_load")
-    score(tension_markers, "internal_tension")
-    score(rigidity_markers, "identity_rigidity")
-    score(flexibility_markers, "identity_flexibility")
-    score(control_markers, "control_orientation")
-    score(trust_markers, "trust_orientation")
-    score(external_validation_markers, "external_validation")
-    score(internal_reference_markers, "internal_reference")
-    score(deliberative_markers, "deliberative_decision_style")
-    score(decisive_markers, "decisive_action_style")
-    score(internal_pressure_markers, "internal_pressure_regulation")
-    score(external_release_markers, "external_pressure_release")
+    if keyword_hit(text, [
+        "vent", "talk it out", "let it out", "express"
+    ]):
+        signal_summary["external_pressure_release"] += 1
+        confidence_score += 0.05
 
     # -------------------------
-    # LITE TRANSLATION (MINIMAL, OBSERVATIONAL)
+    # LITE TRANSLATION (OBSERVATIONAL)
     # -------------------------
-    if signal_summary["internal_pressure_regulation"] > 0:
-        orientation_snapshot = (
-            "You tend to manage pressure internally rather than releasing it outwardly. "
-            "This reflects a contained, self-directed coping style."
-        )
-    else:
-        orientation_snapshot = (
-            "Your motivational structure appears internally consistent, "
-            "with relatively low internal friction at this time."
-        )
-
     lite = {
-        "orientation_snapshot": orientation_snapshot,
+        "orientation_snapshot": (
+            "Your responses suggest a pattern of internal responsibility, cognitive load, "
+            "and self-contained pressure regulation. You appear to process demands internally "
+            "before acting outwardly."
+            if confidence_score > 0.4
+            else
+            "Your motivational structure appears internally consistent, with relatively low internal friction at this time."
+        ),
         "real_world_signals": [
-            "You may carry stress quietly without signaling it to others."
-            if signal_summary["internal_pressure_regulation"] > 0 else
-            "You may appear steady and composed to people around you."
-        ],
+            "You may carry responsibility and stress internally without outward display."
+        ] if signal_summary["internal_pressure_regulation"] else [],
         "strengths": [
-            "Strong internal regulation and self-control."
-            if signal_summary["internal_pressure_regulation"] > 0 else
-            "Ability to maintain internal alignment."
-        ],
+            "Capacity for self-regulation and sustained internal focus."
+        ] if confidence_score > 0.4 else [],
         "common_misinterpretations": [
-            "This pattern can be mistaken for emotional distance."
-            if signal_summary["internal_pressure_regulation"] > 0 else
-            "This can be mistaken for passivity."
-        ],
+            "This can be mistaken for passivity or emotional distance."
+        ] if signal_summary["internal_pressure_regulation"] else [],
         "reflection_prompts": [
-            "Notice when holding pressure internally helps you — and when it becomes costly."
-        ]
+            "Notice when internal processing helps you — and when sharing might reduce load."
+        ] if confidence_score > 0.4 else [],
     }
 
     return {
