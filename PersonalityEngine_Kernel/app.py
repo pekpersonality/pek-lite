@@ -6,7 +6,6 @@ Thin HTTP wrapper around the Personality Engine Kernel.
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
-from typing import List, Optional, Dict
 
 from PersonalityEngine_Kernel.engines.inference.inference_engine import run_inference
 
@@ -18,50 +17,34 @@ app = FastAPI(
 
 
 class InferenceRequest(BaseModel):
-    responses: List[str]
-    context_flags: Optional[Dict] = None
-    forced_overrides: Optional[Dict] = None
+    responses: list[str]
+    context_flags: dict | None = None
+    forced_overrides: dict | None = None
 
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "engine": "PEK Lite"}
-
-
-def build_engine_input(payload: InferenceRequest) -> dict:
     return {
-        "responses": payload.responses,
-        "context_flags": payload.context_flags or {},
-        "forced_overrides": payload.forced_overrides or {}
+        "status": "ok",
+        "engine": "PEK Lite"
     }
 
 
-@app.post("/infer")
-def infer(payload: InferenceRequest):
-    if not payload.responses:
-        raise HTTPException(status_code=400, detail="No responses provided")
+def render_lite_html(lite: dict) -> str:
+    def li(items):
+        return "".join(f"<li>{item}</li>" for item in items)
 
-    result = run_inference(**build_engine_input(payload))
-    return JSONResponse(result)
+    orientation = lite.get("orientation_snapshot", "")
+    real_world = lite.get("real_world_signals", []) or []
+    strengths = lite.get("strengths", []) or []
+    misinterp = lite.get("common_misinterpretations", []) or []
+    prompts = lite.get("reflection_prompts", []) or []
 
-
-@app.post("/report", response_class=HTMLResponse)
-def report(payload: InferenceRequest):
-    if not payload.responses:
-        raise HTTPException(status_code=400, detail="No responses provided")
-
-    result = run_inference(**build_engine_input(payload))
-    lite = result.get("lite_translation", {})
-
-    def render_list(items):
-        if not items:
-            return ""
-        return "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>"
-
-    html = f"""
+    return f"""
     <!DOCTYPE html>
-    <html>
+    <html lang="en">
     <head>
+        <meta charset="UTF-8">
         <title>PEK Lite — Personality Snapshot</title>
         <style>
             body {{
@@ -71,25 +54,40 @@ def report(payload: InferenceRequest):
                 padding: 60px 20px;
             }}
             .container {{
-                max-width: 820px;
+                max-width: 860px;
                 margin: auto;
                 background: #16161c;
-                padding: 50px;
+                padding: 46px;
                 border-radius: 14px;
                 box-shadow: 0 20px 60px rgba(0,0,0,0.6);
             }}
-            h1 {{ margin-bottom: 8px; }}
-            .sub {{ color: #9a9ab0; margin-bottom: 40px; }}
-            h2 {{
-                margin-top: 40px;
-                font-size: 1.35em;
-                border-bottom: 1px solid #2a2a35;
-                padding-bottom: 10px;
+            h1 {{
+                font-size: 2.1em;
+                margin: 0 0 6px 0;
             }}
-            ul {{ line-height: 1.7; padding-left: 20px; }}
-            li {{ margin-bottom: 8px; }}
+            .sub {{
+                color: #9a9ab0;
+                margin-bottom: 28px;
+            }}
+            h2 {{
+                margin-top: 28px;
+                font-size: 1.15em;
+                border-bottom: 1px solid #2a2a35;
+                padding-bottom: 8px;
+            }}
+            p {{
+                line-height: 1.6;
+            }}
+            ul {{
+                line-height: 1.7;
+                padding-left: 20px;
+                margin: 12px 0 0 0;
+            }}
+            li {{
+                margin-bottom: 8px;
+            }}
             .footer {{
-                margin-top: 50px;
+                margin-top: 34px;
                 font-size: 0.85em;
                 color: #777;
                 text-align: center;
@@ -102,15 +100,19 @@ def report(payload: InferenceRequest):
             <div class="sub">Behavioral & cognitive pattern snapshot</div>
 
             <h2>Orientation Snapshot</h2>
-            <p>{lite.get("orientation_snapshot", "")}</p>
+            <p>{orientation}</p>
 
-            {f"<h2>Real-World Signals</h2>{render_list(lite.get('real_world_signals', []))}" if lite.get("real_world_signals") else ""}
+            <h2>Real-World Signals</h2>
+            <ul>{li(real_world) if real_world else "<li>No strong signals detected yet.</li>"}</ul>
 
-            {f"<h2>Strengths</h2>{render_list(lite.get('strengths', []))}" if lite.get("strengths") else ""}
+            <h2>Strengths</h2>
+            <ul>{li(strengths) if strengths else "<li>Not enough signal density to summarize strengths yet.</li>"}</ul>
 
-            {f"<h2>Common Misinterpretations</h2>{render_list(lite.get('common_misinterpretations', []))}" if lite.get("common_misinterpretations") else ""}
+            <h2>Common Misinterpretations</h2>
+            <ul>{li(misinterp) if misinterp else "<li>No common misinterpretations detected yet.</li>"}</ul>
 
-            {f"<h2>Reflection Prompts</h2>{render_list(lite.get('reflection_prompts', []))}" if lite.get("reflection_prompts") else ""}
+            <h2>Reflection Prompts</h2>
+            <ul>{li(prompts) if prompts else "<li>Try adding 6–10 responses for a sharper read.</li>"}</ul>
 
             <div class="footer">
                 Generated by PEK Lite · Full PEK available soon
@@ -120,4 +122,32 @@ def report(payload: InferenceRequest):
     </html>
     """
 
-    return html
+
+@app.post("/infer")
+def infer(payload: InferenceRequest):
+    if not payload.responses:
+        raise HTTPException(status_code=400, detail="No responses provided")
+
+    result = run_inference(
+        responses=payload.responses,
+        context_flags=payload.context_flags or {},
+        forced_overrides=payload.forced_overrides or {}
+    )
+
+    return JSONResponse(result)
+
+
+@app.post("/report", response_class=HTMLResponse)
+def report(payload: InferenceRequest):
+    if not payload.responses:
+        raise HTTPException(status_code=400, detail="No responses provided")
+
+    result = run_inference(
+        responses=payload.responses,
+        context_flags=payload.context_flags or {},
+        forced_overrides=payload.forced_overrides or {}
+    )
+
+    lite = result.get("lite_translation", {}) or {}
+    html = render_lite_html(lite)
+    return HTMLResponse(content=html)
