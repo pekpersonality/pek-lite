@@ -1,11 +1,12 @@
 """
 PEK Lite – FastAPI Application Entry Point
-Thin HTTP wrapper around the Personality Engine Kernel.
+Screen-rendered Lite report (clean, non-raw).
 """
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
+from typing import List, Dict, Optional
 
 from PersonalityEngine_Kernel.engines.inference.inference_engine import run_inference
 
@@ -16,51 +17,35 @@ app = FastAPI(
 )
 
 
-class InferenceRequest(BaseModel):
-    responses: list[str]
-    context_flags: dict | None = None
-    forced_overrides: dict | None = None
+# -----------------------------
+# Models
+# -----------------------------
 
+class InferenceRequest(BaseModel):
+    responses: List[str]
+    context_flags: Optional[Dict] = None
+    forced_overrides: Optional[Dict] = None
+
+
+# -----------------------------
+# Health
+# -----------------------------
 
 @app.get("/health")
 def health():
-    return {
-        "status": "ok",
-        "engine": "PEK Lite"
-    }
+    return {"status": "ok", "engine": "PEK Lite"}
 
 
-def build_engine_input(payload: InferenceRequest) -> dict:
-    # Merge all responses into one internal statement
-    combined_statement = " ".join(payload.responses)
+# -----------------------------
+# Lite HTML Renderer
+# -----------------------------
 
-    return {
-        "example_statement": combined_statement,
-        "context_flags": payload.context_flags or {},
-        "forced_overrides": payload.forced_overrides or {}
-    }
+def render_lite_html(lite: dict) -> str:
+    def li(items):
+        return "".join(f"<li>{item}</li>" for item in items)
 
-
-@app.post("/infer")
-def infer(payload: InferenceRequest):
-    if not payload.responses:
-        raise HTTPException(status_code=400, detail="No responses provided")
-
-    engine_input = build_engine_input(payload)
-    result = run_inference(engine_input)
-
-    return JSONResponse(result)
-
-
-@app.post("/report", response_class=HTMLResponse)
-def render_report(payload: InferenceRequest):
-    if not payload.responses:
-        raise HTTPException(status_code=400, detail="No responses provided")
-
-    engine_input = build_engine_input(payload)
-    result = run_inference(engine_input)
-
-    html = f"""
+    return f"""
+    <!DOCTYPE html>
     <html>
     <head>
         <title>Personality Engine Kernel — Lite Report</title>
@@ -93,7 +78,20 @@ def render_report(payload: InferenceRequest):
             <h1>Personality Engine Kernel — Lite Snapshot</h1>
             <div class="muted">Behavioral pattern overview</div>
 
-            <pre>{result}</pre>
+            <h2>Orientation Snapshot</h2>
+            <p>{lite.get("orientation_snapshot", "")}</p>
+
+            <h2>Real-World Signals</h2>
+            <ul>{li(lite.get("real_world_signals", []))}</ul>
+
+            <h2>Strengths</h2>
+            <ul>{li(lite.get("strengths", []))}</ul>
+
+            <h2>Common Misinterpretations</h2>
+            <ul>{li(lite.get("common_misinterpretations", []))}</ul>
+
+            <h2>Reflection Prompts</h2>
+            <ul>{li(lite.get("reflection_prompts", []))}</ul>
 
             <hr>
             <div class="muted">
@@ -104,4 +102,35 @@ def render_report(payload: InferenceRequest):
     </html>
     """
 
-    return html
+
+# -----------------------------
+# API Routes
+# -----------------------------
+
+@app.post("/infer")
+def infer(payload: InferenceRequest):
+    if not payload.responses:
+        raise HTTPException(status_code=400, detail="No responses provided")
+
+    return JSONResponse(
+        run_inference(
+            responses=payload.responses,
+            context_flags=payload.context_flags or {},
+            forced_overrides=payload.forced_overrides or {}
+        )
+    )
+
+
+@app.post("/report", response_class=HTMLResponse)
+def report(payload: InferenceRequest):
+    if not payload.responses:
+        raise HTTPException(status_code=400, detail="No responses provided")
+
+    result = run_inference(
+        responses=payload.responses,
+        context_flags=payload.context_flags or {},
+        forced_overrides=payload.forced_overrides or {}
+    )
+
+    lite = result.get("lite_translation", {})
+    return render_lite_html(lite)
