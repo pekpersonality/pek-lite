@@ -1,5 +1,5 @@
 """
-PEK Lite - FastAPI Application Entry Point
+PEK Lite – FastAPI Application Entry Point
 Stable ASGI app for Railway deployment
 """
 
@@ -34,20 +34,15 @@ class InferenceRequest(BaseModel):
 # -----------------------------
 @app.get("/health")
 def health():
-    return {
-        "status": "ok",
-        "engine": "PEK Lite"
-    }
+    return {"status": "ok", "engine": "PEK Lite"}
 
 
 # -----------------------------
 # INPUT NORMALIZATION
 # -----------------------------
 def build_engine_input(payload: InferenceRequest) -> dict:
-    combined_statement = " ".join(payload.responses)
-
     return {
-        "example_statement": combined_statement,
+        "example_statement": " ".join(payload.responses),
         "context_flags": payload.context_flags or {},
         "forced_overrides": payload.forced_overrides or {}
     }
@@ -61,31 +56,26 @@ def infer(payload: InferenceRequest):
     if not payload.responses:
         raise HTTPException(status_code=400, detail="No responses provided")
 
-    engine_input = build_engine_input(payload)
-    result = run_inference(engine_input)
-
+    result = run_inference(build_engine_input(payload))
     return JSONResponse(content=result)
 
 
 # -----------------------------
-# HTML REPORT ENDPOINT
+# DARK WEB REPORT (EXISTING)
 # -----------------------------
 @app.post("/report", response_class=HTMLResponse)
 def render_report(payload: InferenceRequest):
     if not payload.responses:
         raise HTTPException(status_code=400, detail="No responses provided")
 
-    engine_input = build_engine_input(payload)
-    result = run_inference(engine_input)
-
+    result = run_inference(build_engine_input(payload))
     lt = result["lite_translation"]
 
     html = f"""
-    <!DOCTYPE html>
-    <html lang="en">
+    <html>
     <head>
-        <meta charset="UTF-8">
-        <title>Personality Engine Kernel - Lite Snapshot</title>
+        <meta charset="utf-8">
+        <title>Personality Engine Kernel — Lite</title>
         <style>
             body {{
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -99,94 +89,120 @@ def render_report(payload: InferenceRequest):
                 background: #16161c;
                 padding: 52px;
                 border-radius: 14px;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.6);
             }}
-            h1 {{
-                font-size: 2.3em;
-                margin-bottom: 6px;
-            }}
-            .sub {{
-                color: #9aa0b0;
-                margin-bottom: 36px;
-            }}
-            h2 {{
-                margin-top: 42px;
-                border-bottom: 1px solid #2a2a35;
-                padding-bottom: 6px;
-            }}
-            p {{
-                line-height: 1.7;
-                margin-top: 12px;
-            }}
-            ul {{
-                line-height: 1.7;
-                margin-top: 12px;
-            }}
-            .footer {{
-                margin-top: 48px;
-                color: #777;
-                font-size: 0.85em;
-            }}
+            h1 {{ font-size: 2.3em; }}
+            .sub {{ color: #9aa0b0; margin-bottom: 36px; }}
+            h2 {{ margin-top: 42px; border-bottom: 1px solid #2a2a35; }}
+            p, ul {{ line-height: 1.7; }}
+            .footer {{ margin-top: 48px; color: #777; font-size: 0.85em; }}
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>Personality Engine Kernel - Lite</h1>
-            <div class="sub">Behavioral and cognitive pattern snapshot</div>
+            <h1>Personality Engine Kernel — Lite</h1>
+            <div class="sub">Behavioral & cognitive pattern snapshot</div>
 
             <h2>Orientation Snapshot</h2>
             <p>{lt["orientation_snapshot"]}</p>
 
             <h2>Underlying Behavioral Patterns</h2>
-            <p>
-                Your responses indicate a tendency toward internally driven regulation.
-                Motivation, responsibility, and cognitive processing appear to be handled
-                quietly and deliberately rather than through outward expression.
-                This reflects a pattern of self-reliance and internal calibration.
-            </p>
+            <p>Your responses indicate internally driven regulation and self-calibrated processing.</p>
 
-            <h2>Internal Dynamics and Pressure Flow</h2>
-            <p>
-                Signals related to cognitive load, internal tension, and pressure regulation
-                suggest that demands are absorbed internally before being released.
-                This creates outward composure, but can allow pressure to accumulate
-                beneath the surface over time.
-            </p>
+            <h2>Internal Dynamics & Pressure Flow</h2>
+            <p>Pressure and cognitive load are absorbed internally before outward expression.</p>
 
-            <h2>Decision and Control Style</h2>
-            <p>
-                Your profile reflects a deliberate decision-making approach.
-                You tend to think through outcomes before acting, with control anchored
-                internally rather than imposed externally. This supports stability,
-                though it may slow visible responsiveness.
-            </p>
+            <h2>Decision & Control Style</h2>
+            <p>Decisions are deliberate, internally anchored, and stability-oriented.</p>
 
             <h2>Real-World Signals</h2>
-            <ul>
-                {''.join(f"<li>{s}</li>" for s in lt["real_world_signals"])}
-            </ul>
+            <ul>{''.join(f"<li>{s}</li>" for s in lt["real_world_signals"])}</ul>
 
             <h2>Strengths</h2>
-            <ul>
-                {''.join(f"<li>{s}</li>" for s in lt["strengths"])}
-            </ul>
+            <ul>{''.join(f"<li>{s}</li>" for s in lt["strengths"])}</ul>
 
             <h2>Common Misinterpretations</h2>
-            <ul>
-                {''.join(f"<li>{s}</li>" for s in lt["common_misinterpretations"])}
-            </ul>
+            <ul>{''.join(f"<li>{s}</li>" for s in lt["common_misinterpretations"])}</ul>
 
             <h2>Reflection Prompts</h2>
-            <ul>
-                {''.join(f"<li>{s}</li>" for s in lt["reflection_prompts"])}
-            </ul>
+            <ul>{''.join(f"<li>{s}</li>" for s in lt["reflection_prompts"])}</ul>
 
             <div class="footer">
-                Generated by PEK Lite | Insightful Snapshot
+                Generated by PEK Lite · Insightful Snapshot
             </div>
         </div>
     </body>
     </html>
     """
+    return HTMLResponse(content=html)
 
+
+# -----------------------------
+# PDF-SAFE LIGHT REPORT (NEW)
+# -----------------------------
+@app.post("/report/pdf", response_class=HTMLResponse)
+def render_pdf_report(payload: InferenceRequest):
+    if not payload.responses:
+        raise HTTPException(status_code=400, detail="No responses provided")
+
+    result = run_inference(build_engine_input(payload))
+    lt = result["lite_translation"]
+
+    html = f"""
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>PEK Lite Report</title>
+        <style>
+            body {{
+                font-family: Georgia, "Times New Roman", serif;
+                background: #ffffff;
+                color: #111;
+                padding: 72px;
+            }}
+            h1 {{ font-size: 28px; margin-bottom: 6px; }}
+            .sub {{ color: #555; margin-bottom: 40px; }}
+            h2 {{ margin-top: 36px; font-size: 18px; }}
+            p, ul {{ line-height: 1.65; font-size: 15px; }}
+            .footer {{
+                margin-top: 60px;
+                font-size: 12px;
+                color: #777;
+                text-align: center;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Personality Engine Kernel — Lite</h1>
+        <div class="sub">Behavioral & cognitive pattern snapshot</div>
+
+        <h2>Orientation Snapshot</h2>
+        <p>{lt["orientation_snapshot"]}</p>
+
+        <h2>Underlying Behavioral Patterns</h2>
+        <p>Your responses indicate internally driven regulation and deliberate self-calibration.</p>
+
+        <h2>Internal Dynamics & Pressure Flow</h2>
+        <p>Pressure is absorbed internally, preserving outward composure while increasing unseen load.</p>
+
+        <h2>Decision & Control Style</h2>
+        <p>Decisions favor internal clarity, stability, and forethought over reactive adjustment.</p>
+
+        <h2>Real-World Signals</h2>
+        <ul>{''.join(f"<li>{s}</li>" for s in lt["real_world_signals"])}</ul>
+
+        <h2>Strengths</h2>
+        <ul>{''.join(f"<li>{s}</li>" for s in lt["strengths"])}</ul>
+
+        <h2>Common Misinterpretations</h2>
+        <ul>{''.join(f"<li>{s}</li>" for s in lt["common_misinterpretations"])}</ul>
+
+        <h2>Reflection Prompts</h2>
+        <ul>{''.join(f"<li>{s}</li>" for s in lt["reflection_prompts"])}</ul>
+
+        <div class="footer">
+            Personality Engine Kernel · PEK Lite Snapshot
+        </div>
+    </body>
+    </html>
+    """
     return HTMLResponse(content=html)
