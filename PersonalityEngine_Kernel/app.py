@@ -1,144 +1,159 @@
-from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import HTMLResponse
+"""
+PEK Lite – FastAPI Application Entry Point
+Stable ASGI app for Railway deployment
+"""
+
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
 from typing import List, Optional
 
-router = APIRouter()
+from PersonalityEngine_Kernel.engines.inference.inference_engine import run_inference
 
-class ReportPayload(BaseModel):
+
+# -----------------------------
+# FASTAPI APP (THIS IS WHAT RAILWAY NEEDS)
+# -----------------------------
+app = FastAPI(
+    title="PEK Lite",
+    version="1.0.0"
+)
+
+
+# -----------------------------
+# REQUEST MODEL
+# -----------------------------
+class InferenceRequest(BaseModel):
     responses: List[str]
-    context_flags: Optional[dict] = {}
-    forced_overrides: Optional[dict] = {}
+    context_flags: Optional[dict] = None
+    forced_overrides: Optional[dict] = None
 
-@router.post("/report", response_class=HTMLResponse)
-async def generate_report(payload: ReportPayload, request: Request):
 
-    # ---------- HARD GUARD ----------
-    if not payload.responses or not isinstance(payload.responses, list):
-        raise HTTPException(status_code=400, detail="No valid responses provided")
+# -----------------------------
+# HEALTH CHECK
+# -----------------------------
+@app.get("/health")
+def health():
+    return {
+        "status": "ok",
+        "engine": "PEK Lite"
+    }
 
-    # ---------- RUN INFERENCE ----------
-    try:
-        engine_input = {
-            "responses": payload.responses,
-            "context_flags": payload.context_flags or {},
-            "forced_overrides": payload.forced_overrides or {},
-        }
 
-        result = run_inference(engine_input)
+# -----------------------------
+# INPUT NORMALIZATION
+# -----------------------------
+def build_engine_input(payload: InferenceRequest) -> dict:
+    combined_statement = " ".join(payload.responses)
 
-        if not result or not isinstance(result, dict):
-            raise ValueError("Inference returned invalid result")
+    return {
+        "example_statement": combined_statement,
+        "context_flags": payload.context_flags or {},
+        "forced_overrides": payload.forced_overrides or {}
+    }
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Engine failure: {str(e)}")
 
-    # ---------- SAFE EXTRACTION ----------
-    t = result.get("lite_translation", {})
+# -----------------------------
+# JSON INFERENCE ENDPOINT
+# -----------------------------
+@app.post("/infer")
+def infer(payload: InferenceRequest):
+    if not payload.responses:
+        raise HTTPException(status_code=400, detail="No responses provided")
 
-    orientation = t.get("orientation_snapshot", "")[:900]
+    engine_input = build_engine_input(payload)
+    result = run_inference(engine_input)
 
-    def render_list(items):
-        if not items or not isinstance(items, list):
-            return "<p class='muted'>None detected.</p>"
+    return JSONResponse(content=result)
 
-        lines = []
-        for i in items[:5]:  # HARD CAP — prevents memory spikes
-            lines.append(f"<li>{i}</li>")
-        return "<ul>" + "".join(lines) + "</ul>"
 
-    # ---------- HTML ----------
+# -----------------------------
+# HTML REPORT ENDPOINT
+# -----------------------------
+@app.post("/report", response_class=HTMLResponse)
+def render_report(payload: InferenceRequest):
+    if not payload.responses:
+        raise HTTPException(status_code=400, detail="No responses provided")
+
+    engine_input = build_engine_input(payload)
+    result = run_inference(engine_input)
+
     html = f"""
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>PEK Lite — Personality Snapshot</title>
-<style>
-body {{
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    background: #0e0e11;
-    color: #eaeaf0;
-    padding: 60px 20px;
-}}
-.container {{
-    max-width: 860px;
-    margin: auto;
-    background: #16161c;
-    padding: 46px;
-    border-radius: 14px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-}}
-h1 {{
-    font-size: 2.1em;
-    margin-bottom: 4px;
-}}
-.sub {{
-    color: #9aa0ff;
-    font-size: 0.95em;
-    margin-bottom: 28px;
-}}
-.section {{
-    margin-top: 36px;
-}}
-.section h2 {{
-    font-size: 1.25em;
-    border-bottom: 1px solid #2a2a35;
-    padding-bottom: 6px;
-}}
-ul {{
-    line-height: 1.7;
-    padding-left: 20px;
-}}
-.muted {{
-    color: #9aa0b5;
-    font-size: 0.9em;
-}}
-.footer {{
-    margin-top: 48px;
-    font-size: 0.8em;
-    color: #777;
-}}
-</style>
-</head>
-<body>
-<div class="container">
+    <html>
+    <head>
+        <title>Personality Engine Kernel — Lite Snapshot</title>
+        <style>
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                background: #0e0e11;
+                color: #eaeaf0;
+                padding: 60px 20px;
+            }}
+            .container {{
+                max-width: 860px;
+                margin: auto;
+                background: #16161c;
+                padding: 48px;
+                border-radius: 14px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            }}
+            h1 {{
+                font-size: 2.2em;
+                margin-bottom: 6px;
+            }}
+            .sub {{
+                color: #9aa0b0;
+                margin-bottom: 32px;
+            }}
+            h2 {{
+                margin-top: 36px;
+                border-bottom: 1px solid #2a2a35;
+                padding-bottom: 6px;
+            }}
+            ul {{
+                line-height: 1.7;
+            }}
+            .footer {{
+                margin-top: 40px;
+                color: #777;
+                font-size: 0.85em;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Personality Engine Kernel — Lite</h1>
+            <div class="sub">Behavioral & cognitive pattern snapshot</div>
 
-<h1>Personality Engine Kernel — Lite</h1>
-<div class="sub">Behavioral & cognitive pattern snapshot</div>
+            <h2>Orientation Snapshot</h2>
+            <p>{result["lite_translation"]["orientation_snapshot"]}</p>
 
-<div class="section">
-<h2>Orientation Snapshot</h2>
-<p>{orientation}</p>
-</div>
+            <h2>Real-World Signals</h2>
+            <ul>
+                {''.join(f"<li>{s}</li>" for s in result["lite_translation"]["real_world_signals"])}
+            </ul>
 
-<div class="section">
-<h2>Real-World Signals</h2>
-{render_list(t.get("real_world_signals"))}
-</div>
+            <h2>Strengths</h2>
+            <ul>
+                {''.join(f"<li>{s}</li>" for s in result["lite_translation"]["strengths"])}
+            </ul>
 
-<div class="section">
-<h2>Strengths</h2>
-{render_list(t.get("strengths"))}
-</div>
+            <h2>Common Misinterpretations</h2>
+            <ul>
+                {''.join(f"<li>{s}</li>" for s in result["lite_translation"]["common_misinterpretations"])}
+            </ul>
 
-<div class="section">
-<h2>Common Misinterpretations</h2>
-{render_list(t.get("common_misinterpretations"))}
-</div>
+            <h2>Reflection Prompts</h2>
+            <ul>
+                {''.join(f"<li>{s}</li>" for s in result["lite_translation"]["reflection_prompts"])}
+            </ul>
 
-<div class="section">
-<h2>Reflection Prompts</h2>
-{render_list(t.get("reflection_prompts"))}
-</div>
-
-<div class="footer">
-Generated by PEK Lite · Full PEK coming soon
-</div>
-
-</div>
-</body>
-</html>
-"""
+            <div class="footer">
+                Generated by PEK Lite
+            </div>
+        </div>
+    </body>
+    </html>
+    """
 
     return HTMLResponse(content=html)
