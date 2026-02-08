@@ -1,116 +1,14 @@
-"""
-PEK Lite – FastAPI Application Entry Point
-Hardened input handling + thin kernel wrapper
-"""
-
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
-from pydantic import BaseModel
-import re
-
-from PersonalityEngine_Kernel.engines.inference.inference_engine import run_inference
-
-
-app = FastAPI(
-    title="PEK Lite",
-    version="0.5"
-)
-
-
-# -----------------------------
-# Models
-# -----------------------------
-
-class InferenceRequest(BaseModel):
-    responses: list[str]
-    context_flags: dict | None = None
-    forced_overrides: dict | None = None
-
-
-# -----------------------------
-# Health
-# -----------------------------
-
-@app.get("/health")
-def health():
-    return {
-        "status": "ok",
-        "engine": "PEK Lite"
-    }
-
-
-# -----------------------------
-# Input Hardening
-# -----------------------------
-
-MAX_RESPONSE_LENGTH = 600        # per response
-MAX_TOTAL_LENGTH = 2000          # combined
-
-
-def sanitize_responses(responses: list[str]) -> list[str]:
-    cleaned = []
-
-    for r in responses:
-        if not r:
-            continue
-
-        text = r.strip()
-
-        if not text:
-            continue
-
-        # collapse excessive whitespace
-        text = re.sub(r"\s+", " ", text)
-
-        # cap individual length
-        text = text[:MAX_RESPONSE_LENGTH]
-
-        cleaned.append(text)
-
-    combined_length = sum(len(r) for r in cleaned)
-
-    if combined_length > MAX_TOTAL_LENGTH:
-        raise HTTPException(
-            status_code=400,
-            detail="Responses are too long. Please shorten your answers."
-        )
-
-    if not cleaned:
-        raise HTTPException(
-            status_code=400,
-            detail="No usable responses detected."
-        )
-
-    return cleaned
-
-
-def build_engine_input(payload: InferenceRequest) -> dict:
-    safe_responses = sanitize_responses(payload.responses)
-
-    combined_statement = " ".join(safe_responses)
-
-    return {
-        "example_statement": combined_statement,
-        "context_flags": payload.context_flags or {},
-        "forced_overrides": payload.forced_overrides or {}
-    }
-
-
-# -----------------------------
-# Routes
-# -----------------------------
-
-@app.post("/infer")
-def infer(payload: InferenceRequest):
-    engine_input = build_engine_input(payload)
-    result = run_inference(engine_input)
-    return JSONResponse(result)
-
-
 @app.post("/report", response_class=HTMLResponse)
 def render_report(payload: InferenceRequest):
     engine_input = build_engine_input(payload)
     result = run_inference(engine_input)
+
+    t = result.get("lite_translation", {})
+
+    def render_list(items):
+        if not items:
+            return "<p class='muted'>None detected.</p>"
+        return "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>"
 
     html = f"""
     <html>
@@ -132,6 +30,7 @@ def render_report(payload: InferenceRequest):
                 box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             }}
             h1 {{ margin-bottom: 5px; }}
+            h2 {{ margin-top: 30px; }}
             ul {{ line-height: 1.6; }}
             .muted {{
                 color: #666;
@@ -144,7 +43,20 @@ def render_report(payload: InferenceRequest):
             <h1>Personality Engine Kernel — Lite Snapshot</h1>
             <div class="muted">Behavioral pattern overview</div>
 
-            <pre>{result}</pre>
+            <h2>Orientation Snapshot</h2>
+            <p>{t.get("orientation_snapshot", "No orientation snapshot available.")}</p>
+
+            <h2>Real-World Signals</h2>
+            {render_list(t.get("real_world_signals", []))}
+
+            <h2>Strengths</h2>
+            {render_list(t.get("strengths", []))}
+
+            <h2>Common Misinterpretations</h2>
+            {render_list(t.get("common_misinterpretations", []))}
+
+            <h2>Reflection Prompts</h2>
+            {render_list(t.get("reflection_prompts", []))}
 
             <hr>
             <div class="muted">
