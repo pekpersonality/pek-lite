@@ -1,70 +1,144 @@
-@app.post("/report", response_class=HTMLResponse)
-def render_report(payload: InferenceRequest):
-    engine_input = build_engine_input(payload)
-    result = run_inference(engine_input)
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
+from typing import List, Optional
 
+router = APIRouter()
+
+class ReportPayload(BaseModel):
+    responses: List[str]
+    context_flags: Optional[dict] = {}
+    forced_overrides: Optional[dict] = {}
+
+@router.post("/report", response_class=HTMLResponse)
+async def generate_report(payload: ReportPayload, request: Request):
+
+    # ---------- HARD GUARD ----------
+    if not payload.responses or not isinstance(payload.responses, list):
+        raise HTTPException(status_code=400, detail="No valid responses provided")
+
+    # ---------- RUN INFERENCE ----------
+    try:
+        engine_input = {
+            "responses": payload.responses,
+            "context_flags": payload.context_flags or {},
+            "forced_overrides": payload.forced_overrides or {},
+        }
+
+        result = run_inference(engine_input)
+
+        if not result or not isinstance(result, dict):
+            raise ValueError("Inference returned invalid result")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Engine failure: {str(e)}")
+
+    # ---------- SAFE EXTRACTION ----------
     t = result.get("lite_translation", {})
 
+    orientation = t.get("orientation_snapshot", "")[:900]
+
     def render_list(items):
-        if not items:
+        if not items or not isinstance(items, list):
             return "<p class='muted'>None detected.</p>"
-        return "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>"
 
+        lines = []
+        for i in items[:5]:  # HARD CAP — prevents memory spikes
+            lines.append(f"<li>{i}</li>")
+        return "<ul>" + "".join(lines) + "</ul>"
+
+    # ---------- HTML ----------
     html = f"""
-    <html>
-    <head>
-        <title>Personality Engine Kernel — Lite Report</title>
-        <style>
-            body {{
-                font-family: Arial, sans-serif;
-                background: #f7f7f7;
-                color: #111;
-                padding: 40px;
-            }}
-            .container {{
-                max-width: 800px;
-                margin: auto;
-                background: white;
-                padding: 40px;
-                border-radius: 8px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            }}
-            h1 {{ margin-bottom: 5px; }}
-            h2 {{ margin-top: 30px; }}
-            ul {{ line-height: 1.6; }}
-            .muted {{
-                color: #666;
-                font-size: 0.9em;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Personality Engine Kernel — Lite Snapshot</h1>
-            <div class="muted">Behavioral pattern overview</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PEK Lite — Personality Snapshot</title>
+<style>
+body {{
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    background: #0e0e11;
+    color: #eaeaf0;
+    padding: 60px 20px;
+}}
+.container {{
+    max-width: 860px;
+    margin: auto;
+    background: #16161c;
+    padding: 46px;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}}
+h1 {{
+    font-size: 2.1em;
+    margin-bottom: 4px;
+}}
+.sub {{
+    color: #9aa0ff;
+    font-size: 0.95em;
+    margin-bottom: 28px;
+}}
+.section {{
+    margin-top: 36px;
+}}
+.section h2 {{
+    font-size: 1.25em;
+    border-bottom: 1px solid #2a2a35;
+    padding-bottom: 6px;
+}}
+ul {{
+    line-height: 1.7;
+    padding-left: 20px;
+}}
+.muted {{
+    color: #9aa0b5;
+    font-size: 0.9em;
+}}
+.footer {{
+    margin-top: 48px;
+    font-size: 0.8em;
+    color: #777;
+}}
+</style>
+</head>
+<body>
+<div class="container">
 
-            <h2>Orientation Snapshot</h2>
-            <p>{t.get("orientation_snapshot", "No orientation snapshot available.")}</p>
+<h1>Personality Engine Kernel — Lite</h1>
+<div class="sub">Behavioral & cognitive pattern snapshot</div>
 
-            <h2>Real-World Signals</h2>
-            {render_list(t.get("real_world_signals", []))}
+<div class="section">
+<h2>Orientation Snapshot</h2>
+<p>{orientation}</p>
+</div>
 
-            <h2>Strengths</h2>
-            {render_list(t.get("strengths", []))}
+<div class="section">
+<h2>Real-World Signals</h2>
+{render_list(t.get("real_world_signals"))}
+</div>
 
-            <h2>Common Misinterpretations</h2>
-            {render_list(t.get("common_misinterpretations", []))}
+<div class="section">
+<h2>Strengths</h2>
+{render_list(t.get("strengths"))}
+</div>
 
-            <h2>Reflection Prompts</h2>
-            {render_list(t.get("reflection_prompts", []))}
+<div class="section">
+<h2>Common Misinterpretations</h2>
+{render_list(t.get("common_misinterpretations"))}
+</div>
 
-            <hr>
-            <div class="muted">
-                Generated by PEK Lite
-            </div>
-        </div>
-    </body>
-    </html>
-    """
+<div class="section">
+<h2>Reflection Prompts</h2>
+{render_list(t.get("reflection_prompts"))}
+</div>
 
-    return html
+<div class="footer">
+Generated by PEK Lite · Full PEK coming soon
+</div>
+
+</div>
+</body>
+</html>
+"""
+
+    return HTMLResponse(content=html)
