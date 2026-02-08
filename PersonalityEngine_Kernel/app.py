@@ -1,28 +1,35 @@
 """
 PEK Lite – FastAPI Application Entry Point
-Thin HTTP wrapper around the Personality Engine Kernel.
+Hardened input handling + thin kernel wrapper
 """
-
-import html
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
+import re
 
 from PersonalityEngine_Kernel.engines.inference.inference_engine import run_inference
 
 
 app = FastAPI(
     title="PEK Lite",
-    version="0.4"
+    version="0.5"
 )
 
+
+# -----------------------------
+# Models
+# -----------------------------
 
 class InferenceRequest(BaseModel):
     responses: list[str]
     context_flags: dict | None = None
     forced_overrides: dict | None = None
 
+
+# -----------------------------
+# Health
+# -----------------------------
 
 @app.get("/health")
 def health():
@@ -32,8 +39,55 @@ def health():
     }
 
 
+# -----------------------------
+# Input Hardening
+# -----------------------------
+
+MAX_RESPONSE_LENGTH = 600        # per response
+MAX_TOTAL_LENGTH = 2000          # combined
+
+
+def sanitize_responses(responses: list[str]) -> list[str]:
+    cleaned = []
+
+    for r in responses:
+        if not r:
+            continue
+
+        text = r.strip()
+
+        if not text:
+            continue
+
+        # collapse excessive whitespace
+        text = re.sub(r"\s+", " ", text)
+
+        # cap individual length
+        text = text[:MAX_RESPONSE_LENGTH]
+
+        cleaned.append(text)
+
+    combined_length = sum(len(r) for r in cleaned)
+
+    if combined_length > MAX_TOTAL_LENGTH:
+        raise HTTPException(
+            status_code=400,
+            detail="Responses are too long. Please shorten your answers."
+        )
+
+    if not cleaned:
+        raise HTTPException(
+            status_code=400,
+            detail="No usable responses detected."
+        )
+
+    return cleaned
+
+
 def build_engine_input(payload: InferenceRequest) -> dict:
-    combined_statement = " ".join(payload.responses)
+    safe_responses = sanitize_responses(payload.responses)
+
+    combined_statement = " ".join(safe_responses)
 
     return {
         "example_statement": combined_statement,
@@ -42,123 +96,63 @@ def build_engine_input(payload: InferenceRequest) -> dict:
     }
 
 
-def _li(items: list[str]) -> str:
-    if not items:
-        return "<li style='color:#777;'>No strong signals detected from the current input.</li>"
-    return "".join(f"<li>{html.escape(str(i))}</li>" for i in items)
+# -----------------------------
+# Routes
+# -----------------------------
+
+@app.post("/infer")
+def infer(payload: InferenceRequest):
+    engine_input = build_engine_input(payload)
+    result = run_inference(engine_input)
+    return JSONResponse(result)
 
 
-def render_lite_html(result: dict) -> str:
-    t = result.get("lite_translation") or {}
+@app.post("/report", response_class=HTMLResponse)
+def render_report(payload: InferenceRequest):
+    engine_input = build_engine_input(payload)
+    result = run_inference(engine_input)
 
-    orientation_snapshot = html.escape(str(t.get("orientation_snapshot", ""))).strip()
-    real_world_signals = t.get("real_world_signals") or []
-    strengths = t.get("strengths") or []
-    common_misinterpretations = t.get("common_misinterpretations") or []
-    reflection_prompts = t.get("reflection_prompts") or []
-
-    return f"""
-    <!DOCTYPE html>
-    <html lang="en">
+    html = f"""
+    <html>
     <head>
-        <meta charset="UTF-8">
-        <title>PEK Lite — Personality Snapshot</title>
+        <title>Personality Engine Kernel — Lite Report</title>
         <style>
             body {{
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-                background: #0e0e11;
-                color: #eaeaf0;
-                padding: 60px 20px;
+                font-family: Arial, sans-serif;
+                background: #f7f7f7;
+                color: #111;
+                padding: 40px;
             }}
             .container {{
-                max-width: 900px;
+                max-width: 800px;
                 margin: auto;
-                background: #16161c;
-                padding: 50px;
-                border-radius: 14px;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+                background: white;
+                padding: 40px;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             }}
-            h1 {{
-                font-size: 2.2em;
-                margin: 0 0 6px 0;
-            }}
-            .sub {{
-                color: #9fa4ff;
-                margin-bottom: 34px;
-            }}
-            h2 {{
-                margin-top: 38px;
-                font-size: 1.35em;
-                border-bottom: 1px solid #2a2a35;
-                padding-bottom: 10px;
-            }}
-            p {{
-                line-height: 1.7;
-                font-size: 1.05em;
-                margin-top: 14px;
-            }}
-            ul {{
-                line-height: 1.7;
-                padding-left: 22px;
-                margin-top: 14px;
-            }}
-            li {{
-                margin-bottom: 10px;
-            }}
-            .footer {{
-                margin-top: 46px;
+            h1 {{ margin-bottom: 5px; }}
+            ul {{ line-height: 1.6; }}
+            .muted {{
+                color: #666;
                 font-size: 0.9em;
-                color: #777;
-                text-align: center;
             }}
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>Personality Engine Kernel — Lite</h1>
-            <div class="sub">Behavioral & cognitive pattern snapshot</div>
+            <h1>Personality Engine Kernel — Lite Snapshot</h1>
+            <div class="muted">Behavioral pattern overview</div>
 
-            <h2>Orientation Snapshot</h2>
-            <p>{orientation_snapshot if orientation_snapshot else "No orientation snapshot available for the current input."}</p>
+            <pre>{result}</pre>
 
-            <h2>Real-World Signals</h2>
-            <ul>{_li(real_world_signals)}</ul>
-
-            <h2>Strengths</h2>
-            <ul>{_li(strengths)}</ul>
-
-            <h2>Common Misinterpretations</h2>
-            <ul>{_li(common_misinterpretations)}</ul>
-
-            <h2>Reflection Prompts</h2>
-            <ul>{_li(reflection_prompts)}</ul>
-
-            <div class="footer">
-                Generated by PEK Lite · Full PEK available soon
+            <hr>
+            <div class="muted">
+                Generated by PEK Lite
             </div>
         </div>
     </body>
     </html>
     """
 
-
-@app.post("/infer")
-def infer(payload: InferenceRequest):
-    if not payload.responses:
-        raise HTTPException(status_code=400, detail="No responses provided")
-
-    engine_input = build_engine_input(payload)
-    result = run_inference(engine_input)
-
-    return JSONResponse(result)
-
-
-@app.post("/report", response_class=HTMLResponse)
-def report(payload: InferenceRequest):
-    if not payload.responses:
-        raise HTTPException(status_code=400, detail="No responses provided")
-
-    engine_input = build_engine_input(payload)
-    result = run_inference(engine_input)
-
-    return HTMLResponse(content=render_lite_html(result))
+    return html
