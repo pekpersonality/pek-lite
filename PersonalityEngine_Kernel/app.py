@@ -2,7 +2,7 @@
 PEK Lite – FastAPI Application Entry Point
 Stable ASGI app for Railway deployment
 """
-
+from fastapi import Request
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
@@ -186,3 +186,24 @@ def render_report(payload: InferenceRequest):
     """
 
     return HTMLResponse(content=html)
+# -----------------------------
+# GUMROAD WEBHOOK (PHASE 1)
+# -----------------------------
+@app.post("/gumroad/webhook")
+async def gumroad_webhook(request: Request):
+    try:
+        payload = await request.form()
+
+        # Minimal validation
+        if payload.get("seller_id") is None:
+            raise HTTPException(status_code=400, detail="Invalid Gumroad payload")
+
+        # TEMP: Log payload keys (safe)
+        print("GUMROAD WEBHOOK RECEIVED")
+        print(dict(payload))
+
+        return {"status": "received"}
+
+    except Exception as e:
+        print("GUMROAD WEBHOOK ERROR:", str(e))
+        raise HTTPException(status_code=500, detail="Webhook error")
