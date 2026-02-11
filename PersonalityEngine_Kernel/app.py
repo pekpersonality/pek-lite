@@ -198,9 +198,13 @@ async def gumroad_webhook(request: Request):
         if payload.get("seller_id") is None:
             raise HTTPException(status_code=400, detail="Invalid Gumroad payload")
 
-        # TEMP: Log payload keys (safe)
+        # TEMP: Full payload inspection
+        payload_dict = dict(payload)
+
         print("GUMROAD WEBHOOK RECEIVED")
-        print(dict(payload))
+        for k, v in payload_dict.items():
+            print(f"{k}: {v}")
+
 
         return {"status": "received"}
 
