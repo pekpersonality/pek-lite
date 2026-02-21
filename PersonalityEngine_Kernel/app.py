@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
 from typing import List, Optional
 
-from engines.inference.inference_engine import run_inference
+from PersonalityEngine_Kernel.engines.inference.inference_engine import run_inference
 print("RUN_INFERENCE SOURCE:", run_inference.__code__.co_filename)
 
 app = FastAPI(
