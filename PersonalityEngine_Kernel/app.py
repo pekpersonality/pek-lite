@@ -287,11 +287,38 @@ def render_report(responses: List[str] = Form(...)):
                 padding: 16px;
                 border-radius: 10px;
             }}
+
+            @media print {{
+                button {{
+                    display: none;
+                }}
+
+                body {{
+                    font-size: 12pt;
+                }}
+
+                a {{
+                    display: none;
+                }}
+
+                h2, p, ul, .depth, .next {{
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                }}
+
+                h2 {{
+                    page-break-after: avoid;
+                }}
+            }}
         </style>
     </head>
     <body>
         <div class="container">
             <h1>PersonaSight™ Snapshot</h1>
+
+            <button onclick="window.print()" style="margin-bottom:20px; padding:10px 16px; border-radius:8px; border:none; background:#2c2a27; color:white; cursor:pointer;">
+                Save / Print Snapshot
+            </button>
 
             <div class="depth">
                 <strong>Input Depth:</strong> {depth.get("label","")}<br>
