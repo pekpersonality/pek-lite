@@ -316,6 +316,10 @@ def render_report(responses: List[str] = Form(...)):
         <div class="container">
             <h1>PersonaSight™ Snapshot</h1>
 
+            <div style="margin-bottom:20px; padding:12px; background:#fff3cd; border-radius:8px; font-size:0.95em; color:#856404;">
+                This report is not saved. Please click “Save / Print Snapshot” before closing this page.
+            </div>
+
             <button onclick="window.print()" style="margin-bottom:20px; padding:10px 16px; border-radius:8px; border:none; background:#2c2a27; color:white; cursor:pointer;">
                 Save / Print Snapshot
             </button>
